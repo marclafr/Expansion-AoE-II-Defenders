@@ -1,9 +1,9 @@
-
+/*
 #include "j1App.h"
 #include "j1Fonts.h"
 #include "j1Render.h"
 #include "Camera.h"
-#include "j1UIManager.h"
+//#include "j1UIManager.h"
 #include "j1Score.h"
 #include "j1WaveManager.h"
 #include "j1Tutorial.h"
@@ -142,3 +142,4 @@ void j1Score::SetNullWaveTimer()
 	sprintf_s(wave_num, 256, "Wave %i / %d", actual_wave_num, App->wave_manager->GetMaxWaveNum());
 	wave_timer_texture = App->font->Print(wave_num);
 }
+*/

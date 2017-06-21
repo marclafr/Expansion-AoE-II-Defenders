@@ -1,3 +1,5 @@
+//TODO activate
+/*
 #ifndef __j1TUTORIAL_H__
 #define __j1TUTORIAL_H__
 
@@ -48,16 +50,16 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	void TutorialsProgression();
+	//void TutorialsProgression();
 
-	void TutorialReset();
-	void Tutorial1();
-	void Tutorial2();
-	void Tutorial3();
-	void Tutorial4();
-	void Tutorial5();
-	void Tutorial6();
-	void Tutorial7();
+	//void TutorialReset();
+	//void Tutorial1();
+	//void Tutorial2();
+	//void Tutorial3();
+	//void Tutorial4();
+	//void Tutorial5();
+	//void Tutorial6();
+	//void Tutorial7();
 
 	bool tutorial = false;
 	UIComponents* tutorial1;
@@ -146,3 +148,4 @@ private:
 };
 
 #endif // __j1TUTORIAL_H__
+*/

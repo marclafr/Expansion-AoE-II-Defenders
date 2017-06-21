@@ -242,6 +242,11 @@ TileSet* j1Map::GetTilesetFromTileId(int id) const
 	return set;
 }
 
+iPoint j1Map::MapToWorld(iPoint pos, TileSet * tileset) const
+{
+	return MapToWorld(pos.x, pos.y, tileset);
+}
+
 iPoint j1Map::MapToWorld(int x, int y, TileSet* tileset) const
 {
 	iPoint ret;

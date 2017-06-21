@@ -73,7 +73,7 @@ void UIHUDMinimap::DrawQuad()
 	App->render->DrawQuad(quad_atlas,255,255,255,255,false,false);
 }
 
-iPoint UIHUDMinimap::WorldToMinimap(fPoint world_point)
+iPoint UIHUDMinimap::WorldToMinimap(iPoint world_point)
 {
 	fPoint minimap_point;
 	minimap_point.x = world_point.x / rect_map.w * GetPosRect().w;

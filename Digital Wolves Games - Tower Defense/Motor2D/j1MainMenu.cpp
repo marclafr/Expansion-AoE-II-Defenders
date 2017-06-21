@@ -15,9 +15,9 @@
 #include "j1SceneManager.h"
 #include "Task.h"
 
-#include "UIButton.h"
+/*#include "UIButton.h"
 #include "UILabel.h"
-#include "j1UIManager.h"
+#include "j1UIManager.h"*/
 
 j1MainMenu::j1MainMenu() : j1Module()
 {
@@ -42,6 +42,7 @@ bool j1MainMenu::Start()
 {
 	App->audio->PlayMusic("audio/music/Menu01.ogg", 0.0f);
 
+	/*
 	//BACKGROUND
 	App->uimanager->AddComponent(UIT_UIIMAGE, { 0, 0, 1336, 767 }, { 0, 0, 1366, 767 });
 
@@ -91,7 +92,7 @@ bool j1MainMenu::Start()
 	exit->SetMouseOnTopTextRect({ 477, 1378, 200, 91 });
 	exit->SetTask(new SetPreUpdateFalseTask());
 
-	App->uimanager->AddLabel(265, 708, "Exit");
+	App->uimanager->AddLabel(265, 708, "Exit");*/
 
 	return true;
 }
@@ -105,6 +106,7 @@ bool j1MainMenu::PreUpdate()
 // Called each loop iteration
 bool j1MainMenu::Update(float dt)
 {
+	App->scene_manager->ChangeScene(SC_GAME);
 	App->render->BlitMainMenu();
 
 	return true;
@@ -120,7 +122,7 @@ bool j1MainMenu::PostUpdate()
 bool j1MainMenu::CleanUp()
 {
 	LOG("Freeing  MainMenu");
-	App->uimanager->SetAllToDelete();
+	//App->uimanager->SetAllToDelete();
 	return true;
 }
 

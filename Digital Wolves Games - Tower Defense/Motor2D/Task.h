@@ -80,7 +80,7 @@ public:
 
 	bool Execute();
 };
-
+/*
 class ChangeBackGroundTask : public Task
 {
 private:
@@ -91,7 +91,7 @@ public:
 	ChangeBackGroundTask(const SDL_Rect & atlas, const BUTTONSUNDERGROUND underground);
 
 	bool Execute();
-};
+};*/
 
 enum ENTITY_TASKTYPE
 {
@@ -135,7 +135,7 @@ public:
 
 	bool Execute();
 };
-
+/*
 class UpgradeTowerTask : public EntityTask
 {
 private:
@@ -181,7 +181,7 @@ public:
 	void SetCanInvestigate(bool canU);
 
 	bool Execute();
-};
+};*/
 
 class DeleteTowerTask : public EntityTask
 {
@@ -217,7 +217,7 @@ public:
 
 	bool Execute();
 };
-
+/*
 class TrainUnitTask : public EntityTask
 {
 private:
@@ -254,7 +254,7 @@ public:
 	bool Execute();
 
 	void SetInfoButton(info_button* info_b);
-};
+};*/
 
 class ChangeToFacebook : public Task
 {
@@ -279,12 +279,12 @@ class ChangeToBugs : public Task
 public:
 	bool Execute();
 };
-
+/*
 class BringNextWave : public Task
 {
 public:
 	bool Execute();
-};
+};*/
 
 class Surrender : public Task
 {
@@ -292,7 +292,7 @@ public:
 	bool Execute();
 };
 
-class ReturnToGame : public Task
+/*class ReturnToGame : public Task
 {
 private:
 	UIHUDMenuInGame* menu_ingame;
@@ -301,7 +301,7 @@ public:
 	ReturnToGame(UIHUDMenuInGame* menu_ingame);
 
 	bool Execute();
-};
+};*/
 
 class LoadLastChackpoint : public Task
 {

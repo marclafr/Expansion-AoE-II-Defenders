@@ -8,11 +8,11 @@
 #include "ProjectileManager.h"
 #include "j1EntityManager.h"
 
-Projectile::Projectile(fPoint initialpos, Entity * target, int damage, float TimeInSecs, int Startheight, int Curveheight, PROJECTILE_TYPE type) : StartPos(initialpos), Damage(damage), Target(target), StartHeight(Startheight), CurveHeight(Curveheight), projectile_type(type)
+Projectile::Projectile(iPoint initialpos, Entity * target, int damage, float time_in_secs, int start_height, int curve_height, PROJECTILE_TYPE type) : start_pos(initialpos), damage(damage), target(target), start_height(start_height), curve_height(curve_height), projectile_type(type)
 {
-	LastPos = Target->GetPosition();
-	Diferential = 1 / TimeInSecs;
-	PreActualPos = initialpos;
+	last_pos = target->GetPixelPosition();
+	diferential = 1 / time_in_secs;
+	pre_actual_pos = initialpos;
 	switch (type)
 	{
 	case P_BASIC_ARROW:
@@ -59,27 +59,27 @@ Projectile::~Projectile()
 
 void Projectile::Update()
 {
-	if (Target != nullptr)
-		LastPos = Target->GetPosition();
+	if (target != nullptr)
+		last_pos = target->GetPosition();
 
-	fPoint initial_point = { StartPos.x,StartPos.y - StartHeight };
+	iPoint initial_point (start_pos.x, start_pos.y - start_height);
 
-	fPoint mid_point = { (initial_point.x + LastPos.x) / 2,((initial_point.y + LastPos.y) / 2) - CurveHeight };
+	fPoint mid_point((initial_point.x + last_pos.x) / 2.0f, ((initial_point.y + last_pos.y) / 2.0f) - curve_height);
 
-	ActualPos.x = ((1 - ProjectilePos)*(1 - ProjectilePos)*initial_point.x) + ((2 * ProjectilePos)*(1 - ProjectilePos)*mid_point.x) + ((ProjectilePos*ProjectilePos)*LastPos.x);
-	ActualPos.y = ((1 - ProjectilePos)*(1 - ProjectilePos)*initial_point.y) + ((2 * ProjectilePos)*(1 - ProjectilePos)*mid_point.y) + ((ProjectilePos*ProjectilePos)*LastPos.y);
+	actual_pos.x = ((1 - projectile_pos)*(1 - projectile_pos)*initial_point.x) + ((2 * projectile_pos)*(1 - projectile_pos)*mid_point.x) + ((projectile_pos*projectile_pos)*last_pos.x);
+	actual_pos.y = ((1 - projectile_pos)*(1 - projectile_pos)*initial_point.y) + ((2 * projectile_pos)*(1 - projectile_pos)*mid_point.y) + ((projectile_pos*projectile_pos)*last_pos.y);
 
-	fPoint first_point = { initial_point.x * (1 - ProjectilePos) + mid_point.x * ProjectilePos, initial_point.y * (1 - ProjectilePos) + mid_point.y * ProjectilePos };
-	fPoint second_point = { mid_point.x * (1 - ProjectilePos) + LastPos.x * ProjectilePos, mid_point.y * (1 - ProjectilePos) + LastPos.y * ProjectilePos };
+	fPoint first_point (initial_point.x * (1 - projectile_pos) + mid_point.x * projectile_pos, initial_point.y * (1 - projectile_pos) + mid_point.y * projectile_pos);
+	fPoint second_point (mid_point.x * (1 - projectile_pos) + last_pos.x * projectile_pos, mid_point.y * (1 - projectile_pos) + last_pos.y * projectile_pos);
 
-	fPoint vector = { second_point.x - first_point.x, second_point.y - first_point.y };
+	fPoint vector (second_point.x - first_point.x, second_point.y - first_point.y);
 	angle = atan2(vector.y, vector.x) * 57.9257795;
-	ProjectilePos += Diferential;
+	projectile_pos += diferential;
 
-	if (ProjectilePos > 1)
-		ProjectilePos = 1;
+	if (projectile_pos > 1)
+		projectile_pos = 1;
 
-	if (Target != nullptr && ProjectilePos == 1 && dest_reached == false)
+	if (target != nullptr && projectile_pos == 1 && dest_reached == false)
 	{
 		switch (projectile_type)
 		{
@@ -87,35 +87,35 @@ void Projectile::Update()
 		case P_FIRE_ARROW:
 		case P_ICE_ARROW:
 		case P_AIR_ARROW:
-			Target->Damaged(Damage);
+			target->Damaged(damage);
 			dest_reached = true;
 			break;
 		case P_CANNONBALL:
 		case P_FIRE_CANNONBALL:
 		case P_AIR_CANNONBALL:
-			Target->Damaged(Damage);
-			AreaDamage(Damage, { (int)Target->GetX(), (int)Target->GetY() }, AREA_DMG_RADIUS);
-			element_terrain_pos = Target->GetPosition();
+			target->Damaged(damage);
+			AreaDamage(damage, { (int)target->GetX(), (int)target->GetY() }, AREA_DMG_RADIUS);
+			element_terrain_pos = target->GetPosition();
 			delete projectile_anim;
 			projectile_anim = new AnimationManager(App->anim->GetAnimationType(ANIM_FIRE_EXPLOSION));
 			dest_reached = true;
-			PrintElementTerrainTimer.Start();
+			print_element_terrain_timer.Start();
 			break;
 		case P_ICE_CANNONBALL:
-			Target->Damaged(Damage);
-			AreaDamage(Damage, { (int)Target->GetX(), (int)Target->GetY() }, AREA_DMG_RADIUS);
-			element_terrain_pos = Target->GetPosition();
+			target->Damaged(damage);
+			AreaDamage(damage, { (int)target->GetX(), (int)target->GetY() }, AREA_DMG_RADIUS);
+			element_terrain_pos = target->GetPosition();
 			delete projectile_anim;
 			projectile_anim = new AnimationManager(App->anim->GetAnimationType(ANIM_ICE_EXPLOSION));
 			dest_reached = true;
-			PrintElementTerrainTimer.Start();
+			print_element_terrain_timer.Start();
 			break;
 		default:
 			break;
 		}
 		if (projectile_type == P_ICE_ARROW)
 		{
-			Unit* unit_target = (Unit*)Target;
+			Unit* unit_target = (Unit*)target;
 			unit_target->SlowUnit();
 		}
 	}
@@ -125,7 +125,7 @@ void Projectile::Update()
 
 void Projectile::Draw()
 {
-	float pett = PrintElementTerrainTimer.ReadMs() / 1000.0f;
+	float pett = print_element_terrain_timer.ReadMs() / 1000.0f;
 	if (pett < ELEMENT_TERRAIN_TIME && dest_reached == true)
 		PrintElementTerrain(projectile_type, element_terrain_pos);
 	
@@ -134,18 +134,18 @@ void Projectile::Draw()
 	if (projectile_anim != nullptr)
 		projectile_anim->Update(rect, pivot);
 	if (dest_reached == false)
-		if (App->render->camera->InsideRenderTarget(App->render->camera->GetPosition().x + ActualPos.x, App->render->camera->GetPosition().y + ActualPos.y))
-			App->render->PushInGameSprite(App->tex->GetTexture(T_ARROW_BOMB), ActualPos.x, ActualPos.y, &rect, SDL_FLIP_HORIZONTAL, pivot.x, pivot.y, 1, angle, false);
+		if (App->render->camera->InsideRenderTarget(App->render->camera->GetPosition().x + actual_pos.x, App->render->camera->GetPosition().y + actual_pos.y))
+			App->render->PushInGameSprite(App->tex->GetTexture(T_ARROW_BOMB), actual_pos.x, actual_pos.y, &rect, SDL_FLIP_HORIZONTAL, pivot.x, pivot.y, 1, angle, false);
 }
 
 int Projectile::GetProjectilePos() const
 {
-	return ProjectilePos;
+	return projectile_pos;
 }
 
 int Projectile::GetDamage() const
 {
-	return Damage;
+	return damage;
 }
 
 void Projectile::SetRect(SDL_Rect rect)
@@ -175,7 +175,7 @@ void Projectile::AreaDamage(int damage, iPoint center, int radius)
 	vec.clear();
 }
 
-void Projectile::PrintElementTerrain(PROJECTILE_TYPE element, fPoint center)
+void Projectile::PrintElementTerrain(PROJECTILE_TYPE element, iPoint center)
 {
 	if (floor_effect == true && projectile_anim->Finished() == true)
 	{
@@ -200,11 +200,11 @@ void Projectile::PrintElementTerrain(PROJECTILE_TYPE element, fPoint center)
 	{
 		area_damage_timer.Start();
 		if (projectile_type == P_FIRE_CANNONBALL)
-			AreaDamage(Damage / 2, { (int)element_terrain_pos.x, (int)element_terrain_pos.y }, AREA_DMG_RADIUS);
+			AreaDamage(damage / 2, { (int)element_terrain_pos.x, (int)element_terrain_pos.y }, AREA_DMG_RADIUS);
 		else if (projectile_type == P_ICE_CANNONBALL)
-			AreaDamage(Damage / 2, { (int)element_terrain_pos.x, (int)element_terrain_pos.y }, AREA_DMG_RADIUS);
+			AreaDamage(damage / 2, { (int)element_terrain_pos.x, (int)element_terrain_pos.y }, AREA_DMG_RADIUS);
 	}
-	if (App->render->camera->InsideRenderTarget(App->render->camera->GetPosition().x + ActualPos.x, App->render->camera->GetPosition().y + ActualPos.y))
+	if (App->render->camera->InsideRenderTarget(App->render->camera->GetPosition().x + actual_pos.x, App->render->camera->GetPosition().y + actual_pos.y))
 	{
 		projectile_anim->Update(rect, pivot);
 		switch (element)

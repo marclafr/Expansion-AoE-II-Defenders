@@ -51,6 +51,7 @@ class Elipse : public Primitive
 public:
 
 	Elipse(const fPoint& position = { 0,0 }, uint rad = 0, const iPoint& displacement = { 0,0 });
+	Elipse(const iPoint& position = { 0,0 }, uint rad = 0, const iPoint& displacement = { 0,0 });
 	Elipse(const Elipse& copy);
 	~Elipse();
 
@@ -86,7 +87,9 @@ public:
 class IsoRect : public Primitive
 {
 public:
-	IsoRect(const fPoint& position = { 0,0 }, float width = 0, float height = 0, const iPoint& displacement = { 0,0 });
+	IsoRect();
+	IsoRect(const fPoint& position, float width, float height, const iPoint& displacement = { 0,0 });
+	IsoRect(const iPoint& position, float width, float height, const iPoint& displacement = { 0,0 });
 	IsoRect(const IsoRect& copy);
 	~IsoRect();
 
@@ -107,9 +110,10 @@ public:
 	uint	GetHeight()const;
 
 	bool Inside(const fPoint pos) const;
+	bool Inside(const iPoint pos) const;
 	bool Overlaps(SDL_Rect rect) const;
 	bool Overlaps(IsoRect rect) const;
-	bool Overlaps(fPoint center, int radius);
+	bool Overlaps(iPoint center, int radius);
 };
 /// ---------------------------------------------
 

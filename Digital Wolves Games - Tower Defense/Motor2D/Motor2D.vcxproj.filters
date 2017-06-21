@@ -7,9 +7,6 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="GetEntitiesInfo.cpp">
-      <Filter>Entity\Get</Filter>
-    </ClCompile>
     <ClCompile Include="Intro.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
@@ -56,9 +53,6 @@
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Textures.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1UIManager.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Video.cpp">
@@ -121,9 +115,6 @@
     <ClCompile Include="Resources.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Task.cpp">
       <Filter>Useful</Filter>
     </ClCompile>
@@ -133,53 +124,11 @@
     <ClCompile Include="theoraplay.c">
       <Filter>Useful\theoraplay</Filter>
     </ClCompile>
-    <ClCompile Include="UIComponents.cpp">
-      <Filter>UIComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="UIButton.cpp">
-      <Filter>UIComponents\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="UICheckbutton.cpp">
-      <Filter>UIComponents\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="UISelectOption.cpp">
-      <Filter>UIComponents\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="UILabel.cpp">
-      <Filter>UIComponents\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="UIHUDDescription.cpp">
-      <Filter>UIComponents\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="UIHUDMenuInGame.cpp">
-      <Filter>UIComponents\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="UIHUDMinimap.cpp">
-      <Filter>UIComponents\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="UIHUDPanelButtons.cpp">
-      <Filter>UIComponents\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="UIHUDResources.cpp">
-      <Filter>UIComponents\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="UIHUDScoreBar.cpp">
-      <Filter>UIComponents\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="UIHUDTownHallBarLife.cpp">
-      <Filter>UIComponents\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="PanelInfoGroupSelection.cpp">
-      <Filter>UIComponents\HUD\PanelInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="PanelInfoOneSelection.cpp">
-      <Filter>UIComponents\HUD\PanelInfo</Filter>
-    </ClCompile>
     <ClCompile Include="j1Mouse.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="UIHUDPanelInfo.cpp">
-      <Filter>UIComponents\HUD\PanelInfo</Filter>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Useful</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -235,9 +184,6 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Textures.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1UIManager.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Video.h">
@@ -309,9 +255,6 @@
     <ClInclude Include="Resources.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Task.h">
       <Filter>Useful</Filter>
     </ClInclude>
@@ -321,60 +264,12 @@
     <ClInclude Include="theoraplay.h">
       <Filter>Useful\theoraplay</Filter>
     </ClInclude>
-    <ClInclude Include="UIGetEntitiesInfo.h">
-      <Filter>Entity\Get</Filter>
-    </ClInclude>
-    <ClInclude Include="UIComponents.h">
-      <Filter>UIComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="UIButton.h">
-      <Filter>UIComponents\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="UICheckbutton.h">
-      <Filter>UIComponents\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="UISelectOption.h">
-      <Filter>UIComponents\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="UILabel.h">
-      <Filter>UIComponents\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="UIHUDDescription.h">
-      <Filter>UIComponents\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="UIHUDMenuInGame.h">
-      <Filter>UIComponents\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="UIHUDMinimap.h">
-      <Filter>UIComponents\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="UIHUDPanelButtons.h">
-      <Filter>UIComponents\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="UIHUDResources.h">
-      <Filter>UIComponents\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="UIHUDScoreBar.h">
-      <Filter>UIComponents\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="UIHUDTownHallBarLife.h">
-      <Filter>UIComponents\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="PanelInfoBasicStructure.h">
-      <Filter>UIComponents\HUD\PanelInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="PanelInfoGroupSelection.h">
-      <Filter>UIComponents\HUD\PanelInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="PanelInfoOneSelection.h">
-      <Filter>UIComponents\HUD\PanelInfo</Filter>
-    </ClInclude>
     <ClInclude Include="j1Mouse.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="UIHUDPanelInfo.h">
-      <Filter>UIComponents\HUD\PanelInfo</Filter>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Useful</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -383,9 +278,6 @@
     </Filter>
     <Filter Include="Entity">
       <UniqueIdentifier>{a11610b8-48d1-45f5-b19e-004da5a0b7f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Entity\Get">
-      <UniqueIdentifier>{95c04ccd-6ada-4787-92c4-ac3a3aa92e96}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scenes">
       <UniqueIdentifier>{b7922134-b362-4a01-aa77-e45ca589cb65}</UniqueIdentifier>
@@ -401,18 +293,6 @@
     </Filter>
     <Filter Include="Useful\theoraplay">
       <UniqueIdentifier>{6cee6657-2aed-4f7f-86b8-7e8bae8eebdc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UIComponents">
-      <UniqueIdentifier>{108f72d3-5fa3-40b7-8e9e-6743b41eca47}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UIComponents\Basic">
-      <UniqueIdentifier>{48c193af-092c-4001-821e-66b8f4508657}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UIComponents\HUD">
-      <UniqueIdentifier>{2802048d-b301-4bdb-91b2-50ce5c1a583f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UIComponents\HUD\PanelInfo">
-      <UniqueIdentifier>{d336046b-e54d-4c78-8c49-771d7ed3dffa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

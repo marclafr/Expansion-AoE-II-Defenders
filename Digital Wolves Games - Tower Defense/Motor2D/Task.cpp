@@ -10,12 +10,12 @@
 #include "p2Log.h"
 #include "j1Tutorial.h"
 #include "j1WaveManager.h"
-#include "UIComponents.h"
+/*#include "UIComponents.h"
 #include "j1UIManager.h"
-#include "UIHUDMenuInGame.h"
+#include "UIHUDMenuInGame.h"*/
 #include "j1Tutorial.h"
 
-#include "UIHUDPanelButtons.h"
+//#include "UIHUDPanelButtons.h"
 
 #include "Task.h"
 
@@ -32,7 +32,7 @@ void CreateTowerTask::Set(BUILDING_TYPE type, fPoint position, Side side)
 
 bool CreateTowerTask::Execute()
 {
-	App->entity_manager->CreateBuilding(type, position, side);
+	//App->entity_manager->CreateBuilding(type, position, side);
 	return true;
 }
 
@@ -60,7 +60,7 @@ bool ChangeMainMenuSceneToTutorial::Execute()
 	{
 		App->scene->win = false;
 		App->scene->lose = false;
-		App->tutorial->tutorial = true;
+		//App->tutorial->tutorial = true;
 	}
 	return true;
 }
@@ -94,14 +94,14 @@ bool ChangeScoreSceneToTask::Execute()
 	return true;
 }
 
-ChangeBackGroundTask::ChangeBackGroundTask(const SDL_Rect & atlas, const BUTTONSUNDERGROUND underground) : rect_atlas(atlas), underground(underground) {}
+/*ChangeBackGroundTask::ChangeBackGroundTask(const SDL_Rect & atlas, const BUTTONSUNDERGROUND underground) : rect_atlas(atlas), underground(underground) {}
 
 bool ChangeBackGroundTask::Execute()
 {
 	App->score_scene->GetUnderBackground()->SetAtlas(rect_atlas);
 	App->score_scene->ChangeUnselected(underground);
 	return true;
-}
+}*/
 
 EntityTask::EntityTask(ENTITY_TASKTYPE type) : type(type) {}
 
@@ -116,7 +116,7 @@ bool PlaceBasicTowerTask::Execute()
 {
 	App->scene->placing_wall = false;
 	App->scene->placing_tower = T_BASIC_TOWER;
-	if (App->tutorial->tutorial_num == TUTORIAL_2) App->tutorial->PanelSelected = true;
+	//if (App->tutorial->tutorial_num == TUTORIAL_2) App->tutorial->PanelSelected = true;
 	return true;
 }
 
@@ -126,11 +126,11 @@ bool PlaceBombardTowerTask::Execute()
 {
 	App->scene->placing_wall = false;
 	App->scene->placing_tower = T_BOMBARD_TOWER;
-	if (App->tutorial->tutorial_num == TUTORIAL_2) App->tutorial->PanelSelected = true;
+	//if (App->tutorial->tutorial_num == TUTORIAL_2) App->tutorial->PanelSelected = true;
 	return true;
 }
 
-UpgradeTowerTask::UpgradeTowerTask(INVESTIGATION_TYPE type, ENTITY_TASKTYPE et_type) : EntityTask(et_type), type(type) {}
+/*UpgradeTowerTask::UpgradeTowerTask(INVESTIGATION_TYPE type, ENTITY_TASKTYPE et_type) : EntityTask(et_type), type(type) {}
 
 const INVESTIGATION_TYPE UpgradeTowerTask::GetUpgradeType() const
 {
@@ -146,6 +146,7 @@ void UpgradeTowerTask::SetCanUpgrade(bool canU)
 {
 	canUpgrade = canU;
 }
+
 
 bool UpgradeTowerTask::Execute()
 {
@@ -203,7 +204,7 @@ bool DoInvestigation::Execute()
 		App->entity_manager->UnselectEverything();
 	}
 	return true;
-}
+}*/
 
 DeleteTowerTask::DeleteTowerTask(ENTITY_TASKTYPE type) : EntityTask(type) {}
 
@@ -239,11 +240,11 @@ bool PlaceWallTask::Execute()
 {
 	App->scene->placing_wall = true;
 	App->scene->placing_tower = T_NO_TYPE;
-	if (App->tutorial->tutorial_num == TUTORIAL_2) App->tutorial->PanelSelected = true;
+	//if (App->tutorial->tutorial_num == TUTORIAL_2) App->tutorial->PanelSelected = true;
 	return true;
 }
 
-TrainUnitTask::TrainUnitTask(UNIT_TYPE u_type, ENTITY_TASKTYPE type) : EntityTask(type), u_type(u_type) {}
+/*TrainUnitTask::TrainUnitTask(UNIT_TYPE u_type, ENTITY_TASKTYPE type) : EntityTask(type), u_type(u_type) {}
 
 bool TrainUnitTask::Execute()
 {
@@ -285,8 +286,7 @@ bool ExitButonsInside::Execute()
 void ExitButonsInside::SetInfoButton(info_button * info_b)
 {
 	from_info_b = info_b;
-}
-
+}*/
 
 bool ChangeToFacebook::Execute()
 {
@@ -311,30 +311,30 @@ bool ChangeToBugs::Execute()
 	ShellExecute(NULL, "open", "https://github.com/marclafr/Digital-Wolves-Games/issues", NULL, NULL, SW_SHOWMAXIMIZED);
 	return true;
 }
-
+/*
 bool BringNextWave::Execute()
 {
 	App->wave_manager->BringNextWave();
 	if (App->tutorial->tutorial_num == TUTORIAL_6) App->tutorial->NextWaveButtonSelected = true;
 	return true;
-}
+}*/
 
 bool Surrender::Execute()
 {
 	App->scene->lose = true;
 	App->scene_manager->ChangeScene(SC_SCORE);
-	App->tutorial->tutorial = false;
+	//App->tutorial->tutorial = false;
 	App->FinishGame("save_game.xml");
 	return true;
 }
 
-ReturnToGame::ReturnToGame(UIHUDMenuInGame * menu_ingame) : menu_ingame(menu_ingame) {}
+/*ReturnToGame::ReturnToGame(UIHUDMenuInGame * menu_ingame) : menu_ingame(menu_ingame) {}
 
 bool ReturnToGame::Execute()
 {
 	menu_ingame->DeletePanel();
 	return true;
-}
+}*/
 
 bool LoadLastChackpoint::Execute()
 {

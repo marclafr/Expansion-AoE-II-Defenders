@@ -1,3 +1,4 @@
+/*
 #ifndef _RESOURCES
 #define _RESOURCES
 
@@ -51,3 +52,4 @@ public:
 };
 
 #endif
+*/

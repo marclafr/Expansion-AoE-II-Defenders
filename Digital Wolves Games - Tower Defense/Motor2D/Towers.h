@@ -43,9 +43,9 @@ private:
 	AnimationManager* anim_fire = nullptr;
 public:
 	iPoint arrowpos;
-	Tower(TOWER_TYPE t_type, fPoint pos);
+	Tower(TOWER_TYPE t_type, iPoint pos);
 	~Tower();
-	void UpgradeTurret(INVESTIGATION_TYPE type);
+	//void UpgradeTurret(INVESTIGATION_TYPE type);
 	void Update(float dt); // defines order
 	void AI();
 	void Draw();

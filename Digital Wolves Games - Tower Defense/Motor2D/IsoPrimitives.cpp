@@ -71,7 +71,10 @@ SDL_Color Primitive::GetColor() const
 
 ///Class Elipse ---------------------------------
 //Constructors ==============
-Elipse::Elipse(const fPoint& position, uint rad, const iPoint& desplacement) :Primitive(position, desplacement), rad(rad)
+Elipse::Elipse(const fPoint& position, uint rad, const iPoint& displacement) :Primitive(position, displacement), rad(rad)
+{}
+
+Elipse::Elipse(const iPoint & position, uint rad, const iPoint & displacement) : Primitive(fPoint(position.x, position.y), displacement), rad(rad)
 {}
 
 Elipse::Elipse(const Elipse & copy) : Primitive(copy), rad(copy.rad)
@@ -194,10 +197,15 @@ uint Elipse::GetRad() const
 }
 /// ---------------------------------------------
 
+IsoRect::IsoRect() :Primitive({ 0,0 }, { 0,0 }), width(0), height(0)
+{}
 
 ///Class Rectangle ------------------------------
 //Constructors ==============
-IsoRect::IsoRect(const fPoint& position, float width, float height, const iPoint& desplacement) :Primitive(position, desplacement), width(width), height(height)
+IsoRect::IsoRect(const fPoint& position, float width, float height, const iPoint& displacement) :Primitive(position, displacement), width(width), height(height)
+{}
+
+IsoRect::IsoRect(const iPoint & position, float width, float height, const iPoint & displacement) : Primitive(fPoint(position.x,position.y), displacement), width(width), height(height)
 {}
 
 IsoRect::IsoRect(const IsoRect& copy) : Primitive(copy), width(copy.width), height(copy.height)
@@ -250,6 +258,19 @@ bool IsoRect::Inside(const fPoint pos) const
 	float delta_y = abs(pos.y - position.y);
 
 	if(height / 2.0f - height / width * delta_x - delta_y >= -PIXEL_TOLERANCE)
+		return true;
+	return false;
+}
+
+bool IsoRect::Inside(const iPoint pos) const
+{
+	float delta_x = abs(pos.x - position.x);
+	if (delta_x >= width / 2.0f)
+		return false;
+
+	float delta_y = abs(pos.y - position.y);
+
+	if (height / 2.0f - height / width * delta_x - delta_y >= -PIXEL_TOLERANCE)
 		return true;
 	return false;
 }
@@ -439,7 +460,7 @@ bool IsoRect::Overlaps(IsoRect rect) const
 	return false;
 }
 
-bool IsoRect::Overlaps(fPoint center, int radius)
+bool IsoRect::Overlaps(iPoint center, int radius)
 {
 	if (Inside(center))
 		return true;

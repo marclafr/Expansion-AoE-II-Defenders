@@ -1,4 +1,6 @@
-#include "j1WaveManager.h"
+
+//TODO activate
+/*#include "j1WaveManager.h"
 #include "j1App.h"
 #include "j1EntityManager.h"
 #include "Entity.h"
@@ -662,3 +664,4 @@ int j1WaveManager::SecondsUntilNextWave()
 {
 	return (TIME_BETWEEN_WAVES - (int)timer.ReadSec());
 }
+*/

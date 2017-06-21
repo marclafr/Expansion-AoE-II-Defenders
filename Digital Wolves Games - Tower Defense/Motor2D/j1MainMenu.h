@@ -41,9 +41,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	//Enable Module with submodules
-	void EnableScene();
-
 	bool game_scene = true;
 
 	void SetRetPreUpdate(bool ret);

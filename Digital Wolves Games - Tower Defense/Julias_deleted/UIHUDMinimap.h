@@ -32,7 +32,7 @@ public:
 	void Draw();
 	void DrawQuad();
 
-	iPoint WorldToMinimap(fPoint world_point);
+	iPoint WorldToMinimap(iPoint world_point);
 	iPoint MinimapToWorld(iPoint minimap_point);
 
 	const SDL_Rect GetRectMap() const;

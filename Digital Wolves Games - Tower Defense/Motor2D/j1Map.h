@@ -122,6 +122,7 @@ public:
 	// Load new map
 	bool Load(const char* path);
 
+	iPoint MapToWorld(iPoint pos, TileSet* tileset = nullptr) const;
 	iPoint MapToWorld(int x, int y, TileSet* tileset = nullptr) const;
 	iPoint WorldToMap(int x, int y) const;
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);

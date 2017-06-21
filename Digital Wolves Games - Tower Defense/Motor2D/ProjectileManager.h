@@ -22,7 +22,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
-	Projectile* CreateProjectile(fPoint initialpos, Entity * target, int damage, float TimeInSecs, int Startheight, int Curveheight, PROJECTILE_TYPE type);
+	Projectile* CreateProjectile(iPoint initialpos, Entity * target, int damage, float TimeInSecs, int Startheight, int Curveheight, PROJECTILE_TYPE type);
 	void DeleteProjectile(Projectile* projectile);
 
 	int fx_cannon_shoot;

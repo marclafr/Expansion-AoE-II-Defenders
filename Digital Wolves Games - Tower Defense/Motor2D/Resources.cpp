@@ -1,3 +1,4 @@
+/*
 #include "Resources.h"
 #include "Buildings.h"
 #include "j1App.h"
@@ -190,4 +191,4 @@ void Resources::AddResource(int add)
 		App->scene->resources->AddFood(add);
 		break;
 	}
-}
+}*/

@@ -1,3 +1,5 @@
+//TODO activate
+/*
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1EntityManager.h"
@@ -461,3 +463,4 @@ void ResourceManager::LoadResourcesAmount(pugi::xml_node &data)
 	stone = data.attribute("stone").as_int();
 	food = data.attribute("food").as_int();
 }
+*/

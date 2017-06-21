@@ -9,7 +9,7 @@
 #include "Entity.h"
 #include "j1Animation.h"
 #include "j1EntityManager.h"
-#include "j1UIManager.h"
+//#include "j1UIManager.h"
 #include "Camera.h"
 #include "j1Scene.h"
 #include "j1Input.h"
@@ -506,9 +506,9 @@ void j1Render::BlitGameScene()
 
 	BlitSelectingRect();
 	BlitUI();
-	App->entity_manager->BlitMinimap();
+	//App->entity_manager->BlitMinimap();
 	BlitMouse();
-	App->uimanager->DrawMinimapQuad();
+	//App->uimanager->DrawMinimapQuad();
 
 	CleanUpMapVec();
 	CleanUpInGameSpriteQueue();

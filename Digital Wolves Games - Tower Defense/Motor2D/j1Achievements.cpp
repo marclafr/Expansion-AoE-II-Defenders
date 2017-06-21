@@ -7,9 +7,9 @@
 #include "j1Achievements.h"
 #include "Task.h"
 
-#include "UIButton.h"
+/*#include "UIButton.h"
 #include "UILabel.h"
-#include "j1UIManager.h"
+#include "j1UIManager.h"*/
 
 j1Achievements::j1Achievements() : j1Module()
 {
@@ -59,7 +59,7 @@ bool j1Achievements::PostUpdate()
 bool j1Achievements::CleanUp()
 {
 	LOG("Freeing  MainMenu");
-	App->uimanager->SetAllToDelete();
+	//App->uimanager->SetAllToDelete();
 	return true;
 }
 

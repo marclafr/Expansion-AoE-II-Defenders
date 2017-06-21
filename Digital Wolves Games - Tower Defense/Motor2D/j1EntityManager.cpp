@@ -3,8 +3,8 @@
 #include "j1EntityManager.h"
 #include "j1Pathfinding.h"
 #include "Units.h"
-#include "j1UIManager.h"
-#include "UIHUDPanelInfo.h"
+//#include "j1UIManager.h"
+//#include "UIHUDPanelInfo.h"
 #include "j1Scene.h"
 #include "j1Render.h"
 #include "j1Fonts.h"
@@ -32,15 +32,16 @@ bool j1EntityManager::CleanUp() {
 	return true;
 }
 
-Entity * j1EntityManager::CreateUnit(UNIT_TYPE u_type, fPoint pos, Side side)
+Entity * j1EntityManager::CreateUnit(UNIT_TYPE u_type, iPoint pos, Side side)
 {
-	Entity* new_entity = (Entity*) new Unit(u_type, pos, side, priority);
+	Entity* new_entity = (Entity*) new Unit(u_type, pos, side);
 	entity_quadtree->PushBack(new_entity);
-	priority++;
 	App->score_scene->units_count++;
 	return new_entity;
 }
 
+//TODO uncoment and fix
+/*
 Entity * j1EntityManager::CreateBuilding(BUILDING_TYPE b_type, fPoint pos, bool builded) const
 {
 	Entity* new_entity = (Entity*) new Building(b_type, pos, builded);
@@ -62,7 +63,7 @@ Entity * j1EntityManager::CreateResource(RESOURCE_TYPE r_type, fPoint pos, int a
 	Entity* new_entity = (Entity*) new Resources(r_type, pos, amount_collect, time);
 	entity_quadtree->PushBack(new_entity);
 	return new_entity;
-}
+}*/
 
 void j1EntityManager::SelectInQuad(const SDL_Rect& select_rect, std::vector<Entity*>& selection) const
 {
@@ -125,7 +126,7 @@ void j1EntityManager::SelectInQuad(const SDL_Rect& select_rect, std::vector<Enti
 	else if (selection.size() > MAX_SELECTION)
 		selection.resize(MAX_SELECTION);
 
-	App->uimanager->CreatePanelInfo(selection);
+	//App->uimanager->CreatePanelInfo(selection);
 }
 
 void j1EntityManager::UnselectEverything() const
@@ -134,8 +135,8 @@ void j1EntityManager::UnselectEverything() const
 		App->scene->selection[i]->SetEntityStatus(ST_NON_SELECTED);
 
 	App->scene->selection.clear();
-	App->uimanager->DeleteSelectionPanelInfo();
-	App->uimanager->SetPanelButtons(nullptr);
+	//App->uimanager->DeleteSelectionPanelInfo();
+	//App->uimanager->SetPanelButtons(nullptr);
 }
 
 void j1EntityManager::Select(Entity * select) const
@@ -143,10 +144,10 @@ void j1EntityManager::Select(Entity * select) const
 	App->entity_manager->UnselectEverything();
 	select->SetEntityStatus(ST_SELECTED);
 	App->scene->selection.push_back(select);
-	App->uimanager->CreatePanelInfo(App->scene->selection);
+	//App->uimanager->CreatePanelInfo(App->scene->selection);
 }
 
-Entity * j1EntityManager::LookForEnemies(int pixel_range, fPoint pos, Side side, Entity* attacker, ENTITY_TYPE entity_type) const
+Entity * j1EntityManager::LookForEnemies(int pixel_range, iPoint pos, Side side, Entity* attacker, ENTITY_TYPE entity_type) const
 {
 	Entity* ret = nullptr;
 
@@ -166,7 +167,7 @@ Entity * j1EntityManager::LookForEnemies(int pixel_range, fPoint pos, Side side,
 		{
 			if (attacker->GetEntityType() == E_UNIT)
 			{
-				if (App->pathfinding->FindClosestEmptyAttackTile((*it)->GetIPos(), ((Unit*)attacker)->GetRange(), attacker).y != -1)
+				if (App->pathfinding->FindClosestEmptyAttackTile((*it)->GetPosition(), ((Unit*)attacker)->GetRange(), attacker).y != -1)
 				{
 					ret = *it;
 					shortest_distance = current_distance;
@@ -186,7 +187,7 @@ void j1EntityManager::CheckClick(int mouse_x, int mouse_y) const
 {
 	App->scene->selection.clear();
 	iPoint click_point = App->render->ScreenToWorld(mouse_x, mouse_y);
-	Entity* clicked = entity_quadtree->SearchFirst(1, fPoint(click_point.x,click_point.y));
+	Entity* clicked = entity_quadtree->SearchFirst(1, click_point);
 	if(clicked != nullptr)
 		App->scene->selection.push_back(clicked);
 }
@@ -224,23 +225,23 @@ bool j1EntityManager::Update(float dt)
 bool j1EntityManager::PostUpdate()
 {
 	entity_quadtree->DeleteEntities();
-	if (siegeram_destroyed == true)
+	/*if (siegeram_destroyed == true)
 	{
 		App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x + 10.0f, siegeram_pos.y		 }, S_ENEMY);
 		App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x - 10.0f, siegeram_pos.y		 }, S_ENEMY);
 		App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x,		  siegeram_pos.y + 10.0f }, S_ENEMY);
 		App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x,		  siegeram_pos.y - 10.0f }, S_ENEMY);
 		siegeram_destroyed = false;
-	}
+	}*/
 	return true;
 }
 
-Entity * j1EntityManager::CheckForCombat(fPoint position, int range, Side side) const
+Entity * j1EntityManager::CheckForCombat(iPoint position, int range, Side side) const
 {
 	return entity_quadtree->SearchFirstEnemy(range, position, side);
 }
 
-Entity* j1EntityManager::CheckForObjective(fPoint position, int vision_range, Side side) const
+Entity* j1EntityManager::CheckForObjective(iPoint position, int vision_range, Side side) const
 {
 	return entity_quadtree->SearchFirstEnemy(vision_range, position, side);
 }
@@ -263,6 +264,7 @@ void j1EntityManager::DrawQuadTree() const
 	entity_quadtree->DrawRects();
 }
 
+/*
 bool j1EntityManager::Load(pugi::xml_node& data)
 {
 	delete entity_quadtree;
@@ -443,7 +445,7 @@ bool j1EntityManager::Save(pugi::xml_node &data) const
 
 
 	return true;
-}
+}*/
 
 void j1EntityManager::DropUnits(float pos_x, float pos_y)
 {
@@ -452,10 +454,10 @@ void j1EntityManager::DropUnits(float pos_x, float pos_y)
 	siegeram_pos.y = pos_y;
 }
 
-void j1EntityManager::BlitMinimap() const
+/*void j1EntityManager::BlitMinimap() const
 {
 	entity_quadtree->BlitMinimap();
-}
+}*/
 
 bool j1EntityManager::AbleToBuild(iPoint tile,const Entity* exeption) const
 {

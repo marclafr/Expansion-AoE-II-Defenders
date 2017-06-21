@@ -12,7 +12,7 @@
 #include "Camera.h"
 #include "j1Scene.h"
 
-Tower::Tower(TOWER_TYPE t_type, fPoint pos) : Building(B_TURRET, pos, S_ALLY), tower_type(t_type)
+Tower::Tower(TOWER_TYPE t_type, iPoint pos) : Building(B_TURRET, pos, S_ALLY), tower_type(t_type)
 {
 	SDL_Rect tower_rect;
 	iPoint pivot;
@@ -344,6 +344,7 @@ void Tower::ConvertTowerToRubble()
 	SetPivot(0.362637 * 91, 0.431373 * 51);
 }
 
+/*
 void Tower::UpgradeTurret(INVESTIGATION_TYPE type)
 {
 	if (this->IsBuilt())
@@ -465,3 +466,4 @@ void Tower::UpgradeTurret(INVESTIGATION_TYPE type)
 		}
 	}
 }
+*/

@@ -45,7 +45,7 @@ public:
 	iPoint arrowpos;
 	AnimationManager* building_fire;
 
-	Building(BUILDING_TYPE b_type, fPoint pos, bool builded);
+	Building(BUILDING_TYPE b_type, iPoint pos, bool builded);
 	~Building();
 
 	virtual void Update(float dt); // defines order

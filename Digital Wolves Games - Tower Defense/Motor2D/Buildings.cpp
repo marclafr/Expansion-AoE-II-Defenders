@@ -12,7 +12,7 @@
 #include "j1Scene.h"
 
 
-Building::Building(BUILDING_TYPE b_type, fPoint pos, bool builded) : Entity(E_BUILDING, pos, S_ALLY), building_type(b_type)
+Building::Building(BUILDING_TYPE b_type, iPoint pos, bool builded) : Entity(E_BUILDING, pos, S_ALLY), building_type(b_type), build_rect(GetPosition(), 375, 170)
 {
 	SDL_Rect rect;
 	building_fire = new AnimationManager(App->anim->GetAnimationType(ANIM_BUILDINGS_FIRE));
@@ -24,7 +24,7 @@ Building::Building(BUILDING_TYPE b_type, fPoint pos, bool builded) : Entity(E_BU
 	case B_TURRET:
 		SetSide(S_ALLY);
 		SetTextureID(T_TURRET);
-		build_rect = IsoRect( GetPosition(), 96, 47);
+		//build_rect = IsoRect(GetPosition(), 96, 47);
 		break;
 
 	case B_WOOD_WALL:
@@ -36,7 +36,7 @@ Building::Building(BUILDING_TYPE b_type, fPoint pos, bool builded) : Entity(E_BU
 		SetRect({ 610,289,100,106 });
 		SetPivot(0.49 * 100, 106 * 0.754717);
 		SetArmor(4);
-		build_rect = IsoRect(GetPosition(), 96, 47);
+		//build_rect = IsoRect(GetPosition(), 96, 47);
 		break;
 
 	case B_TOWNHALL:
@@ -50,7 +50,7 @@ Building::Building(BUILDING_TYPE b_type, fPoint pos, bool builded) : Entity(E_BU
 		SetPivot(0.52459 * 366, 0.72555 * 317);
 		SetTextureID(T_TOWNHALL);
 		totally_built = true;
-		build_rect = IsoRect(GetPosition(), 375, 170);
+		//build_rect = IsoRect(GetPosition(), 375, 170);
 		break;
 	case B_UNIVERSITY:
 		SetSide(S_ALLY);
@@ -63,7 +63,7 @@ Building::Building(BUILDING_TYPE b_type, fPoint pos, bool builded) : Entity(E_BU
 		SetPivot(0.509317*483, 0.726923*291);
 		SetTextureID(T_TOWNHALL);
 		totally_built = true;
-		build_rect = IsoRect(GetPosition(), 483, 210);
+		//build_rect = IsoRect(GetPosition(), 483, 210);
 		break;
 	default:
 		LOG("Error BUILDING TYPE STATS NULL");
@@ -198,6 +198,7 @@ void Building::SetBuildingType(BUILDING_TYPE type)
 	building_type = type;
 }
 
+/*
 void Building::UpgradeWall(BUILDING_TYPE type)
 {
 	if (this->IsBuilt())
@@ -232,7 +233,7 @@ void Building::UpgradeWall(BUILDING_TYPE type)
 			break;
 		}
 	}
-}
+}*/
 
 IsoRect Building::GetBuildRectangle()
 {

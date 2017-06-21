@@ -67,7 +67,7 @@ bool QuadTreeNode::Inside(const Entity* entity) const
 	return area.Inside(entity->GetPosition());
 }
 
-Entity * QuadTreeNode::SearchFirst(int pixel_range, const fPoint from) const
+Entity * QuadTreeNode::SearchFirst(int pixel_range, const iPoint from) const
 {
 	//wrong
 	Elipse circle(from, pixel_range);
@@ -173,7 +173,7 @@ Entity * QuadTreeNode::SearchFirstUnit(const SDL_Rect & rect) const
 	return ret;
 }
 
-Entity * QuadTreeNode::SearchFirstEnemy(int pixel_range, const fPoint from, const Side side, ENTITY_TYPE entity_type) const
+Entity * QuadTreeNode::SearchFirstEnemy(int pixel_range, const iPoint from, const Side side, ENTITY_TYPE entity_type) const
 {
 	Entity* ret = nullptr;
 
@@ -230,7 +230,7 @@ Entity * QuadTreeNode::SearchFirstEnemy(IsoRect rect, const Side side, ENTITY_TY
 	return ret;
 }
 
-void QuadTreeNode::Search(int pixel_range, const fPoint from, std::vector<Entity*>& vec) const
+void QuadTreeNode::Search(int pixel_range, const iPoint from, std::vector<Entity*>& vec) const
 {
 	if (childs[0] == nullptr)
 	{
@@ -319,7 +319,7 @@ void QuadTreeNode::Search(const IsoRect rect, std::vector<Entity*>& vec) const
 				childs[i]->Search(rect, vec);
 }
 
-void QuadTreeNode::SearchForEnemies(int pixel_range, fPoint from, std::vector<Entity*>& vec, const Side side, ENTITY_TYPE entity_type)
+void QuadTreeNode::SearchForEnemies(int pixel_range, iPoint from, std::vector<Entity*>& vec, const Side side, ENTITY_TYPE entity_type)
 {
 	if (childs[0] == nullptr)
 	{
@@ -659,7 +659,7 @@ void QuadTreeNode::SaveAll(pugi::xml_node & node)
 			childs[i]->SaveAll(node);
 }
 
-void QuadTreeNode::BlitMinimap()
+/*void QuadTreeNode::BlitMinimap()
 {
 	if (childs[0] == nullptr)
 	{
@@ -670,7 +670,7 @@ void QuadTreeNode::BlitMinimap()
 	else
 		for (int i = 0; i < 4; i++)
 			childs[i]->BlitMinimap();
-}
+}*/
 
 QuadTree::QuadTree(IsoRect area)
 {
@@ -691,12 +691,12 @@ bool QuadTree::PushBack(Entity * entity) const
 	return true;
 }
 
-Entity * QuadTree::SearchFirst(int pixel_range, fPoint from) const
+Entity * QuadTree::SearchFirst(int pixel_range, iPoint from) const
 {
 	return origin->SearchFirst(pixel_range, from);
 }
 
-Entity * QuadTree::SearchFirstEnemy(int pixel_range, fPoint from, Side side, ENTITY_TYPE entity_type) const
+Entity * QuadTree::SearchFirstEnemy(int pixel_range, iPoint from, Side side, ENTITY_TYPE entity_type) const
 {
 	return origin->SearchFirstEnemy(pixel_range, from, side);
 }
@@ -713,12 +713,12 @@ bool QuadTree::CheckIfFull(IsoRect tile,const Entity* exeption) const
 	return false;
 }
 
-void QuadTree::Search(int pixel_range, fPoint from, std::vector<Entity*>& vec) const
+void QuadTree::Search(int pixel_range, iPoint from, std::vector<Entity*>& vec) const
 {
 	origin->Search(pixel_range, from, vec);
 }
 
-void QuadTree::SearchForEnemies(int pixel_range, fPoint from, std::vector<Entity*>& vec, const Side side, ENTITY_TYPE entity_type)
+void QuadTree::SearchForEnemies(int pixel_range, iPoint from, std::vector<Entity*>& vec, const Side side, ENTITY_TYPE entity_type)
 {
 	origin->SearchForEnemies(pixel_range, from,	vec, side, entity_type);
 }
@@ -774,10 +774,10 @@ void QuadTree::SaveAll(pugi::xml_node & node)
 	origin->SaveAll(node);
 }
 
-void QuadTree::BlitMinimap() const
+/*void QuadTree::BlitMinimap() const
 {
 	origin->BlitMinimap();
-}
+}*/
 
 Entity * QuadTree::ClickSelect(const iPoint & mouse_pos) const
 {

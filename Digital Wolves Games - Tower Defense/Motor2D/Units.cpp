@@ -13,11 +13,9 @@
 #include "j1Score.h"
 #include "j1Scene.h"
 
-Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNIT, pos, side), unit_type(u_type), direction(D_EAST), action(A_IDLE), changed(false), target(nullptr), ai_update(0)
+Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, pos, side), unit_type(u_type), direction(D_EAST), action(A_IDLE), changed(false), target(nullptr), ai_update(0), unit_circle(GetPosition(), 18)
 {
 	//Add paths
-	
-
 	if (side == S_ENEMY)
 	{
 		//if the bonuses start in true they are never applied
@@ -37,13 +35,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 15.0f;
 		range = LONG_COMBAT_RANGE;
 		unit_class = C_ARCHER;
-		unit_circle = Elipse(GetPosition(), 18);
+		//unit_circle = Elipse(GetPosition(), 18);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_HEAVYCAVALRYARCHER);
 		else
 			SetTextureID(T_HEAVYCAVALRYARCHER);
-
-		priority = 1;
 		break;
 
 		//INFANTRY
@@ -56,13 +52,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 80.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_INFANTRY;
-		unit_circle = Elipse(GetPosition(), 10);
+		//unit_circle = Elipse(GetPosition(), 10);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_MILITIA);
 		else
 			SetTextureID(T_MILITIA);
-
-		priority = 1;
 		break;
 
 	case U_MANATARMS:
@@ -73,12 +67,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 120.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_INFANTRY;
-		unit_circle = Elipse(GetPosition(), 10);
+		//unit_circle = Elipse(GetPosition(), 10);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_MANATARMS);
 		else
 			SetTextureID(T_MANATARMS);
-		priority = 1;
 		break;
 
 	case U_LONGSWORDMAN:
@@ -89,12 +82,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 95.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_INFANTRY;
-		unit_circle = Elipse(GetPosition(), 10);
+		//unit_circle = Elipse(GetPosition(), 10);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_LONGSWORDMAN);
 		else
 			SetTextureID(T_LONGSWORDMAN);
-		priority = 1;
 		break;
 
 	case U_TWOHANDEDSWORDMAN:
@@ -105,12 +97,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 100.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_INFANTRY;
-		unit_circle = Elipse(GetPosition(), 10);
+		//unit_circle = Elipse(GetPosition(), 10);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_TWOHANDEDSWORDMAN);
 		else
 			SetTextureID(T_TWOHANDEDSWORDMAN);
-		priority = 3;
 		break;
 
 	case U_CHAMPION:
@@ -121,12 +112,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 100.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_INFANTRY;
-		unit_circle = Elipse(GetPosition(), 10);
+		//unit_circle = Elipse(GetPosition(), 10);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_CHAMPION);
 		else
 			SetTextureID(T_CHAMPION);
-		priority = 1;
 		break;
 
 	case U_SPEARMAN:
@@ -137,12 +127,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 95.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_INFANTRY;
-		unit_circle = Elipse(GetPosition(), 10);
+		//unit_circle = Elipse(GetPosition(), 10);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_SPEARMAN);
 		else
 			SetTextureID(T_SPEARMAN);
-		priority = 1;
 		break;
 
 	case U_PIKEMAN:
@@ -153,12 +142,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 95.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_INFANTRY;
-		unit_circle = Elipse(GetPosition(), 10);
+		//unit_circle = Elipse(GetPosition(), 10);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_PIKEMAN);
 		else
 			SetTextureID(T_PIKEMAN);
-		priority = 1;
 		break;
 
 		//---
@@ -172,12 +160,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 95.0f;
 		range = LONG_COMBAT_RANGE;
 		unit_class = C_ARCHER;
-		unit_circle = Elipse(GetPosition(), 10);
+		//unit_circle = Elipse(GetPosition(), 10);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_ARCHER);
 		else
 			SetTextureID(T_ARCHER);
-		priority = 1;
 		break;
 
 
@@ -189,12 +176,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 80.0f;
 		range = MID_COMBAT_RANGE;
 		unit_class = C_ARCHER;
-		unit_circle = Elipse(GetPosition(), 10);
+		//unit_circle = Elipse(GetPosition(), 10);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_ARBALEST);
 		else
 			SetTextureID(T_ARBALEST);
-		priority = 1;
 		break;
 
 	case U_CAVALRYARCHER:
@@ -205,12 +191,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 85.0f;
 		range = LONG_COMBAT_RANGE;
 		unit_class = C_ARCHER;
-		unit_circle = Elipse(GetPosition(), 18);
+		//unit_circle = Elipse(GetPosition(), 18);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_CAVALRYARCHER);
 		else
 			SetTextureID(T_CAVALRYARCHER);
-		priority = 2;
 		break;
 
 	case U_HEAVYCAVALRYARCHER:
@@ -221,12 +206,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 120.0f;
 		range = LONG_COMBAT_RANGE;
 		unit_class = C_ARCHER;
-		unit_circle = Elipse(GetPosition(), 18);
+		//unit_circle = Elipse(GetPosition(), 18);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_HEAVYCAVALRYARCHER);
 		else
 			SetTextureID(T_HEAVYCAVALRYARCHER);
-		priority = 2;
 		break;
 
 		//---
@@ -240,12 +224,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 110.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_CAVALRY;
-		unit_circle = Elipse(GetPosition(), 18);
+		//unit_circle = Elipse(GetPosition(), 18);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_PALADIN);
 		else
 			SetTextureID(T_PALADIN);
-		priority = 2;
 		break;
 
 	case U_KNIGHT:
@@ -256,12 +239,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 105.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_CAVALRY;
-		unit_circle = Elipse(GetPosition(), 18);
+		//unit_circle = Elipse(GetPosition(), 18);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_KNIGHT);
 		else
 			SetTextureID(T_KNIGHT);
-		priority = 2;
 		break;
 
 	case U_CAVALIER:
@@ -272,12 +254,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 100.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_CAVALRY;
-		unit_circle = Elipse(GetPosition(), 18);
+		//unit_circle = Elipse(GetPosition(), 18);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_CAVALIER);
 		else
 			SetTextureID(T_CAVALIER);
-		priority = 2;
 		break;
 
 		//---
@@ -291,12 +272,11 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 210.0f;
 		range = CLOSE_COMBAT_RANGE;
 		unit_class = C_SIEGE;
-		unit_circle = Elipse(GetPosition(), 30);
+		//unit_circle = Elipse(GetPosition(), 30);
 		if (side == S_ENEMY)
 			SetTextureID(T_ENEMY_SIEGERAM);
 		else
 			SetTextureID(T_SIEGERAM);
-		priority = 1;
 		break;
 
 	case U_MANGONEL:
@@ -307,9 +287,8 @@ Unit::Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority) : Entity(E_UNI
 		rate_of_fire = 300.0f;
 		range = LONG_COMBAT_RANGE;
 		unit_class = C_SIEGE;
-		unit_circle = Elipse(GetPosition(), 30);
+		//unit_circle = Elipse(GetPosition(), 30);
 		SetTextureID(T_MANGONEL);
-		priority = 1;
 		break;
 
 	default:
@@ -368,7 +347,7 @@ void Unit::AI()
 	}
 
 	//Investigations bonuses
-	CheckUnitsBuffs();
+	//CheckUnitsBuffs();
 	//----------------------
 
 	switch (action)
@@ -482,8 +461,8 @@ void Unit::AI()
 			break;
 		}
 
-		if (CenterUnit() == true)
-			StartAttack();
+		//if (CenterUnit() == true)
+			//StartAttack();
 
 		break;
 
@@ -558,6 +537,11 @@ void Unit::Draw()
 
 	App->render->PushInGameSprite(this);
 
+}
+
+const iPoint Unit::GetPixelPosition()
+{
+	return App->map->MapToWorld(GetPosition()) - position_in_tile; 
 }
 
 const DIRECTION Unit::GetDir() const
@@ -836,8 +820,8 @@ void Unit::UnitDies()
 			break;
 		}
 	
-	if (GetSide() == S_ENEMY)
-		App->score->EnemyKilled();
+	/*if (GetSide() == S_ENEMY)
+		App->score->EnemyKilled();*/
 
 	if (unit_type == U_SIEGERAM)
 		App->entity_manager->DropUnits(GetX(), GetY());
@@ -855,9 +839,9 @@ bool Unit::OutOfHP() const
 
 void Unit::EnemyInSight()
 {
-	Entity* ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPosition(), GetSide(), this, E_UNIT);
+	Entity* ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this, E_UNIT);
 	if (ret == nullptr)
-		ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPosition(), GetSide(), this);
+		ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this);
 
 	if (ret != nullptr && ret != target)
 	{
@@ -869,7 +853,7 @@ void Unit::EnemyInSight()
 
 void Unit::GoToEnemy()
 {
-	destination = App->pathfinding->FindClosestEmptyAttackTile(target->GetIPos(), range, this);
+	destination = App->pathfinding->FindClosestEmptyAttackTile(target->GetPixelPosition(), range, this);
 	if (destination.y == -1)
 	{
 		target = nullptr;
@@ -887,7 +871,7 @@ void Unit::GoToEnemy()
 void Unit::ChangeDirecctionToEnemy()
 {
 	iPoint destination_tile;
-	destination_tile = App->pathfinding->FindClosestEmptyAttackTile(target->GetIPos(), range, this);
+	destination_tile = App->pathfinding->FindClosestEmptyAttackTile(target->GetPosition(), range, this);
 	if (destination_tile.y == -1)
 		target = nullptr;
 	else
@@ -919,18 +903,18 @@ bool Unit::EnemyDead()
 
 void Unit::DoDamage()
 {
-	LookAt(target->GetIPos());
+	LookAt(target->GetPosition());
 
 	if (unit_class == C_ARCHER)
 	{
 		if (unit_type == U_GOD)
-			App->projectile_manager->CreateProjectile(GetPosition(), target, attack, 5, 30, 0, P_ICE_ARROW);
+			App->projectile_manager->CreateProjectile(GetPixelPosition(), target, attack, 5, 30, 0, P_ICE_ARROW);
 		else
-			App->projectile_manager->CreateProjectile(GetPosition(), target, attack, 15, 20, 0, P_BASIC_ARROW);
+			App->projectile_manager->CreateProjectile(GetPixelPosition(), target, attack, 15, 20, 0, P_BASIC_ARROW);
 	}
 
 	else if(unit_type == U_MANGONEL)
-		App->projectile_manager->CreateProjectile(GetPosition(), target, attack, 30, 40, 50, P_CANNONBALL);
+		App->projectile_manager->CreateProjectile(GetPixelPosition(), target, attack, 30, 40, 50, P_CANNONBALL);
 
 	else
 		target->Damaged(attack);
@@ -980,7 +964,7 @@ void Unit::SetAttackPosition()
 void Unit::StartAttack()
 {
 	action = A_ATTACK;
-	LookAt(target->GetIPos());
+	LookAt(target->GetPosition());
 	changed = true;
 }
 
@@ -1003,6 +987,7 @@ void Unit::GetNewDestination()
 		GoToTile(destination);
 }
 
+/*
 void Unit::CheckUnitsBuffs()
 {
 	//Bonus attack
@@ -1064,6 +1049,7 @@ void Unit::CheckUnitsBuffs()
 	}
 	//-------------
 }
+*/
 
 void Unit::GoToTileCenter()
 {
@@ -1081,17 +1067,10 @@ void Unit::GoToTileCenter()
 	move_vector.y = move_vector.y / modul;
 }
 
-bool Unit::CenterUnit()
+void Unit::CenterUnit()
 {
-	SetPosition(GetX() + move_vector.x*speed, GetY() + move_vector.y*speed);
-	unit_circle.SetPosition(GetPosition());
-
-	iPoint tile = GetTile();
-	iPoint center = App->map->MapToWorld(tile.x, tile.y);
-
-	if (GetIPos().DistanceTo(center) <= 3)
-		return true;
-	return false;
+	position_in_tile.x = 0;
+	position_in_tile.y = 0;
 }
 
 void Unit::ChangeAnimation()

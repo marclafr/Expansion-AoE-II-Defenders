@@ -20,7 +20,8 @@
 #include "j1MainMenu.h"
 #include "j1ScoreScene.h"
 #include "j1WaveManager.h"
-#include "UIButton.h"
+
+/*#include "UIButton.h"
 #include "UILabel.h"
 #include "UIHUDPanelButtons.h"
 #include "UIHUDDescription.h"
@@ -29,7 +30,7 @@
 #include "UICheckbutton.h"
 #include "UIHUDMenuInGame.h"
 #include "j1UIManager.h"
-#include "UIGetEntitiesInfo.h"
+#include "UIGetEntitiesInfo.h"*/
 
 #define RECT_INGAME_WITHOUT_UI {0, 15, 1360, 620}
 
@@ -60,8 +61,8 @@ bool j1Scene::Start()
 	App->anim->Enable();
 	App->entity_manager->Enable();
 	App->projectile_manager->Enable();
-	App->investigations->Enable();
-	App->score->Enable();
+	//App->investigations->Enable();
+	//App->score->Enable();
 
 	App->score_scene->prove_achievements = true;
 	App->score_scene->build_simple_tower = true;
@@ -69,8 +70,9 @@ bool j1Scene::Start()
 
 	App->render->camera->SetPosition(iPoint(1700, -2400));
 	CreateSceneUI();
+
 	//ENTITIES
-	townhall = (Building*)App->entity_manager->CreateBuilding(B_TOWNHALL, fPoint(0, 272), S_ALLY);
+	/*townhall = (Building*)App->entity_manager->CreateBuilding(B_TOWNHALL, fPoint(0, 272), S_ALLY);
 	resources = new ResourceManager();
 
 	iPoint tower_ipos = App->map->MapToWorld(TOWER_POS_1_X, TOWER_POS_1_Y);
@@ -83,20 +85,20 @@ bool j1Scene::Start()
 	App->entity_manager->CreateTower(T_BASIC_TOWER, tower_pos);
 
 	App->entity_manager->CreateBuilding(B_UNIVERSITY, fPoint(1093, 819), S_ALLY);
-	fish_anim = new AnimationManager(App->anim->GetAnimationType(ANIM_FISH_JUMP));
+	fish_anim = new AnimationManager(App->anim->GetAnimationType(ANIM_FISH_JUMP));*/
 	//--
 	
-	App->score->Reset();
+	//App->score->Reset();
 
 	//TUTORIAL
-	if (App->tutorial->tutorial)
+	/*if (App->tutorial->tutorial)
 	{
 		App->tutorial->Enable();
 		App->tutorial->TutorialReset();
 		TutorialUI();
 	}
 	else
-		App->wave_manager->Enable();//TODO put after tutorial
+		App->wave_manager->Enable();//TODO put after tutorial*/
 		 
 	mouse_click_move_anim = new AnimationManager(App->anim->GetAnimationType(ANIM_MOUSE_CLICK_MOVE));
 
@@ -129,12 +131,13 @@ bool j1Scene::Update(float dt)
 	App->input->GetMousePosition(x, y);
 	iPoint res = App->render->ScreenToWorld(x, y);
 	
+	/*
 	if (placing_tower == T_BASIC_TOWER)
 		PlacingTower(T_BASIC_TOWER);
 	if (placing_tower == T_BOMBARD_TOWER)
 		PlacingTower(T_BOMBARD_TOWER);
 	if (placing_wall == true)
-		PlacingWall();
+		PlacingWall();*/
 
 	//SELECTION
 	if (selecting)
@@ -172,7 +175,7 @@ bool j1Scene::Update(float dt)
 		App->render->PushUISprite(App->tex->GetTexture(T_MOUSE_CLICK_MOVE), mouse_click_objective.x, mouse_click_objective.y, &rect, SDL_FLIP_NONE, pivot.x, pivot.y);
 	}
 
-	if (bring_next_wave)
+	/*if (bring_next_wave)
 	{
 		new_wave_exclamation = App->uimanager->AddComponent(UIT_UIIMAGE, { 1190, 715, 41, 41 }, { 1079, 1313, 41, 41 });
 		bring_next_wave = false;
@@ -194,6 +197,7 @@ bool j1Scene::Update(float dt)
 	App->render->PushInGameSprite(App->tex->GetTexture(T_FISH_ANIMATION), -300, 1000, &anim_rect, SDL_FLIP_NONE, anim_pivot.x, anim_pivot.y + 100);
 	App->render->PushInGameSprite(App->tex->GetTexture(T_FISH_ANIMATION), -400, 750, &anim_rect, SDL_FLIP_NONE, anim_pivot.x, anim_pivot.y + 100);//no final positions just to try
 	App->render->PushInGameSprite(App->tex->GetTexture(T_FISH_ANIMATION), 1900, 2200, &anim_rect, SDL_FLIP_NONE, anim_pivot.x, anim_pivot.y + 100);	// Camera Movement (has to go after blit so that sprites print in the right camera position)
+	*/
 	App->render->camera->KeyboardMove(dt);
 	App->render->camera->MouseMove(x, y, dt);
 	
@@ -207,7 +211,7 @@ bool j1Scene::PostUpdate()
 	bool ret = true;
 
 	//TODO: defeat
-	if (townhall->GetHp() <= 0)
+	/*if (townhall->GetHp() <= 0)
 	{
 		lose = true;
 		App->FinishGame("save_game.xml");
@@ -220,7 +224,7 @@ bool j1Scene::PostUpdate()
 		App->FinishGame("save_game.xml");
 		App->scene_manager->ChangeScene(SC_SCORE);
 		App->SaveAchievements("Achievements.xml");
-	}
+	}*/
 
 	return ret;
 }
@@ -230,24 +234,25 @@ bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-	delete resources;
+	//delete resources;
 
-	App->score->active = false;
+	//App->score->active = false;
 
-	App->investigations->Disable();
-	App->wave_manager->Disable();
+	//App->investigations->Disable();
+	//App->wave_manager->Disable();
 	App->projectile_manager->Disable();
 	App->entity_manager->Disable();
 	App->anim->Disable();
 	App->map->Disable();
 	App->pathfinding->Disable();
-	App->tutorial->Disable();
+	//App->tutorial->Disable();
 	
-	App->uimanager->SetAllToDelete();
+	//App->uimanager->SetAllToDelete();
 
 	return true;
 }
 
+/*
 void j1Scene::PlacingTower(TOWER_TYPE type)
 {
 	SDL_Texture* tower_tex;
@@ -649,7 +654,7 @@ void j1Scene::PlacingWall()
 		placing_wall_clicked = false;
 	}
 }
-
+*/
 void j1Scene::HandleInput( SDL_Event event)
 {	
 	SDL_Rect rect_ingame_no_ui = RECT_INGAME_WITHOUT_UI;
@@ -737,12 +742,12 @@ void j1Scene::HandleInput( SDL_Event event)
 			placing_wall = true;
 		//--
 
-		if (event.button.button == App->input->menu)
-			App->uimanager->ShowInGameMenu();
+		/*if (event.button.button == App->input->menu)
+			App->uimanager->ShowInGameMenu();*/
 
-		if (event.button.button == SDL_SCANCODE_4)
+		/*if (event.button.button == SDL_SCANCODE_4)
 			if (App->scene->resources->CanTrainSoldier(U_TWOHANDEDSWORDMAN))
-				App->scene->resources->TrainSoldier(U_TWOHANDEDSWORDMAN);
+				App->scene->resources->TrainSoldier(U_TWOHANDEDSWORDMAN);*/
 		break;
 
 	case SDL_KEYUP:
@@ -752,6 +757,7 @@ void j1Scene::HandleInput( SDL_Event event)
 
 void j1Scene::CreateSceneUI()
 {
+	/*
 	//UIElements
 	//Top_HUD
 	App->uimanager->AddComponent(UIT_UIIMAGE, { 0, 0, 1336, 23 }, { 0, 1011, 1366, 23 });
@@ -871,9 +877,10 @@ void j1Scene::CreateSceneUI()
 	//INFO SCORE, TIME, ENEMIES LEFT
 	UIComponents* info_ui = App->uimanager->AddComponent(UIT_UIIMAGE, { 1236, 25, 130, 65 }, { 944, 1313, 130, 88 });
 	App->uimanager->SetInfoUIComponent(info_ui);
+	*/
 }
 
-
+/*
 void j1Scene::TutorialUI()
 {
 
@@ -919,12 +926,13 @@ void j1Scene::TutorialUI()
 	App->tutorial->text1_tutorial1 = App->uimanager->AddLabel(1130, 310, "Press 1 to build a Simple Tower", { 0,0,0,0 });
 	App->tutorial->text2_tutorial1 = App->uimanager->AddLabel(1130, 330, "Press 2 to build a Bombard Tower", { 0,0,0,0 });
 	App->tutorial->text3_tutorial1 = App->uimanager->AddLabel(1130, 350, "Press 3 to build a Wall", { 0,0,0,0 });
-}
+}*/
 
+/*
 const int j1Scene::GetTownHallHp()
 {
 	return townhall->GetHp();
-}
+}*/
 
 const SDL_Rect & j1Scene::GetSelectionRect() const
 {

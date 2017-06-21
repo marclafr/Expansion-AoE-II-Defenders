@@ -34,7 +34,7 @@ private:
 	SDL_Rect rect;
 	iPoint pivot;
 	bool to_delete = false;
-	fPoint position;
+	iPoint position; //tile
 	int hp = 1;
 	int armor = 0;
 	int attack = 0;
@@ -46,14 +46,14 @@ private:
 	float ai_dt = 0;
 
 public:
-	Entity(ENTITY_TYPE entity_type, fPoint pos, Side side);
+	Entity(ENTITY_TYPE entity_type, iPoint pos, Side side);
 
 	~Entity();
 
 	virtual void Update(float dt) = 0;
 	virtual void AI() = 0;
 	virtual void Draw() = 0;
-
+	virtual const iPoint GetPixelPosition() = 0;
 	virtual void Die();//to_delete = true
 
 	void DT(float dt);
@@ -68,7 +68,7 @@ public:
 	void SetPosition(float x, float y);
 	float GetArrowPos() const;
 	void ResetArrowPos();
-	void UpdateArrow(int StartHeight, fPoint TargetPos, int CurveHeight, float TimeSecs);
+	void UpdateArrow(int start_height, iPoint target_pos, int curve_height, float time_secs);
 
 	ENTITY_TYPE GetEntityType() const;
 	ENTITY_STATUS GetEntityStatus();
@@ -77,8 +77,7 @@ public:
 	void IncreaseArmor(int extra_defense);
 	const float GetX() const;
 	const float GetY() const;
-	const fPoint GetPosition() const;
-	const iPoint GetIPos() const;
+	const iPoint GetPosition() const;
 	const int GetAttack() const;
 	const iPoint GetPivot() const;
 	const SDL_Rect GetRect() const;
@@ -91,7 +90,7 @@ public:
 	void Damaged(int dmg);
 	void UpgradeUnit(int plushealth);
 	void SetHp(int new_hp);
-	void DrawPointMinimap();
+	//void DrawPointMinimap();
 
 	const SDL_Rect GetTextureRectWorldPos() const;
 

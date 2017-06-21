@@ -82,7 +82,6 @@
     <ClCompile Include="Buildings.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="GetEntitiesInfo.cpp" />
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="IsoPrimitives.cpp" />
     <ClCompile Include="j1Achievements.cpp" />
@@ -97,7 +96,6 @@
     <ClCompile Include="j1Score.cpp" />
     <ClCompile Include="j1ScoreScene.cpp" />
     <ClCompile Include="j1Tutorial.cpp" />
-    <ClCompile Include="j1UIManager.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />
@@ -113,8 +111,6 @@
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Textures.cpp" />
     <ClCompile Include="j1Window.cpp" />
-    <ClCompile Include="PanelInfoGroupSelection.cpp" />
-    <ClCompile Include="PanelInfoOneSelection.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
@@ -124,19 +120,6 @@
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="theoraplay.c" />
     <ClCompile Include="Towers.cpp" />
-    <ClCompile Include="UIButton.cpp" />
-    <ClCompile Include="UICheckbutton.cpp" />
-    <ClCompile Include="UIComponents.cpp" />
-    <ClCompile Include="UIHUDDescription.cpp" />
-    <ClCompile Include="UIHUDMenuInGame.cpp" />
-    <ClCompile Include="UIHUDMinimap.cpp" />
-    <ClCompile Include="UIHUDPanelButtons.cpp" />
-    <ClCompile Include="UIHUDPanelInfo.cpp" />
-    <ClCompile Include="UIHUDResources.cpp" />
-    <ClCompile Include="UIHUDScoreBar.cpp" />
-    <ClCompile Include="UIHUDTownHallBarLife.cpp" />
-    <ClCompile Include="UILabel.cpp" />
-    <ClCompile Include="UISelectOption.cpp" />
     <ClCompile Include="Units.cpp" />
     <ClCompile Include="j1Video.cpp" />
   </ItemGroup>
@@ -158,7 +141,6 @@
     <ClInclude Include="j1Score.h" />
     <ClInclude Include="j1ScoreScene.h" />
     <ClInclude Include="j1Tutorial.h" />
-    <ClInclude Include="j1UIManager.h" />
     <ClInclude Include="j1Map.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />
@@ -176,9 +158,6 @@
     <ClInclude Include="j1Render.h" />
     <ClInclude Include="j1Textures.h" />
     <ClInclude Include="j1Window.h" />
-    <ClInclude Include="PanelInfoBasicStructure.h" />
-    <ClInclude Include="PanelInfoGroupSelection.h" />
-    <ClInclude Include="PanelInfoOneSelection.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectileManager.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
@@ -190,20 +169,6 @@
     <ClInclude Include="Task.h" />
     <ClInclude Include="theoraplay.h" />
     <ClInclude Include="Towers.h" />
-    <ClInclude Include="UIButton.h" />
-    <ClInclude Include="UICheckbutton.h" />
-    <ClInclude Include="UIComponents.h" />
-    <ClInclude Include="UIGetEntitiesInfo.h" />
-    <ClInclude Include="UIHUDDescription.h" />
-    <ClInclude Include="UIHUDMenuInGame.h" />
-    <ClInclude Include="UIHUDMinimap.h" />
-    <ClInclude Include="UIHUDPanelButtons.h" />
-    <ClInclude Include="UIHUDPanelInfo.h" />
-    <ClInclude Include="UIHUDResources.h" />
-    <ClInclude Include="UIHUDScoreBar.h" />
-    <ClInclude Include="UIHUDTownHallBarLife.h" />
-    <ClInclude Include="UILabel.h" />
-    <ClInclude Include="UISelectOption.h" />
     <ClInclude Include="Units.h" />
     <ClInclude Include="j1Video.h" />
   </ItemGroup>

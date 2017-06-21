@@ -15,7 +15,7 @@
 #include "j1Pathfinding.h"
 #include "j1Fonts.h"
 #include "j1Animation.h"
-#include "j1UIManager.h"
+//#include "j1UIManager.h"
 #include "j1EntityManager.h"
 #include "j1Scene.h"
 #include "j1MainMenu.h"
@@ -50,18 +50,18 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	font = new j1Fonts();
 	anim = new j1Animation();
 	map = new j1Map();
-	uimanager = new j1UIManager();
+	//uimanager = new j1UIManager();
 	main_menu = new j1MainMenu();
 	scene = new j1Scene();
 	score_scene = new j1ScoreScene();
 	//collision = new j1Collision();
 	scene_manager = new j1SceneManager();
-	wave_manager = new j1WaveManager();
+	//wave_manager = new j1WaveManager();
 	console = new j1Console();
-	investigations = new j1Investigations();
-	score = new j1Score();
+	//investigations = new j1Investigations();
+	//score = new j1Score();
 	achievements = new j1Achievements();
-	tutorial = new j1Tutorial();
+	//tutorial = new j1Tutorial();
 	video = new j1Video();
 	intro = new j1Intro();
 	mouse = new j1Mouse();
@@ -75,7 +75,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(font);
-	AddModule(uimanager);
+	//AddModule(uimanager);
 	AddModule(console);
 	AddModule(scene_manager);
 	AddModule(video);
@@ -87,11 +87,11 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	//AddModule(collision, false);
 	AddModule(entity_manager, false);
 	AddModule(projectile_manager, false);
-	AddModule(wave_manager, false);
-	AddModule(investigations, false);
-	AddModule(score, false);
+	//AddModule(wave_manager, false);
+	//AddModule(investigations, false);
+	//AddModule(score, false);
 	AddModule(achievements, false);
-	AddModule(tutorial, false);
+	//AddModule(tutorial, false);
 
 	// Scenes	
 	AddModule(intro);
@@ -530,14 +530,14 @@ void j1App::SaveAchievements(const char * file)
 		Achievements.append_attribute("only_bombs") = 0;
 	}
 
-	if (App->score->GetScore() >= 100000)
+	/*if (App->score->GetScore() >= 100000)
 	{
 		Achievements.append_attribute("points") = 1;
 	}
 	else
 	{
 		Achievements.append_attribute("points") = 0;
-	}
+	}*/
 
 	std::stringstream stream;
 	data.save(stream);
@@ -714,7 +714,7 @@ bool j1App::SavegameNow() const
 
 void DebugFeatures::UpdateDebug()
 {
-	if (add_food)
+	/*if (add_food)
 	{
 		App->scene->resources->AddFood(1000);
 		App->debug_features.add_food = false;
@@ -744,5 +744,5 @@ void DebugFeatures::UpdateDebug()
 	{
 		App->investigations->InstaUnlockAllInvestigations();
 		unlock_investigations = false;
-	}
+	}*/
 }

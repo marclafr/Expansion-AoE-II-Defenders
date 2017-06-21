@@ -155,7 +155,7 @@ iPoint j1PathFinding::FindEmptyTile(iPoint from, Elipse collision) const
 	return iPoint(-1,-1);
 }
 
-iPoint j1PathFinding::FindClosestEmptyAttackTile(iPoint objective_pos, int tile_range, Entity* attacker)
+iPoint j1PathFinding::FindClosestEmptyAttackTile(iPoint objective_tile, int tile_range, Entity* attacker)
 {	
 	iPoint ret(-1, -1);
 
@@ -165,9 +165,8 @@ iPoint j1PathFinding::FindClosestEmptyAttackTile(iPoint objective_pos, int tile_
 		return ret;
 	}
 
-	iPoint attacker_tile = App->map->WorldToMap(attacker->GetX(), attacker->GetY());
+	iPoint attacker_tile = attacker->GetPosition();
 	std::vector<iPoint> empty_attack_tiles;
-	iPoint objective_tile = App->map->WorldToMap(objective_pos.x, objective_pos.y);
 
 	while (tile_range > 0)
 	{

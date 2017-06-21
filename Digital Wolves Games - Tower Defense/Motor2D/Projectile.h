@@ -34,30 +34,30 @@ class Projectile
 private:
 	SDL_Rect rect;
 	iPoint pivot;
-	fPoint StartPos;
-	fPoint ActualPos, PreActualPos;
-	fPoint LastPos;
-	Entity* Target;
-	int Damage;
-	float Diferential;
+	iPoint start_pos;
+	iPoint actual_pos, pre_actual_pos;
+	iPoint last_pos;
+	Entity* target;
+	int damage;
+	float diferential;
 	enum PROJECTILE_TYPE projectile_type;
-	float ProjectilePos = 0; //it goes from 0 to 1
+	float projectile_pos = 0; //it goes from 0 to 1
 	int angle = 0;
-	int StartHeight;
-	int CurveHeight;
+	int start_height;
+	int curve_height;
 	AnimationManager* projectile_anim = nullptr;
 
 	void AreaDamage(int damage, iPoint center, int radius);
 
-	j1PerfTimer PrintElementTerrainTimer;
+	j1PerfTimer print_element_terrain_timer;
 	j1PerfTimer area_damage_timer;
 	bool dest_reached = false;
-	fPoint element_terrain_pos;
-	void PrintElementTerrain(PROJECTILE_TYPE element, fPoint center);
+	iPoint element_terrain_pos;
+	void PrintElementTerrain(PROJECTILE_TYPE element, iPoint center);
 
 public:
 
-	Projectile(fPoint initialpos, Entity* target, int damage, float TimeInSecs,int Startheight, int Curveheight, PROJECTILE_TYPE type);
+	Projectile(iPoint initialpos, Entity* target, int damage, float TimeInSecs,int Startheight, int Curveheight, PROJECTILE_TYPE type);
 	~Projectile();
 
 	void Update();

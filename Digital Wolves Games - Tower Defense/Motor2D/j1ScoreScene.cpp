@@ -15,12 +15,12 @@
 #include "j1Score.h"
 #include "Task.h"
 
-#include "UIButton.h"
+/*#include "UIButton.h"
 #include "UILabel.h"
 #include "UIHUDScoreBar.h"
 #include "UICheckbutton.h"
 #include "UIGetEntitiesInfo.h"
-#include "j1UIManager.h"
+#include "j1UIManager.h"*/
 
 j1ScoreScene::j1ScoreScene() : j1Module()
 {
@@ -51,6 +51,8 @@ bool j1ScoreScene::Start()
 	achievements_unselected = true;
 	components_achievements_deleted = true;
 
+	//UI
+	/*
 	//BACKGROUND
 	App->uimanager->AddComponent(UIT_UIIMAGE, { 0, 0, 1336, 622 }, { 0, 1504, 1366, 622 });
 
@@ -76,6 +78,7 @@ bool j1ScoreScene::Start()
 		App->uimanager->AddLabel(655, 21, "You Lose!!");
 		App->audio->PlayMusic("audio/music/Lost_Game01.ogg", 0.0f);
 	}
+	*/
 	return true;
 }
 
@@ -88,9 +91,7 @@ bool j1ScoreScene::PreUpdate()
 // Called each loop iteration
 bool j1ScoreScene::Update(float dt)
 {
-
-
-	OptionSelected();
+	//OptionSelected();
 	App->render->BlitScoreScene();
 	return true;
 }
@@ -111,15 +112,16 @@ bool j1ScoreScene::CleanUp()
 {
 	LOG("Freeing  MainMenu");
 
-	App->score->Disable();
-	App->uimanager->SetAllToDelete();
+	//App->score->Disable();
+	//App->uimanager->SetAllToDelete();
 
 	return true;
 }
 
+/*
 void j1ScoreScene::ActualTrophie()
 {
-
+	
 	if (App->score->GetScore() >= 6975 && App->score->GetScore() <= 21900)
 	{
 		actual_trophie = App->uimanager->AddComponent(UIT_UIIMAGE, { 850, 410, 87, 98 }, { 677, 1370, 87, 98 });
@@ -284,7 +286,7 @@ void j1ScoreScene::CreateAllButtons()
 	btn->SetLabel(label = App->uimanager->AddLabel(440, 710, "Achievements", { 255,255,255,0 }));
 	label->SetColorMouseOnTop({ 255,255,0,0 });
 }
-
+*/
 void j1ScoreScene::SetSceneChange(bool is_change)
 {
 	scene_changing = is_change;
@@ -315,7 +317,7 @@ void j1ScoreScene::ChangeUnselected(BUTTONSUNDERGROUND unselected)
 	}
 }
 
-void j1ScoreScene::OptionSelected()
+/*void j1ScoreScene::OptionSelected()
 {
 	if (trophies_unselected)
 	{
@@ -365,4 +367,4 @@ void j1ScoreScene::OptionSelected()
 		if(components_achievements_deleted)
 			CreateAchievements();
 	}
-}
+}*/

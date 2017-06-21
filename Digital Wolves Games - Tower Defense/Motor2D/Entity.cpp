@@ -3,12 +3,12 @@
 #include "j1Map.h"
 #include "j1Render.h"
 #include "Camera.h"
-#include "j1UIManager.h"
-#include "UIHUDMinimap.h"
+//#include "j1UIManager.h"
+//#include "UIHUDMinimap.h"
 #include "Entity.h"
 
 
-Entity::Entity(ENTITY_TYPE entity_type, fPoint pos, Side side): to_delete (false), entity_type(entity_type), position(pos), side(side)
+Entity::Entity(ENTITY_TYPE entity_type, iPoint pos, Side side): to_delete (false), entity_type(entity_type), position(pos), side(side)
 {}
 
 Entity::~Entity()
@@ -102,20 +102,20 @@ void Entity::ResetArrowPos()
 	Arrow_pos = 0;
 }
 
-void Entity::UpdateArrow(int StartHeight, fPoint TargetPos, int CurveHeight, float TimeSecs)
+void Entity::UpdateArrow(int start_height, iPoint target_pos, int curve_height, float time_secs)
 {
 	SDL_Rect rect = { 0,0,45,8};
 	iPoint pos;
 
-	fPoint initial_point = { GetPosition().x,GetPosition().y - StartHeight };
-	fPoint last_point = TargetPos;
-	fPoint mid_point = { (initial_point.x + last_point.x) / 2,((initial_point.y + last_point.y) / 2) - CurveHeight};
+	iPoint initial_point = { GetPosition().x,GetPosition().y - start_height };
+	iPoint last_point = target_pos;
+	iPoint mid_point = { (initial_point.x + last_point.x) / 2,((initial_point.y + last_point.y) / 2) - curve_height };
 
 	pos.x = ((1 - Arrow_pos)*(1 - Arrow_pos)*initial_point.x) + ((2 * Arrow_pos)*(1 - Arrow_pos)*mid_point.x) + ((Arrow_pos*Arrow_pos)*last_point.x);
 	pos.y = ((1 - Arrow_pos)*(1 - Arrow_pos)*initial_point.y) + ((2 * Arrow_pos)*(1 - Arrow_pos)*mid_point.y) + ((Arrow_pos*Arrow_pos)*last_point.y);
 
 	App->render->PushInGameSprite(App->tex->GetTexture(T_ARROW_BOMB), pos.x, pos.y, &rect, SDL_FLIP_NONE, 0, 0, 1, 0, false);
-	float diferential = 1/ TimeSecs;
+	float diferential = 1/ time_secs;
 
 	Arrow_pos += diferential;
 	if (Arrow_pos > 1) Arrow_pos = 1;
@@ -131,14 +131,9 @@ const float Entity::GetY() const
 	return position.y;
 }
 
-const fPoint Entity::GetPosition() const
+const iPoint Entity::GetPosition() const
 {
 	return position;
-}
-
-const iPoint Entity::GetIPos() const
-{
-	return iPoint(position.x, position.y);
 }
 
 const int Entity::GetHp() const
@@ -250,6 +245,7 @@ void Entity::UpgradeUnit(int plushealth) {
 
 }
 
+/*
 void Entity::DrawPointMinimap()
 {
 	iPoint unit_minimap_pos = App->uimanager->GetMinimap()->WorldToMinimap(position);
@@ -261,7 +257,7 @@ void Entity::DrawPointMinimap()
 		atlas_point = RED_POINT_ATLAS;
 	//Draw enemy units points
 	App->render->Blit((SDL_Texture*)App->uimanager->GetAtlas(), unit_minimap_pos.x - App->render->camera->GetPosition().x, unit_minimap_pos.y - App->render->camera->GetPosition().y, &atlas_point);
-}
+}*/
 
 const SDL_Rect Entity::GetTextureRectWorldPos() const
 {

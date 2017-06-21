@@ -1,4 +1,5 @@
-#ifndef _RESOURCE_MANAGER
+//TODO activate
+/*#ifndef _RESOURCE_MANAGER
 #define _RESOURCE_MANAGER
 
 #define STARTING_WOOD 325
@@ -108,3 +109,4 @@ public:
 
 
 #endif
+*/

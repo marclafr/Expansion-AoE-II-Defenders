@@ -63,17 +63,16 @@ public:
 
 	//Enable Module with submodules
 	void CreateSceneUI();
-	void EnableScene();
 
-	void PlacingTower(TOWER_TYPE type);
+	/*void PlacingTower(TOWER_TYPE type);
 	
-	void PlacingWall();
+	void PlacingWall();*/
 
 	void HandleInput(SDL_Event event);
 
-	void TutorialUI();
+	//void TutorialUI();
 
-	const int GetTownHallHp();
+	//const int GetTownHallHp();
 	Building* townhall;
 
 	const SDL_Rect& GetSelectionRect() const;
@@ -114,7 +113,7 @@ public:
 	TOWER_TYPE placing_tower = T_NO_TYPE;
 	bool placing_wall = false;
 
-	ResourceManager* resources = nullptr;
+	//ResourceManager* resources = nullptr;
 
 	std::vector<Entity*> selection;
 };

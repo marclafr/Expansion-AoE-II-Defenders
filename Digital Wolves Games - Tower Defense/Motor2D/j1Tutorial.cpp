@@ -1,4 +1,4 @@
-#include "p2Defs.h"
+/*#include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Input.h"
@@ -15,9 +15,9 @@
 #include "j1SceneManager.h"
 #include "Task.h"
 
-#include "UIButton.h"
-#include "UILabel.h"
-#include "j1UIManager.h"
+//#include "UIButton.h"
+//#include "UILabel.h"
+//#include "j1UIManager.h"
 
 j1Tutorial::j1Tutorial() : j1Module()
 {
@@ -130,7 +130,7 @@ bool j1Tutorial::PostUpdate()
 bool j1Tutorial::CleanUp()
 {
 	LOG("Freeing  MainMenu");
-	App->uimanager->SetAllToDelete();
+	//App->uimanager->SetAllToDelete();
 	tutorial = false;
 	tutorial1_deleted = false;
 	tutorial2_deleted = false;
@@ -245,6 +245,7 @@ void j1Tutorial::TutorialReset()
 	NextWaveButtonSelected = false;
 }
 
+
 void j1Tutorial::Tutorial1()
 {
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
@@ -338,7 +339,7 @@ void j1Tutorial::Tutorial5()
 
 void j1Tutorial::Tutorial6()
 {
-	App->wave_manager->Enable(); 
+	//App->wave_manager->Enable(); 
 	tutorial = false;
 	if (!tutorial6_part1)
 	{
@@ -364,4 +365,4 @@ void j1Tutorial::Tutorial7()
 	{
 		tutorial_num = TUTORIAL_8;
 	}
-}
+}*/

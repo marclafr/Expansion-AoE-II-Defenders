@@ -44,15 +44,15 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	void OptionSelected();
+	//void OptionSelected();
 
-	void ActualTrophie();
+	//void ActualTrophie();
 
 	bool game_scene = true;
 
-	void CreateAchievements();
-	void CreateTrophies();
-	void CreateAllButtons();
+	//void CreateAchievements();
+	//void CreateTrophies();
+	//void CreateAllButtons();
 	void SetSceneChange(bool);
 	bool IsSceneChange();
 	UIComponents* GetUnderBackground();

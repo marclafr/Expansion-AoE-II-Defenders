@@ -99,15 +99,15 @@ private:
 	enum UNIT_TYPE unit_type;
 	enum ACTION action;
 	enum DIRECTION direction;
+	iPoint position_in_tile;
 
 	int ai_update;
-
 	int attack;
 	int range;
 	float speed;
 	float rate_of_fire;
 	iPoint destination; //tile
-	iPoint path_objective;
+	iPoint path_objective; //tile
 	fPoint move_vector;
 	float angle;
 	Elipse unit_circle;
@@ -144,9 +144,9 @@ private:
 	void StartAttack();
 	void MoveAway();
 	void GetNewDestination();
-	void CheckUnitsBuffs();
+	//void CheckUnitsBuffs();
 	void GoToTileCenter();
-	bool CenterUnit();
+	void CenterUnit();
 	void ChangeAnimation();
 	int GetFrameAttack();
 	void Collisions();
@@ -155,7 +155,7 @@ private:
 
 public:
 
-	Unit(UNIT_TYPE u_type, fPoint pos, Side side, int priority);
+	Unit(UNIT_TYPE u_type, iPoint pos, Side side);
 	~Unit();
 	
 	void Update( float dt); // defines order
@@ -164,6 +164,7 @@ public:
 	void AI();
 	void Draw();
 
+	const iPoint GetPixelPosition();
 	const DIRECTION GetDir() const;
 	const UNIT_TYPE GetUnitType() const;
 	const UNIT_CLASS GetUnitClass() const;

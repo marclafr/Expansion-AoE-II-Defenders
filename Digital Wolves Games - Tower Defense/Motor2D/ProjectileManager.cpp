@@ -41,7 +41,7 @@ bool ProjectileManager::CleanUp()
 	return true;
 }
 
-Projectile* ProjectileManager::CreateProjectile(fPoint initialpos, Entity * target, int damage, float TimeInSecs, int Startheight, int Curveheight, PROJECTILE_TYPE type)
+Projectile* ProjectileManager::CreateProjectile(iPoint initialpos, Entity * target, int damage, float TimeInSecs, int Startheight, int Curveheight, PROJECTILE_TYPE type)
 {
 	Projectile* new_projectile = new Projectile( initialpos, target, damage, TimeInSecs, Startheight, Curveheight, type);
 	projectile_vector.push_back(new_projectile);

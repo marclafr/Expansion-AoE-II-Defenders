@@ -1,3 +1,4 @@
+/*
 #include "j1Investigations.h"
 #include "j1App.h"
 #include "Resources.h"
@@ -240,4 +241,4 @@ bool j1Investigations::UpgradeInvestigation(Investigation* investigation)
 	}
 	return false;
 }
-
+*/

@@ -1,3 +1,5 @@
+//TODO activate
+/*
 #ifndef _SCORE
 #define _SCORE
 
@@ -41,3 +43,4 @@ public:
 };
 
 #endif
+*/

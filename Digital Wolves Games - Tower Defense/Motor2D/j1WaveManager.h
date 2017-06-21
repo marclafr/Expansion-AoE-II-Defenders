@@ -1,5 +1,8 @@
+//TODO Activate
+/*
 #ifndef __j1WAVE_MANAGER_H__
 #define __j1WAVE_MANAGER_H__
+
 
 #include <vector>
 #include "p2Point.h"
@@ -106,3 +109,4 @@ private:
 };
 
 #endif // __j1WAVE_MANAGER_H__
+*/
