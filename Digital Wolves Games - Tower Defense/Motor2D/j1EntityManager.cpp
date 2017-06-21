@@ -25,6 +25,27 @@ j1EntityManager::j1EntityManager() : j1Module()
 
 j1EntityManager::~j1EntityManager() {}
 
+bool j1EntityManager::Start()
+{
+
+	/*float m = App->map->data.height;
+	float n = App->map->data.width;
+
+	float map_h = (m + n) * 0.5f * App->map->data.tile_height + 75;//75 1 4 each tile
+	float map_w = (m + n) * 0.5f * App->map->data.tile_width;
+
+	float map_x = (m - n) * 0.5f * 0.5f * App->map->data.tile_width;
+	float map_y = (m + n) * 0.5f * 0.5f * App->map->data.tile_height + 75 / 2; //75 1 4 each tile
+
+	//IsoRect map(iPoint(map_x, map_y), map_w, map_h);
+	//IsoRect map(fPoint(map_x, map_y), map_w, map_h);*/
+
+	//this should not be 76 * 76
+	IsoRect map(fPoint(App->map->data.width/ 2.0f, App->map->data.height / 2.0f), App->map->data.width, App->map->data.height);
+	entity_quadtree = new QuadTree(map);
+
+	return true;
+}
 
 bool j1EntityManager::CleanUp() {
 
@@ -197,25 +218,6 @@ bool j1EntityManager::AreUnitsInRect(const SDL_Rect & rect) const
 	return (entity_quadtree->SearchFirstUnit(rect) != nullptr);
 }
 
-bool j1EntityManager::Start()
-{
-
-	float m = App->map->data.height;
-	float n = App->map->data.width;
-
-	float map_h = (m + n) * 0.5f * App->map->data.tile_height + 75;//75 1 4 each tile
-	float map_w = (m + n) * 0.5f * App->map->data.tile_width;
-
-	float map_x = (m - n) * 0.5f * 0.5f * App->map->data.tile_width;
-	float map_y = (m + n) * 0.5f * 0.5f * App->map->data.tile_height + 75 / 2; //75 1 4 each tile
-
-	//IsoRect map(iPoint(map_x, map_y), map_w, map_h);
-	IsoRect map(fPoint(map_x, map_y), map_w, map_h);
-	entity_quadtree = new QuadTree(map);
-
-	return true;
-}
-
 bool j1EntityManager::Update(float dt)
 {
 	entity_quadtree->UpdateAll(dt);
@@ -261,7 +263,7 @@ bool j1EntityManager::IsUnitInTile(const Unit* unit, const iPoint tile)const
 
 void j1EntityManager::DrawQuadTree() const
 {
-	entity_quadtree->DrawRects();
+	entity_quadtree->Draw();
 }
 
 /*

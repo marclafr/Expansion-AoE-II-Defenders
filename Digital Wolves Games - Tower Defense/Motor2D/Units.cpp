@@ -524,10 +524,11 @@ void Unit::Draw()
 
 		SetPivot(pivot.x, pivot.y);
 		SetRect(rect);
+
 		if (direction == D_NORTH_EAST || direction == D_EAST || direction == D_SOUTH_EAST)
-			App->render->PushInGameSprite(App->tex->GetTexture(GetTextureID()), GetX(), GetY(), &GetRect(), SDL_FLIP_HORIZONTAL, GetPivot().x, GetPivot().y);
+			App->render->PushInGameSprite(App->tex->GetTexture(GetTextureID()), GetPixelPosition(), &GetRect(), SDL_FLIP_HORIZONTAL, GetPivot());
 		else
-			App->render->PushInGameSprite(App->tex->GetTexture(GetTextureID()), GetX(), GetY(), &GetRect(), SDL_FLIP_NONE, GetPivot().x, GetPivot().y);
+			App->render->PushInGameSprite(App->tex->GetTexture(GetTextureID()), GetPixelPosition(), &GetRect(), SDL_FLIP_NONE, GetPivot());
 	}
 
 	animation->Update(rect, pivot);
@@ -618,6 +619,36 @@ const Unit * Unit::GetCollision() const
 	return collision;
 }
 
+const DIRECTION Unit::GetDirection(iPoint objective) const
+{
+	iPoint direction_vec;
+	direction_vec.x = objective.x - GetX();
+	direction_vec.y = GetY() - objective.y;
+	float angle = (float)57.29577951 * atan2(direction_vec.y, direction_vec.x);
+
+	if (angle < 0)
+		angle += 360;
+
+	if ((0 <= angle &&  angle <= 22.5) || (337.5 <= angle&& angle <= 360))
+		return D_EAST;
+	else if (22.5 <= angle &&  angle <= 67.5)
+		return D_NORTH_EAST;
+	else if (67.5 <= angle &&  angle <= 112.5)
+		return D_NORTH;
+	else if (112.5 <= angle &&  angle <= 157.5)
+		return D_NORTH_WEST;
+	else if (157.5 <= angle &&  angle <= 202.5)
+		return D_WEST;
+	else if (202.5 <= angle &&  angle <= 247.5)
+		return D_SOUTH_WEST;
+	else if (247.5 <= angle &&  angle <= 292.5)
+		return D_SOUTH;
+	else if (292.5 <= angle &&  angle <= 337.5)
+		return D_SOUTH_EAST;
+	else
+		return D_NO_DIRECTION;
+}
+
 void Unit::SetAction(const ACTION action)
 {
 	this->action = action;
@@ -625,65 +656,14 @@ void Unit::SetAction(const ACTION action)
 
 void Unit::LookAt(iPoint pos)
 {
-	iPoint direction_vec;
-	direction_vec.x = pos.x - GetX();
-	direction_vec.y = GetY() - pos.y;
-	angle = (float)57.29577951 * atan2(direction_vec.y, direction_vec.x);
-
-	if (angle < 0)
-		angle += 360;
-
-
-	if ((0 <= angle &&  angle <= 22.5) || (337.5 <= angle&& angle <= 360))
+	DIRECTION dir = GetDirection(pos);
+	
+	if (dir != direction)
 	{
-		this->direction = D_EAST;
+		this->direction = dir;
 		changed = true;
 	}
 
-	else if (22.5 <= angle &&  angle <= 67.5)
-	{
-		this->direction = D_NORTH_EAST;
-		changed = true;
-	}
-
-	else if (67.5 <= angle &&  angle <= 112.5)
-	{
-		this->direction = D_NORTH;
-		changed = true;
-	}
-
-	else if (112.5 <= angle &&  angle <= 157.5)
-	{
-		this->direction = D_NORTH_WEST;
-		changed = true;
-	}
-
-	else if (157.5 <= angle &&  angle <= 202.5)
-	{
-		this->direction = D_WEST;
-		changed = true;
-	}
-
-	else if (202.5 <= angle &&  angle <= 247.5)
-	{
-		this->direction = D_SOUTH_WEST;
-		changed = true;
-	}
-
-	else if (247.5 <= angle &&  angle <= 292.5)
-	{
-		this->direction = D_SOUTH;
-		changed = true;
-	}
-
-	else if (292.5 <= angle &&  angle <= 337.5)
-	{
-		this->direction = D_SOUTH_EAST;
-		changed = true;
-	}
-
-	else
-		this->direction = D_NO_DIRECTION;
 }
 
 bool Unit::GoTo( iPoint dest)

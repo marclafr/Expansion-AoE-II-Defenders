@@ -109,7 +109,6 @@ private:
 	iPoint destination; //tile
 	iPoint path_objective; //tile
 	fPoint move_vector;
-	float angle;
 	Elipse unit_circle;
 	UNIT_CLASS unit_class;
 	int rand_num;
@@ -179,6 +178,7 @@ public:
 	const iPoint& GetDestination() const;
 
 	const Unit* GetCollision() const;
+	const DIRECTION GetDirection(iPoint objective) const;
 	void SetAction(const ACTION action);
 
 	void LookAt(iPoint pos);

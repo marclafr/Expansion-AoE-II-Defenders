@@ -70,6 +70,7 @@ public:
 	void PushMapSprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0, bool not_in_world = false);
 	void PushInGameSprite(const Entity* entity);
 	void PushInGameSprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0, bool not_in_world = false);
+	void PushInGameSprite(SDL_Texture* texture, iPoint pos, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, iPoint pivot = {0,0}, float speed = 1.0f, double angle = 0, bool not_in_world = false);
 	void PushInGameSprite(Sprite* sprite);
 	void PushUISprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0);
 	

@@ -89,7 +89,7 @@ public:
 
 	void DeleteEntities() const;
 
-	void DrawRects() const;
+	void Draw() const;
 
 	void SaveAll(pugi::xml_node& node);
 

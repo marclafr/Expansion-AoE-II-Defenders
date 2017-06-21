@@ -388,6 +388,11 @@ void j1Render::PushInGameSprite(SDL_Texture * texture, int x, int y, const SDL_R
 	}
 }
 
+void j1Render::PushInGameSprite(SDL_Texture * texture, iPoint pos, const SDL_Rect * section, SDL_RendererFlip flip, iPoint pivot, float speed, double angle, bool not_in_world)
+{
+	PushInGameSprite(texture, pos.x, pos.y, section, flip, pivot.x, pivot.y, speed, angle, not_in_world);
+}
+
 void j1Render::PushInGameSprite(Sprite * sprite)
 {
 	iPoint in_camera_pos;

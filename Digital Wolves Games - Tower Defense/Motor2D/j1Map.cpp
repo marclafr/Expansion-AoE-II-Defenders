@@ -196,11 +196,9 @@ void j1Map::Draw()
 				{
 					TileSet* tileset = GetTilesetFromTileId(tile_id);
 					SDL_Rect r = tileset->GetTileRect(tile_id);
-					iPoint pos = MapToWorld(x, y, tileset);
-					iPoint ret = App->render->WorldToScreen(pos.x, pos.y);
-
-					if (App->render->camera->InsideRenderTarget(ret.x, ret.y))
-						App->render->PushMapSprite(tileset->texture, pos.x, pos.y, &r);
+					fPoint pos = MapToWorld((float)x, (float)y);
+					pos.x -= data.tile_width / 2.0f;
+					App->render->PushMapSprite(tileset->texture, pos.x, pos.y, &r);
 				}
 			}
 	}
@@ -249,32 +247,15 @@ iPoint j1Map::MapToWorld(iPoint pos, TileSet * tileset) const
 
 iPoint j1Map::MapToWorld(int x, int y, TileSet* tileset) const
 {
-	iPoint ret;
+	fPoint ret(-1.0f,-1.0f);
 
 	if (data.type == MAPTYPE_ISOMETRIC)
 	{
 		if (tileset == nullptr)
 		{
-			ret.x = (x - y) * (int)(data.tile_width * 0.5f);
-			ret.y = (x + y) * (int)(data.tile_height * 0.5f) + (x + y) + data.tile_height * 0.5f;
-			return ret;
-		}
-		
-		int tile_height = 0;
-		int tile_width = 0;
-
-		tile_height = tileset->tile_height;
-		tile_width = tileset->tile_width;
-
-		if (tileset->name.compare("Extras") == 0 || tileset->name.compare("Polish")==0)
-		{
-			ret.x = (x - y) * (int)(tile_width * 0.5f) - tile_width * 0.5f;
-			ret.y = (x + y) * (int)(tile_height * 0.5f) + tile_height;
-		}
-		else
-		{
-			ret.x = (x - y) * (int)(tile_width * 0.5f) - tile_width * 0.5f;
-			ret.y = (x + y) * (int)(tile_height * 0.5f) + (x + y);
+			ret.x = (x - y) * (float)data.tile_width * 0.5f;
+			ret.y = (x + y) * (float)data.tile_height * 0.5f + (x + y) / 2.0f;
+			return iPoint(ret.x, ret.y);
 		}
 	}
 	else
@@ -282,8 +263,7 @@ iPoint j1Map::MapToWorld(int x, int y, TileSet* tileset) const
 		LOG("Unknown map type");
 		ret.x = x; ret.y = y;
 	}
-
-	return ret;
+	return iPoint(ret.x, ret.y);
 }
 
 iPoint j1Map::WorldToMap(int x, int y) const
@@ -307,6 +287,32 @@ iPoint j1Map::WorldToMap(int x, int y) const
 	if (ret.y > 74) ret.y = 74;
 
 	return iPoint(ret.x, ret.y);
+}
+
+fPoint j1Map::MapToWorld(float x, float y, TileSet * tileset) const //returns top corner
+{
+	fPoint ret(-1.0f, -1.0f);;
+
+	if (data.type == MAPTYPE_ISOMETRIC)
+	{
+		if (tileset == nullptr)
+		{
+			ret.x = (x - y) * (float)data.tile_width * 0.5f;
+			ret.y = (x + y) * (float)data.tile_height * 0.5f + (x + y) / 2.0f;
+			return ret;
+		}
+	}
+	else
+	{
+		LOG("Unknown map type");
+		ret.x = x; ret.y = y;
+	}
+	return ret;
+}
+
+fPoint j1Map::MapToWorld(fPoint pos) const
+{
+	return MapToWorld(pos.x, pos.y);
 }
 
 SDL_Rect TileSet::GetTileRect(int id) const

@@ -3,6 +3,7 @@
 #include "j1App.h"
 #include "j1Map.h"
 #include "IsoPrimitives.h"
+#include "j1Render.h"
 #include "j1Pathfinding.h"
 #include "QuadTree.h"
 
@@ -642,8 +643,17 @@ void QuadTreeNode::DrawArea()
 		for (int i = 0; i < 4; i++)
 			childs[i]->DrawArea();
 
-	area.SetColor(SDL_Color{ 255,0,0,255 });
-	area.Draw();
+	float x_angle = area.GetXAngle();
+	float width = App->map->data.width * App->map->data.tile_width;
+	float height = App->map->data.height * App->map->data.tile_height + (App->map->data.width + App->map->data.height) / 2.0f;
+
+	fPoint tile_center = area.GetPosition();
+	fPoint center = App->map->MapToWorld(tile_center);
+
+	App->render->DrawLine(center.x - width * 0.5f, center.y, center.x, center.y - height*sin(x_angle), 255, 0, 0, 255, true);
+	App->render->DrawLine(center.x - width * 0.5f, center.y, center.x, center.y + height*sin(x_angle), 255, 0, 0, 255, true);
+	App->render->DrawLine(center.x + width * 0.5f, center.y, center.x, center.y - height*sin(x_angle), 255, 0, 0, 255, true);
+	App->render->DrawLine(center.x + width * 0.5f, center.y, center.x, center.y + height*sin(x_angle), 255, 0, 0, 255, true);
 }
 
 void QuadTreeNode::SaveAll(pugi::xml_node & node)
@@ -764,7 +774,7 @@ void QuadTree::DeleteEntities() const
 	origin->DeleteEntities();
 }
 
-void QuadTree::DrawRects() const
+void QuadTree::Draw() const
 {
 	origin->DrawArea();
 }

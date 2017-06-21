@@ -122,8 +122,12 @@ public:
 	// Load new map
 	bool Load(const char* path);
 
+	//returns top corner of tile or area
 	iPoint MapToWorld(iPoint pos, TileSet* tileset = nullptr) const;
 	iPoint MapToWorld(int x, int y, TileSet* tileset = nullptr) const;
+	fPoint MapToWorld(float x, float y, TileSet* tileset = nullptr) const;
+	fPoint MapToWorld(fPoint pos) const;
+
 	iPoint WorldToMap(int x, int y) const;
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);
 	bool CreateConstructibleMap1(int& width, int & height, uchar** buffer);

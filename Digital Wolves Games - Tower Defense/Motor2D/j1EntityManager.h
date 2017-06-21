@@ -12,9 +12,6 @@
 #include "QuadTree.h"
 #include "SDL/include/SDL_rect.h"
 
-class UILabel;
-class UIComponents;
-
 class j1EntityManager : public j1Module
 {
 

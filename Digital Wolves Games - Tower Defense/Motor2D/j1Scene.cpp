@@ -198,6 +198,7 @@ bool j1Scene::Update(float dt)
 	App->render->PushInGameSprite(App->tex->GetTexture(T_FISH_ANIMATION), -400, 750, &anim_rect, SDL_FLIP_NONE, anim_pivot.x, anim_pivot.y + 100);//no final positions just to try
 	App->render->PushInGameSprite(App->tex->GetTexture(T_FISH_ANIMATION), 1900, 2200, &anim_rect, SDL_FLIP_NONE, anim_pivot.x, anim_pivot.y + 100);	// Camera Movement (has to go after blit so that sprites print in the right camera position)
 	*/
+
 	App->render->camera->KeyboardMove(dt);
 	App->render->camera->MouseMove(x, y, dt);
 	
@@ -717,6 +718,12 @@ void j1Scene::HandleInput( SDL_Event event)
 
 		if (event.button.button == SDL_SCANCODE_K)
 			App->SaveGame("save_game.xml");
+
+		if (event.button.button == SDL_SCANCODE_P)
+		{
+			iPoint tile = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);
+			App->entity_manager->CreateUnit(U_TWOHANDEDSWORDMAN, tile, S_ALLY);
+		}
 
 		if (event.button.button == App->input->center_to_townhall)
 		{
