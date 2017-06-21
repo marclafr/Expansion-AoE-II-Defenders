@@ -32,12 +32,11 @@
 #include "Intro.h"
 #include "j1Tutorial.h"
 #include "j1Mouse.h"
+#include "j1Gui.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 {
-	PERF_START(ptimer);
-
 	input = new j1Input();
 	win = new j1Window();
 	render = new j1Render();
@@ -65,10 +64,12 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	video = new j1Video();
 	intro = new j1Intro();
 	mouse = new j1Mouse();
+	gui = new j1Gui();
+
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 
-	//Activa at start
+	//Active at start
 	AddModule(fs);
 	AddModule(input);
 	AddModule(win);
@@ -92,6 +93,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	//AddModule(score, false);
 	AddModule(achievements, false);
 	//AddModule(tutorial, false);
+	AddModule(gui, true);
 
 	// Scenes	
 	AddModule(intro);
@@ -101,8 +103,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 	// render last to swap buffer
 	AddModule(render);
-
-	PERF_PEEK(ptimer);
 }
 
 // Destructor
@@ -131,8 +131,6 @@ void j1App::AddModule(j1Module* module, bool active)
 // Called before render is available
 bool j1App::Awake()
 {
-	PERF_START(ptimer);
-
 	pugi::xml_document	config_file;
 	pugi::xml_node		config;
 	pugi::xml_node		app_config;
@@ -168,15 +166,12 @@ bool j1App::Awake()
 		}
 	}
 
-	PERF_PEEK(ptimer);
-
 	return ret;
 }
 
 // Called before the first frame
 bool j1App::Start()
 {
-	PERF_START(ptimer);
 	bool ret = true;
 	std::list<j1Module*>::iterator item = modules.begin();
 
@@ -187,9 +182,6 @@ bool j1App::Start()
 		item++;
 	}
 	startup_time.Start();
-
-	PERF_PEEK(ptimer);
-
 	return ret;
 }
 
@@ -371,7 +363,6 @@ bool j1App::PostUpdate()
 // Called before quitting
 bool j1App::CleanUp()
 {
-	PERF_START(ptimer);
 	bool ret = true;
 	std::list<j1Module*>::reverse_iterator item = modules.rbegin();
 
@@ -381,8 +372,6 @@ bool j1App::CleanUp()
 			ret = (*item)->CleanUp();
 		item++;
 	}
-
-	PERF_PEEK(ptimer);
 	return ret;
 }
 

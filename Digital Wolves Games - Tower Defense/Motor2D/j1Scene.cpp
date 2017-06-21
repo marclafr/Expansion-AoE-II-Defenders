@@ -10,7 +10,6 @@
 #include "j1Window.h"
 #include "j1Map.h"
 #include "j1PathFinding.h"
-#include "j1Scene.h"
 #include "j1Animation.h"
 #include "j1EntityManager.h"
 #include "j1Score.h"
@@ -20,6 +19,9 @@
 #include "j1MainMenu.h"
 #include "j1ScoreScene.h"
 #include "j1WaveManager.h"
+#include "j1Gui.h"
+
+#include "j1Scene.h"
 
 /*#include "UIButton.h"
 #include "UILabel.h"
@@ -54,7 +56,11 @@ bool j1Scene::Awake()
 
 // Called before the first frame
 bool j1Scene::Start()
-{	
+{
+	//GUI
+	App->gui->CreateButton({ 0, 500 }, { 1190,936,25,25 }, { 1216,936,25,25 }, { 1242,936,25,25 }, "This is another test");
+	App->gui->CreateLabel({ 0,250 }, { 400,1750,25,25 }, "This is a test.");
+	//---
 	
 	App->pathfinding->Enable();
 	App->map->Enable();

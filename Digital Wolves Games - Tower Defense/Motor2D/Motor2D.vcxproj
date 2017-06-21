@@ -89,6 +89,7 @@
     <ClCompile Include="j1Console.cpp" />
     <ClCompile Include="j1FileSystem.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
+    <ClCompile Include="j1Gui.cpp" />
     <ClCompile Include="j1Investigations.cpp" />
     <ClCompile Include="j1MainMenu.cpp" />
     <ClCompile Include="j1Mouse.cpp" />
@@ -120,6 +121,11 @@
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="theoraplay.c" />
     <ClCompile Include="Towers.cpp" />
+    <ClCompile Include="UI_AppearingLabel.cpp" />
+    <ClCompile Include="UI_Button.cpp" />
+    <ClCompile Include="UI_HPBar.cpp" />
+    <ClCompile Include="UI_Image.cpp" />
+    <ClCompile Include="UI_Label.cpp" />
     <ClCompile Include="Units.cpp" />
     <ClCompile Include="j1Video.cpp" />
   </ItemGroup>
@@ -134,6 +140,7 @@
     <ClInclude Include="j1Console.h" />
     <ClInclude Include="j1FileSystem.h" />
     <ClInclude Include="j1Fonts.h" />
+    <ClInclude Include="j1Gui.h" />
     <ClInclude Include="j1Investigations.h" />
     <ClInclude Include="j1MainMenu.h" />
     <ClInclude Include="j1Mouse.h" />
@@ -169,6 +176,11 @@
     <ClInclude Include="Task.h" />
     <ClInclude Include="theoraplay.h" />
     <ClInclude Include="Towers.h" />
+    <ClInclude Include="UI_AppearingLabel.h" />
+    <ClInclude Include="UI_Button.h" />
+    <ClInclude Include="UI_HPBar.h" />
+    <ClInclude Include="UI_Image.h" />
+    <ClInclude Include="UI_Label.h" />
     <ClInclude Include="Units.h" />
     <ClInclude Include="j1Video.h" />
   </ItemGroup>
