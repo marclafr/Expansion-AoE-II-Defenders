@@ -9,7 +9,6 @@ public:
 	UI_Image(iPoint pos, SDL_Rect atlas_rect);
 	~UI_Image();
 
-	friend UI_Button;
 	bool IsMouseInside();
 
 private:

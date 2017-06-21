@@ -3,7 +3,7 @@
 #include "j1Input.h"
 #include "UI_Button.h"
 
-UI_Button::UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top, SDL_Rect rect_clicking) : UI_Element(pos, rect_idle), text(nullptr)
+UI_Button::UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top, SDL_Rect rect_clicking, char* descript, SDL_Rect description_background_rect) : UI_Element(pos, rect_idle)
 {
 	img_idle = new UI_Image(pos, rect_idle);
 
@@ -29,33 +29,23 @@ UI_Button::UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top,
 	else
 		img_clicking = new UI_Image(pos, rect_clicking);
 
+	if (descript != nullptr)
+	{
+		description = App->gui->CreateLabel({ pos.x, pos.y + 30 }, description_background_rect, descript);//TODO SOLVE THE 30 magic number.
+	}
+	else
+	{
+		description = nullptr;
+		has_description = false;
+	}
 }
 
 UI_Button::~UI_Button()
 {
-	if (img_idle != nullptr)
-	{
-		delete img_idle;
-		img_idle = nullptr;
-	}
-
-	if (img_mouse_on_top != nullptr)
-	{
-		delete img_mouse_on_top;
-		img_mouse_on_top = nullptr;
-	}
-
-	if (img_clicking != nullptr)
-	{
-		delete img_clicking;
-		img_clicking = nullptr;
-	}
-
-	if (text != nullptr)
-	{
-		delete text;
-		text = nullptr;
-	}
+	DELETE_PTR(img_idle);
+	DELETE_PTR(img_mouse_on_top);
+	DELETE_PTR(img_clicking);
+	DELETE_PTR(description);
 }
 
 bool UI_Button::Draw(SDL_Texture * atlas)
@@ -63,15 +53,15 @@ bool UI_Button::Draw(SDL_Texture * atlas)
 	switch (button_state)
 	{
 	case UI_B_IDLE:
-		App->render->PushUISprite(atlas, img_idle->pos.x, img_idle->pos.y, &img_idle->atlas_rect);
+		App->render->PushUISprite(atlas, img_idle->GetX(), img_idle->GetY(), &img_idle->GetAtlasRect());
 		break;
 
 	case UI_B_MOUSE_ON_TOP:
-		App->render->PushUISprite(atlas, img_mouse_on_top->pos.x, img_mouse_on_top->pos.y, &img_mouse_on_top->atlas_rect);
+		App->render->PushUISprite(atlas, img_mouse_on_top->GetX(), img_mouse_on_top->GetY(), &img_mouse_on_top->GetAtlasRect());
 		break;
 
 	case UI_B_CLICKING:
-		App->render->PushUISprite(atlas, img_clicking->pos.x, img_clicking->pos.y, &img_clicking->atlas_rect);
+		App->render->PushUISprite(atlas, img_clicking->GetX(), img_clicking->GetY(), &img_clicking->GetAtlasRect());
 		break;
 
 	default:

@@ -126,7 +126,6 @@
     <ClCompile Include="UI_HPBar.cpp" />
     <ClCompile Include="UI_Image.cpp" />
     <ClCompile Include="UI_Label.cpp" />
-    <ClCompile Include="UI_Text.cpp" />
     <ClCompile Include="Units.cpp" />
     <ClCompile Include="j1Video.cpp" />
   </ItemGroup>
@@ -182,7 +181,6 @@
     <ClInclude Include="UI_HPBar.h" />
     <ClInclude Include="UI_Image.h" />
     <ClInclude Include="UI_Label.h" />
-    <ClInclude Include="UI_Text.h" />
     <ClInclude Include="Units.h" />
     <ClInclude Include="j1Video.h" />
   </ItemGroup>

@@ -145,9 +145,6 @@
     <ClCompile Include="UI_Label.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="UI_Text.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="j1Gui.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -305,9 +302,6 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="UI_Label.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Text.h">
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="j1Gui.h">

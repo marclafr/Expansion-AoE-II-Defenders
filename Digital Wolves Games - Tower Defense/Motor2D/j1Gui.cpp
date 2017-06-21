@@ -13,7 +13,6 @@
 #include "UI_HPBar.h"
 #include "UI_Image.h"
 #include "UI_Label.h"
-#include "UI_Text.h"
 //----------
 
 j1Gui::j1Gui() : j1Module()
@@ -78,10 +77,18 @@ UI_Image * j1Gui::CreateImage(iPoint pos, SDL_Rect atlas_rect)
 	return ret;
 }
 
-UI_Button * j1Gui::CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking)
+UI_Button * j1Gui::CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description, SDL_Rect description_background_rect)
 {
 	UI_Button* ret = nullptr;
-	ret = new UI_Button(pos, atlas_rect_idle, atlas_rect_mouse_on_top, atlas_rect_clicking);
+	ret = new UI_Button(pos, atlas_rect_idle, atlas_rect_mouse_on_top, atlas_rect_clicking, description, description_background_rect);
+	ui_elements.push_back(ret);
+	return ret;
+}
+
+UI_Label * j1Gui::CreateLabel(iPoint pos, SDL_Rect atlas_rect, char * txt)
+{
+	UI_Label* ret = nullptr;
+	ret = new UI_Label(pos, atlas_rect, txt);
 	ui_elements.push_back(ret);
 	return ret;
 }
@@ -110,4 +117,19 @@ bool UI_Element::Update()
 bool UI_Element::Draw(SDL_Texture* atlas)
 {
 	return true;
+}
+
+const int UI_Element::GetX()
+{
+	return pos.x;
+}
+
+const int UI_Element::GetY()
+{
+	return pos.y;
+}
+
+const SDL_Rect UI_Element::GetAtlasRect()
+{
+	return atlas_rect;
 }
