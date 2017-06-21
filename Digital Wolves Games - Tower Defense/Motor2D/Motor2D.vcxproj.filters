@@ -130,6 +130,27 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Useful</Filter>
     </ClCompile>
+    <ClCompile Include="UI_AppearingLabel.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Button.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_HPBar.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Image.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Label.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Text.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Gui.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buildings.h">
@@ -271,6 +292,27 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>Useful</Filter>
     </ClInclude>
+    <ClInclude Include="UI_AppearingLabel.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Button.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_HPBar.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Image.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Label.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Text.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Gui.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">
@@ -293,6 +335,9 @@
     </Filter>
     <Filter Include="Useful\theoraplay">
       <UniqueIdentifier>{6cee6657-2aed-4f7f-86b8-7e8bae8eebdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{6e0b10ce-089e-4f77-9ef9-07d1c73ac194}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
