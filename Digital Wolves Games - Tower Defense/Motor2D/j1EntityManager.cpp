@@ -160,10 +160,12 @@ void j1EntityManager::UnselectEverything() const
 		App->scene->selection[i]->SetEntityStatus(ST_NON_SELECTED);
 
 	App->scene->selection.clear();
+			//TODO: Delete panel info here
 	//App->uimanager->DeleteSelectionPanelInfo();
 	//App->uimanager->SetPanelButtons(nullptr);
 }
 
+//TODO: This function is unused
 void j1EntityManager::Select(Entity * select) const
 {
 	App->entity_manager->UnselectEverything();

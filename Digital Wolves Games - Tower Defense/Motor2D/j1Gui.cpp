@@ -20,6 +20,8 @@
 #include "j1Gui.h"
 
 #define ONE_SELECTED_IMAGE_POS { 300, 300 }
+#define SPACE_BETWEEN_SELECTED_ICONS 30
+#define MAX_ICONS_IN_ROW 3
 
 j1Gui::j1Gui() : j1Module()
 {
@@ -55,10 +57,11 @@ bool j1Gui::PreUpdate()
 	return true;
 }
 
-bool j1Gui::Update()
+bool j1Gui::Update(float dt)
 {
 	for (int i = 0; i < ui_elements.size(); i++)
 		ui_elements[i]->Update();
+
 	return true;
 }
 
@@ -75,6 +78,8 @@ bool j1Gui::PostUpdate()
 bool j1Gui::CleanUp()
 {
 	LOG("Freeing GUI");
+
+	ui_elements.clear();
 
 	return true;
 }
@@ -154,7 +159,65 @@ void j1Gui::CreatePanel(std::vector<Entity*> selection)
 	}
 	else if (selection.size() > 1)
 	{
+		Building* building;
+		Unit* unit;
+		iPoint correct_pos;
+		int row_num = 0;
+		int row_num_element = 0;
+		for (int i = 0; i < selection.size(); i++)
+		{
+			switch (selection[i]->GetEntityType())
+			{
+			case E_NO_ENTITY:
+				break;
+			case E_BUILDING:
+				building = (Building*)selection[i];
+				switch (building->GetBuildingType())
+				{
+				case B_NO_BUILDING:
+					break;
+				case B_TURRET:
+				case B_CANNON:
+				case B_TURRET_UPGRADED_FIRE:
+				case B_TURRET_UPGRADED_ICE:
+				case B_TURRET_UPGRADED_AIR:
+				case B_CANNON_UPGRADED_FIRE:
+				case B_CANNON_UPGRADED_ICE:
+				case B_CANNON_UPGRADED_AIR:
+					break;
+				case B_WOOD_WALL:
+				case B_STONE_WALL:
+				case B_BRICK_WALL:
+					break;
+				case B_TOWNHALL:
+					break;
+				case B_UNIVERSITY:
+					break;
 
+				default:
+					break;
+				}
+				break;
+			case E_UNIT:
+				unit = (Unit*)selection[i];
+				correct_pos = ONE_SELECTED_IMAGE_POS;
+				if (i >= row_num * MAX_ICONS_IN_ROW)
+				{
+					row_num++;
+					row_num_element = 0;
+				}
+				correct_pos.x += SPACE_BETWEEN_SELECTED_ICONS * row_num_element;
+				row_num_element++;
+				correct_pos.y += SPACE_BETWEEN_SELECTED_ICONS * (row_num - 1);
+				CreateImage(correct_pos, GetUnitIcon(unit));
+				break;
+			case E_RESOURCE:
+				break;
+
+			default:
+				break;
+			}
+		}
 	}
 }
 
@@ -170,7 +233,7 @@ SDL_Rect j1Gui::GetUnitIcon(Unit * unit)
 	{
 		//TODO: Get All atlas icons pos
 	default:
-		return { 1092, 827, 29, 29 };
+		return { 774, 962, 25, 25 };// contorno { 1092, 827, 29, 29 };
 		break;
 	}
 	return { 0,0,0,0 };
