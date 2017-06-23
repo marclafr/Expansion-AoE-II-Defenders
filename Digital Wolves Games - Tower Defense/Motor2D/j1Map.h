@@ -123,9 +123,9 @@ public:
 	bool Load(const char* path);
 
 	//returns top corner of tile or area
-	iPoint MapToWorld(iPoint pos, TileSet* tileset = nullptr) const;
-	iPoint MapToWorld(int x, int y, TileSet* tileset = nullptr) const;
-	fPoint MapToWorld(float x, float y, TileSet* tileset = nullptr) const;
+	iPoint MapToWorld(iPoint pos) const;
+	iPoint MapToWorld(int x, int y) const;
+	fPoint MapToWorld(float x, float y) const;
 	fPoint MapToWorld(fPoint pos) const;
 
 	iPoint WorldToMap(int x, int y) const;

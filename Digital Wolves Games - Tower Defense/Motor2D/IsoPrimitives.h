@@ -65,7 +65,8 @@ public:
 	//Draw
 	bool	Draw();
 	//Shape functions
-	bool	IsIn(const fPoint* loc) const;
+	bool	IsIn(const fPoint& loc) const;
+	bool	IsIn(const iPoint& loc) const;
 	bool	Intersects(const SDL_Rect* rect) const;
 	bool	Intersects(const Elipse* target)const;
 	bool	Intersects(const IsoRect* target)const;
@@ -93,7 +94,7 @@ public:
 	IsoRect(const IsoRect& copy);
 	~IsoRect();
 
-private:
+protected:
 	float width = 0;
 	float height = 0;
 

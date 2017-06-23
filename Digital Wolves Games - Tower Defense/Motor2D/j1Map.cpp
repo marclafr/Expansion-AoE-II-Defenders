@@ -240,23 +240,20 @@ TileSet* j1Map::GetTilesetFromTileId(int id) const
 	return set;
 }
 
-iPoint j1Map::MapToWorld(iPoint pos, TileSet * tileset) const
+iPoint j1Map::MapToWorld(iPoint pos) const
 {
-	return MapToWorld(pos.x, pos.y, tileset);
+	return MapToWorld(pos.x, pos.y);
 }
 
-iPoint j1Map::MapToWorld(int x, int y, TileSet* tileset) const
+iPoint j1Map::MapToWorld(int x, int y) const
 {
 	fPoint ret(-1.0f,-1.0f);
 
 	if (data.type == MAPTYPE_ISOMETRIC)
 	{
-		if (tileset == nullptr)
-		{
-			ret.x = (x - y) * (float)data.tile_width * 0.5f;
-			ret.y = (x + y) * (float)data.tile_height * 0.5f + (x + y) / 2.0f;
-			return iPoint(ret.x, ret.y);
-		}
+		ret.x = (x - y) * (float)data.tile_width * 0.5f;
+		ret.y = (x + y) * (float)data.tile_height * 0.5f + (x + y) / 2.0f;
+		return iPoint(ret.x, ret.y);
 	}
 	else
 	{
@@ -289,18 +286,15 @@ iPoint j1Map::WorldToMap(int x, int y) const
 	return iPoint(ret.x, ret.y);
 }
 
-fPoint j1Map::MapToWorld(float x, float y, TileSet * tileset) const //returns top corner
+fPoint j1Map::MapToWorld(float x, float y) const //returns top corner
 {
-	fPoint ret(-1.0f, -1.0f);;
+	fPoint ret(-1.0f, -1.0f);
 
 	if (data.type == MAPTYPE_ISOMETRIC)
 	{
-		if (tileset == nullptr)
-		{
-			ret.x = (x - y) * (float)data.tile_width * 0.5f;
-			ret.y = (x + y) * (float)data.tile_height * 0.5f + (x + y) / 2.0f;
-			return ret;
-		}
+		ret.x = (x - y) * (float)data.tile_width * 0.5f;
+		ret.y = (x + y) * (float)data.tile_height * 0.5f + (x + y) / 2.0f;
+		return ret;
 	}
 	else
 	{

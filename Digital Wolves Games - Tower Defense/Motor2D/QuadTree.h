@@ -10,16 +10,18 @@
 
 #define NODE_ENTITIES 3
 
+class TiledIsoRect;
+
 class QuadTreeNode
 {
 private:
 	QuadTreeNode* parent = nullptr;
 	QuadTreeNode* childs[4];
-	IsoRect area;
+	TiledIsoRect* area;
 	Entity* entities[NODE_ENTITIES];
 
 public:
-	QuadTreeNode(IsoRect area, QuadTreeNode* parent);
+	QuadTreeNode(const iPoint& tile_pos, const uint x_tiles, const uint tile_width, const uint y_tiles, const uint tile_height, QuadTreeNode* parent);
 	~QuadTreeNode();
 	
 	bool AddEntity(Entity* entity);
@@ -35,8 +37,7 @@ public:
 	void Search(const IsoRect rect, std::vector<Entity*>& vec) const;
 	void SearchForEnemies(int pixel_range, iPoint from, std::vector<Entity*>& vec, const Side side, ENTITY_TYPE entity_type = E_NO_ENTITY);
 	Entity* SearchFirstCollisionInTile(iPoint tile, Entity* exeption = nullptr);
-	void SearchCollisionsInTile(iPoint tile, std::vector<Unit*>& vec, Entity* exeption = nullptr);
-	void SearchCollisions(IsoRect tile, std::vector<Unit*>& vec, Entity* exeption = nullptr);
+	void SearchCollisions(iPoint tile, std::vector<Unit*>& vec, Entity* exeption = nullptr);
 	Entity* SearchFirstCollision(IsoRect rect, Entity* exeption = nullptr) const;
 
 	void Selection(const SDL_Rect rect, std::vector<Entity*>& vec) const;
@@ -66,7 +67,7 @@ private:
 	QuadTreeNode* origin;
 
 public:
-	QuadTree(IsoRect area);
+	QuadTree(const iPoint& tile_pos, const uint x_tiles, const uint tile_width, const uint y_tiles, const uint tile_height);
 	~QuadTree();
 
 	bool PushBack(Entity* entity) const;
@@ -98,4 +99,41 @@ public:
 	Entity* ClickSelect(const iPoint& mouse_pos) const;
 };
 
+class TiledIsoRect
+{
+private:
+	iPoint tile_pos; //top
+	uint x_tiles;
+	uint y_tiles;
+	uint tile_width;
+	uint tile_height;
+	IsoRect* rect;
+
+public:
+	TiledIsoRect(const iPoint& tile_pos, const uint x_tiles, const uint tile_width, const uint y_tiles, const uint tile_height, const iPoint& displacement = { 0,0 }, const SDL_Color& color = { 0,0,0,255 });
+	~TiledIsoRect();
+
+	void SetColor(SDL_Color color);
+	void Draw() const;
+
+	//Get Methods
+	uint GetPixelWidth()const;
+	uint GetPixelHeight()const;
+	uint GetXTiles()const;
+	uint GetYTiles()const;
+	uint GetTileWidth() const;
+	uint GetTileHeight() const;
+	const iPoint& GetTilePos() const; //top
+	const fPoint& GetPixelCenter();
+	const fPoint& GetTileCenter();
+
+	//Functionality
+	bool TileInside(const fPoint tile) const;
+	bool TileInside(const iPoint tile) const;
+	bool PixelInside(const iPoint pos) const;
+	bool PixelInside(const fPoint pos) const;
+	bool Overlaps(SDL_Rect rect) const;
+	bool Overlaps(IsoRect rect) const;
+	bool Overlaps(iPoint center, int radius);
+};
 #endif

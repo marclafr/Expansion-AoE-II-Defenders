@@ -41,8 +41,9 @@ bool j1EntityManager::Start()
 	//IsoRect map(fPoint(map_x, map_y), map_w, map_h);*/
 
 	//this should not be 76 * 76
-	IsoRect map(fPoint(App->map->data.width/ 2.0f, App->map->data.height / 2.0f), App->map->data.width, App->map->data.height);
-	entity_quadtree = new QuadTree(map);
+	//IsoRect map(fPoint( / 2.0f,  / 2.0f), App->map->data.width, App->map->data.height);
+
+	entity_quadtree = new QuadTree({0,0}, App->map->data.width, App->map->data.tile_width, App->map->data.height, App->map->data.tile_height);
 
 	return true;
 }
@@ -53,7 +54,7 @@ bool j1EntityManager::CleanUp() {
 	return true;
 }
 
-Entity * j1EntityManager::CreateUnit(UNIT_TYPE u_type, iPoint pos, Side side)
+Entity * j1EntityManager::CreateUnit(UNIT_TYPE u_type,const iPoint& pos, Side side)
 {
 	Entity* new_entity = (Entity*) new Unit(u_type, pos, side);
 	entity_quadtree->PushBack(new_entity);

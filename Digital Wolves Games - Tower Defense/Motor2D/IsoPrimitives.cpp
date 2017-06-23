@@ -2,6 +2,7 @@
 
 #include "j1App.h"
 #include "j1Render.h"
+#include "j1Map.h"
 #include <math.h>
 #include "p2Log.h"
 
@@ -91,10 +92,16 @@ bool Elipse::Draw()
 	return App->render->DrawElipse(position.x + displacement.x, position.y + displacement.y, rad, color.r, color.g, color.b, angle, color.a, true);
 }
 
-bool Elipse::IsIn(const fPoint* loc) const
+bool Elipse::IsIn(const fPoint& loc) const
 {
 	float sin_rad = rad * sin(x_angle);
-	return ((((loc->x - position.x) * (loc->x - position.x)) / (rad  *rad) + ((loc->y - position.y) * (loc->y - position.y)) / (sin_rad * sin_rad)) <= 1);
+	return ((((loc.x - position.x) * (loc.x - position.x)) / (rad  *rad) + ((loc.y - position.y) * (loc.y - position.y)) / (sin_rad * sin_rad)) <= 1.0f);
+}
+
+bool Elipse::IsIn(const iPoint& loc) const
+{
+	float sin_rad = rad * sin(x_angle);
+	return (((((float)loc.x - position.x) * ((float)loc.x - position.x)) / (rad  *rad) + (((float)loc.y - position.y) * ((float)loc.y - position.y)) / (sin_rad * sin_rad)) <= 1.0f);
 }
 
 bool Elipse::Intersects(const SDL_Rect * rect) const
