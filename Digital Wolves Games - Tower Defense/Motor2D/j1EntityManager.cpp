@@ -1,6 +1,5 @@
 #include <vector>
 #include "j1App.h"
-#include "j1EntityManager.h"
 #include "j1Pathfinding.h"
 #include "Units.h"
 //#include "j1UIManager.h"
@@ -15,6 +14,9 @@
 #include "j1Map.h"
 #include "j1Audio.h"
 #include "j1ScoreScene.h"
+#include "j1Gui.h"
+
+#include "j1EntityManager.h"
 
 #define MAX_SELECTION 25
 
@@ -148,6 +150,7 @@ void j1EntityManager::SelectInQuad(const SDL_Rect& select_rect, std::vector<Enti
 	else if (selection.size() > MAX_SELECTION)
 		selection.resize(MAX_SELECTION);
 
+	App->gui->CreatePanel(App->scene->selection);
 	//App->uimanager->CreatePanelInfo(selection);
 }
 
@@ -157,15 +160,18 @@ void j1EntityManager::UnselectEverything() const
 		App->scene->selection[i]->SetEntityStatus(ST_NON_SELECTED);
 
 	App->scene->selection.clear();
+			//TODO: Delete panel info here
 	//App->uimanager->DeleteSelectionPanelInfo();
 	//App->uimanager->SetPanelButtons(nullptr);
 }
 
+//TODO: This function is unused
 void j1EntityManager::Select(Entity * select) const
 {
 	App->entity_manager->UnselectEverything();
 	select->SetEntityStatus(ST_SELECTED);
 	App->scene->selection.push_back(select);
+	App->gui->CreatePanel(App->scene->selection);
 	//App->uimanager->CreatePanelInfo(App->scene->selection);
 }
 

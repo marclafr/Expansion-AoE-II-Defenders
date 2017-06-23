@@ -20,6 +20,9 @@ class UI_Button;
 class UI_AppearingLabel;
 class UI_HPBar;
 
+class Entity;
+class Unit;
+
 class UI_Element
 {
 protected:
@@ -60,6 +63,8 @@ public:
 	// Called before all Updates
 	bool PreUpdate();
 
+	bool Update(float dt);
+
 	// Called after all Updates
 	bool PostUpdate();
 
@@ -72,6 +77,8 @@ public:
 	UI_Label* CreateLabel(iPoint pos, SDL_Rect atlas_rect, char* txt, bool not_in_world = true);
 	//-----------------------
 
+	void CreatePanel(std::vector<Entity*> selection);
+
 	const SDL_Texture* GetAtlas() const;
 
 private:
@@ -80,6 +87,9 @@ private:
 	std::string atlas_file_name;
 
 	std::vector<UI_Element*> ui_elements;
+
+
+	SDL_Rect GetUnitIcon(Unit* unit);
 
 };
 
