@@ -5,7 +5,9 @@
 #include "j1Textures.h"
 #include "j1Fonts.h"
 #include "j1Input.h"
-#include "j1Gui.h"
+#include "Entity.h"
+#include "Buildings.h"
+#include "Units.h"
 
 //UI_ELEMENTS
 #include "UI_AppearingLabel.h"
@@ -14,6 +16,10 @@
 #include "UI_Image.h"
 #include "UI_Label.h"
 //----------
+
+#include "j1Gui.h"
+
+#define ONE_SELECTED_IMAGE_POS { 300, 300 }
 
 j1Gui::j1Gui() : j1Module()
 {
@@ -46,9 +52,13 @@ bool j1Gui::Start()
 // Update all guis
 bool j1Gui::PreUpdate()
 {
+	return true;
+}
+
+bool j1Gui::Update()
+{
 	for (int i = 0; i < ui_elements.size(); i++)
-		ui_elements[i]->Update(); 
-	
+		ui_elements[i]->Update();
 	return true;
 }
 
@@ -93,10 +103,77 @@ UI_Label * j1Gui::CreateLabel(iPoint pos, SDL_Rect atlas_rect, char * txt, bool 
 	return ret;
 }
 
+void j1Gui::CreatePanel(std::vector<Entity*> selection)
+{
+	if (selection.size() == 1)
+	{
+		Building* building;
+		Unit* unit;
+		switch (selection[0]->GetEntityType())
+		{
+		case E_NO_ENTITY:
+			break;
+		case E_BUILDING:
+			building = (Building*)selection[0];
+			switch (building->GetBuildingType())
+			{
+			case B_NO_BUILDING:
+				break;
+			case B_TURRET:
+			case B_CANNON:
+			case B_TURRET_UPGRADED_FIRE:
+			case B_TURRET_UPGRADED_ICE:
+			case B_TURRET_UPGRADED_AIR:
+			case B_CANNON_UPGRADED_FIRE:
+			case B_CANNON_UPGRADED_ICE:
+			case B_CANNON_UPGRADED_AIR:
+				break;
+			case B_WOOD_WALL:
+			case B_STONE_WALL:
+			case B_BRICK_WALL:
+				break;
+			case B_TOWNHALL:
+				break;
+			case B_UNIVERSITY:
+				break;
+
+			default:
+				break;
+			}
+			break;
+		case E_UNIT:
+			unit = (Unit*)selection[0];
+			CreateImage(ONE_SELECTED_IMAGE_POS, GetUnitIcon(unit));
+			break;
+		case E_RESOURCE:
+			break;
+
+		default:
+			break;
+		}
+	}
+	else if (selection.size() > 1)
+	{
+
+	}
+}
+
 // const getter for atlas
 const SDL_Texture* j1Gui::GetAtlas() const
 {
 	return atlas;
+}
+
+SDL_Rect j1Gui::GetUnitIcon(Unit * unit)
+{
+	switch (unit->GetUnitType())
+	{
+		//TODO: Get All atlas icons pos
+	default:
+		return { 1092, 827, 29, 29 };
+		break;
+	}
+	return { 0,0,0,0 };
 }
 
 // class Gui ---------------------------------------------------
