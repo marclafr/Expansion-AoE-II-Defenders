@@ -234,6 +234,14 @@ bool j1Scene::PostUpdate()
 		App->SaveAchievements("Achievements.xml");
 	}*/
 
+	int x = 0;
+	int y = 0;
+	App->input->GetMousePosition(x,y);
+	iPoint map_pos = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);
+	iPoint world_pos = App->map->MapToWorld(map_pos);
+	SDL_Rect point{ world_pos.x, world_pos.y, 5, 5 };
+	App->render->DrawQuad(point,0,0,255,255);
+
 	return ret;
 }
 

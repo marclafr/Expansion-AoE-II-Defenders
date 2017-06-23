@@ -226,6 +226,7 @@ IsoRect::~IsoRect()
 bool IsoRect::Draw() const
 {
 	//Draw lines with the correct angles and coordinates to form the rotated quad
+	//Need to take into acount non straight diagonals
 	iPoint draw_pos(position.x + displacement.x, position.y + displacement.y);
 
 	App->render->DrawLine(draw_pos.x - width * 0.5f, draw_pos.y, draw_pos.x, draw_pos.y - height*sin(x_angle), color.r, color.g, color.b, color.a, true);

@@ -806,22 +806,34 @@ Entity * QuadTree::ClickSelect(const iPoint & mouse_pos) const
 
 TiledIsoRect::TiledIsoRect(const iPoint& tile_pos, const uint x_tiles, const uint tile_width, const uint y_tiles, const uint tile_height, const iPoint& displacement, const SDL_Color& color) : tile_pos(tile_pos), x_tiles(x_tiles), y_tiles(y_tiles), tile_height(tile_height), tile_width(tile_width)
 {
-	fPoint tile_center((float)tile_pos.x + (float)x_tiles / 2.0f, (float)tile_pos.y + (float)y_tiles / 2.0f);
-	fPoint position = App->map->MapToWorld(tile_center);
-
 	iPoint top_pixel_vertex = App->map->MapToWorld(tile_pos);
-	iPoint right_pixel_vertex(top_pixel_vertex.x - x_tiles * tile_width / 2.0f, top_pixel_vertex.y + x_tiles * tile_height / 2.0f);
-	iPoint left_pixel_vertex(top_pixel_vertex.x + y_tiles * tile_width / 2.0f, top_pixel_vertex.y + y_tiles * tile_height / 2.0f);
-	iPoint bottom_pixel_vertex(top_pixel_vertex.x - x_tiles * tile_width / 2.0f + y_tiles * tile_width / 2.0f, top_pixel_vertex.y - y_tiles * tile_height / 2.0f + x_tiles * tile_height / 2.0f);
+
+	iPoint left_tile(tile_pos.x, tile_pos.y + y_tiles - 1.0f);
+	iPoint left_pixel_vertex = App->map->MapToWorld(left_tile);
+	left_pixel_vertex.x -= tile_width / 2.0f;
+	left_pixel_vertex.y += tile_height / 2.0f + 0.5f;
+
+	iPoint right_tile(tile_pos.x + x_tiles - 1.0f, tile_pos.y);
+	iPoint right_pixel_vertex = App->map->MapToWorld(right_tile);
+	right_pixel_vertex.x += tile_width / 2.0f;
+	right_pixel_vertex.y += tile_height / 2.0f + 0.5f;
+	
+	iPoint bottom_tile(tile_pos.x + x_tiles - 1.0f, tile_pos.y + y_tiles - 1.0f);
+	iPoint bottom_pixel_vertex = App->map->MapToWorld(bottom_tile);
+	bottom_pixel_vertex.y += tile_height + 1.0f;
 
 	fPoint top_bottom_vec(bottom_pixel_vertex.x - top_pixel_vertex.x, bottom_pixel_vertex.y - top_pixel_vertex.y);
 	fPoint right_left_vec(left_pixel_vertex.x - right_pixel_vertex.x, left_pixel_vertex.y - right_pixel_vertex.y);
 
-	fPoint center((top_bottom_vec.x + right_left_vec.x) / 2.0f, (top_bottom_vec.y + right_left_vec.y) / 2.0f);
+	fPoint center_first_vec(top_pixel_vertex.x + top_bottom_vec.x / 2.0f, top_pixel_vertex.y + top_bottom_vec.y / 2.0f);
+	fPoint center_second_vec(right_pixel_vertex.x + right_left_vec.x / 2.0f, right_pixel_vertex.y + right_left_vec.y / 2.0f);
+
+	if (center_first_vec.x != center_second_vec.x || center_first_vec.y != center_second_vec.y)
+		LOG("TiledIsoRect diagonal centers not equal");
 
 	uint width = x_tiles * tile_width;
 	uint height = y_tiles * tile_height + (x_tiles + y_tiles) / 2.0f;
-	rect = new IsoRect(position, width, height, displacement);
+	rect = new IsoRect(center_first_vec, width, height, displacement);
 }
 
 TiledIsoRect::~TiledIsoRect()

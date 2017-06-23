@@ -251,8 +251,8 @@ iPoint j1Map::MapToWorld(int x, int y) const
 
 	if (data.type == MAPTYPE_ISOMETRIC)
 	{
-		ret.x = (x - y) * (float)data.tile_width * 0.5f;
-		ret.y = (x + y) * (float)data.tile_height * 0.5f + (x + y) / 2.0f;
+		ret.x = (x - y) * ((float)data.tile_width * 0.5f);
+		ret.y = (x + y) * ((float)data.tile_height * 0.5f) + (x + y) / 2.0f;
 		return iPoint(ret.x, ret.y);
 	}
 	else
@@ -292,8 +292,8 @@ fPoint j1Map::MapToWorld(float x, float y) const //returns top corner
 
 	if (data.type == MAPTYPE_ISOMETRIC)
 	{
-		ret.x = (x - y) * (float)data.tile_width * 0.5f;
-		ret.y = (x + y) * (float)data.tile_height * 0.5f + (x + y) / 2.0f;
+		ret.x = (x - y) * ((float)data.tile_width * 0.5f);
+		ret.y = (x + y) * ((float)data.tile_height * 0.5f) + (x + y) / 2.0f;
 		return ret;
 	}
 	else
