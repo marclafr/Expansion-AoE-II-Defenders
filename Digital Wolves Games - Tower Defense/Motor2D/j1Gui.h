@@ -7,6 +7,7 @@
 #include "p2Point.h"
 
 #define CURSOR_WIDTH 2
+#define BACKGROUND_RECT_DESCRIPTIONS_BUTTONS { 400, 1750, 0, 0 }
 
 	 //----------------||------------------||----------------\\
 	//----------------||         UI         ||----------------\\
@@ -22,11 +23,13 @@ class UI_HPBar;
 class UI_Element
 {
 protected:
-	UI_Element(iPoint pos, SDL_Rect atlas_rect);
+	UI_Element(iPoint pos, SDL_Rect atlas_rect, bool not_in_world = true);
 	~UI_Element();
 
 	iPoint pos;
 	SDL_Rect atlas_rect;
+
+	bool not_in_world = true;
 
 public:
 	virtual bool Update();
@@ -64,9 +67,9 @@ public:
 	bool CleanUp();
 
 	// Gui creation functions
-	UI_Image* CreateImage(iPoint pos, SDL_Rect atlas_rect);
-	UI_Button* CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description = nullptr, SDL_Rect description_background_rect = { 400,1750,0,0 });
-	UI_Label* CreateLabel(iPoint pos, SDL_Rect atlas_rect, char* txt);
+	UI_Image* CreateImage(iPoint pos, SDL_Rect atlas_rect, bool not_in_world = true);
+	UI_Button* CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description = nullptr, bool not_in_world = true, SDL_Rect description_background_rect = BACKGROUND_RECT_DESCRIPTIONS_BUTTONS);
+	UI_Label* CreateLabel(iPoint pos, SDL_Rect atlas_rect, char* txt, bool not_in_world = true);
 	//-----------------------
 
 	const SDL_Texture* GetAtlas() const;

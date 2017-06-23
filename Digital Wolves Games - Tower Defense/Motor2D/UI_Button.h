@@ -14,7 +14,7 @@ enum UI_BUTTON_STATE
 class UI_Button : public UI_Element
 {
 public:
-	UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top, SDL_Rect rect_clicking, char* description = nullptr, SDL_Rect description_background_rect = { 400,1750,0,0 });
+	UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top, SDL_Rect rect_clicking, char* description = nullptr, SDL_Rect description_background_rect = { 400,1750,0,0 }, bool not_in_world = true);
 	~UI_Button();
 private:
 	UI_Image* img_idle;

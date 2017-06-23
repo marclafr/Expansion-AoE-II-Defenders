@@ -58,8 +58,9 @@ bool j1Scene::Awake()
 bool j1Scene::Start()
 {
 	//GUI
-	App->gui->CreateButton({ 0, 500 }, { 1190,936,25,25 }, { 1216,936,25,25 }, { 1242,936,25,25 }, "This is another test");
-	App->gui->CreateLabel({ 0,250 }, { 400,1750,25,25 }, "This is a test.");
+	App->gui->CreateButton({ 500, 500 }, { 1190,936,25,25 }, { 1216,936,25,25 }, { 1242,936,25,25 }, "This is another test");
+	App->gui->CreateLabel({ 250,250 }, { 400,1750,25,25 }, "This is a test.");
+	App->gui->CreateImage({ 0,0 }, { 0,1011,1367,23 });
 	//---
 	
 	App->pathfinding->Enable();

@@ -5,11 +5,11 @@
 
 class UI_Image;
 
-class UI_Text
+class Text
 {
 public:
-	UI_Text(char* txt);
-	~UI_Text();
+	Text(char* txt);
+	~Text();
 
 	SDL_Texture* text_texture;
 	SDL_Rect text_rect;
@@ -19,11 +19,11 @@ public:
 class UI_Label : public UI_Element
 {
 public:
-	UI_Label(iPoint pos, SDL_Rect atlas_rect, char* txt);
+	UI_Label(iPoint pos, SDL_Rect atlas_rect, char* txt, bool not_in_world = true);
 	~UI_Label();
 
 private:
-	UI_Text* text;
+	Text* text;
 	bool text_changed = true;
 
 	bool Draw(SDL_Texture* atlas);
