@@ -69,26 +69,26 @@ bool j1Gui::CleanUp()
 	return true;
 }
 
-UI_Image * j1Gui::CreateImage(iPoint pos, SDL_Rect atlas_rect)
+UI_Image * j1Gui::CreateImage(iPoint pos, SDL_Rect atlas_rect, bool not_in_world)
 {
 	UI_Image* ret = nullptr;
-	ret = new UI_Image(pos, atlas_rect);
+	ret = new UI_Image(pos, atlas_rect, not_in_world);
 	ui_elements.push_back(ret);
 	return ret;
 }
 
-UI_Button * j1Gui::CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description, SDL_Rect description_background_rect)
+UI_Button * j1Gui::CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description, bool not_in_world, SDL_Rect description_background_rect)
 {
 	UI_Button* ret = nullptr;
-	ret = new UI_Button(pos, atlas_rect_idle, atlas_rect_mouse_on_top, atlas_rect_clicking, description, description_background_rect);
+	ret = new UI_Button(pos, atlas_rect_idle, atlas_rect_mouse_on_top, atlas_rect_clicking, description, description_background_rect, not_in_world);
 	ui_elements.push_back(ret);
 	return ret;
 }
 
-UI_Label * j1Gui::CreateLabel(iPoint pos, SDL_Rect atlas_rect, char * txt)
+UI_Label * j1Gui::CreateLabel(iPoint pos, SDL_Rect atlas_rect, char * txt, bool not_in_world)
 {
 	UI_Label* ret = nullptr;
-	ret = new UI_Label(pos, atlas_rect, txt);
+	ret = new UI_Label(pos, atlas_rect, txt, not_in_world);
 	ui_elements.push_back(ret);
 	return ret;
 }
@@ -101,7 +101,7 @@ const SDL_Texture* j1Gui::GetAtlas() const
 
 // class Gui ---------------------------------------------------
 
-UI_Element::UI_Element(iPoint pos, SDL_Rect atlas_rect) : pos(pos), atlas_rect(atlas_rect)
+UI_Element::UI_Element(iPoint pos, SDL_Rect atlas_rect, bool not_in_world) : pos(pos), atlas_rect(atlas_rect), not_in_world(not_in_world)
 {
 }
 
