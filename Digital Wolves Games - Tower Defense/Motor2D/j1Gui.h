@@ -7,7 +7,7 @@
 #include "p2Point.h"
 
 #define CURSOR_WIDTH 2
-#define BACKGROUND_RECT_DESCRIPTIONS_BUTTONS { 400, 1750, 0, 0 }
+#define BACKGROUND_RECT_DEFAULT_TEXT { 400, 1750, 0, 0 }
 
 	 //----------------||------------------||----------------\\
 	//----------------||         UI         ||----------------\\
@@ -21,6 +21,7 @@ class UI_AppearingLabel;
 class UI_HPBar;
 
 class Entity;
+class Building;
 class Unit;
 
 class UI_Element
@@ -73,7 +74,7 @@ public:
 
 	// Gui creation functions
 	UI_Image* CreateImage(iPoint pos, SDL_Rect atlas_rect, bool not_in_world = true);
-	UI_Button* CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description = nullptr, bool not_in_world = true, SDL_Rect description_background_rect = BACKGROUND_RECT_DESCRIPTIONS_BUTTONS);
+	UI_Button* CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description = nullptr, bool not_in_world = true, SDL_Rect description_background_rect = BACKGROUND_RECT_DEFAULT_TEXT);
 	UI_Label* CreateLabel(iPoint pos, SDL_Rect atlas_rect, char* txt, bool not_in_world = true);
 	//-----------------------
 
@@ -90,7 +91,11 @@ private:
 
 
 	SDL_Rect GetUnitIcon(Unit* unit);
+	std::string attribute_value_attack;
+	std::string attribute_value_armor;
+	std::string attribute_value_range;
 
+	void ShowBuildingArmor(Building* building);
 };
 
 //	\\----------------||______________________||----------------//

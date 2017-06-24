@@ -7,6 +7,7 @@
 #include "j1Input.h"
 #include "Entity.h"
 #include "Buildings.h"
+#include "Towers.h"
 #include "Units.h"
 
 //UI_ELEMENTS
@@ -19,9 +20,16 @@
 
 #include "j1Gui.h"
 
-#define ONE_SELECTED_IMAGE_POS { 300, 300 }
-#define SPACE_BETWEEN_SELECTED_ICONS 30
-#define MAX_ICONS_IN_ROW 3
+#define ONE_SELECTED_IMAGE_POS { 300, 300 }	//Position of the first icon in the selection (pixels)
+#define ENTITY_ATTACK_ICON_POS { 350, 300 } //Position of the attack icon in the selection (pixels)
+#define ENTITY_ARMOR_ICON_POS  { 350, 330 } //Position of the armor icon in the selection (pixels)
+#define ENTITY_RANGE_ICON_POS  { 350, 360 } //Position of the range icon in the selection (pixels)
+#define ATTRIBUTES_TEXT_DISPLACEMENT 43 // X Displacement from the icons to the numbers of the attribute: i.e.: *Attack Icon*  10 (pixels)
+#define ENTITY_ATTACK_ICON_RECT { 956, 858, 38, 22 } //Attack icon rectangle in atlas
+#define ENTITY_ARMOR_ICON_RECT { 956, 902, 37, 19 } //Armor icon rectangle in atlas
+#define ENTITY_RANGE_ICON_RECT { 956, 881, 35, 20 } //Range icon rectangle in atlas
+#define SPACE_BETWEEN_SELECTED_ICONS 30 //Space between one icon and another in a multiple entity selection
+#define MAX_ICONS_IN_ROW 3	//Max amount of icons there can be in a row before going into the bottom of them
 
 j1Gui::j1Gui() : j1Module()
 {
@@ -110,10 +118,13 @@ UI_Label * j1Gui::CreateLabel(iPoint pos, SDL_Rect atlas_rect, char * txt, bool 
 
 void j1Gui::CreatePanel(std::vector<Entity*> selection)
 {
+	//One entity selected
 	if (selection.size() == 1)
 	{
 		Building* building;
+		Tower* tower;
 		Unit* unit;
+		iPoint attribute_pos;
 		switch (selection[0]->GetEntityType())
 		{
 		case E_NO_ENTITY:
@@ -132,14 +143,32 @@ void j1Gui::CreatePanel(std::vector<Entity*> selection)
 			case B_CANNON_UPGRADED_FIRE:
 			case B_CANNON_UPGRADED_ICE:
 			case B_CANNON_UPGRADED_AIR:
+				tower = (Tower*)selection[0];
+				//Attack
+				CreateImage(ENTITY_ATTACK_ICON_POS, ENTITY_ATTACK_ICON_RECT);
+				attribute_value_attack = std::to_string(tower->GetAttack());
+				attribute_pos = ENTITY_ATTACK_ICON_POS;
+				attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT;
+				CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_attack.c_str());
+				//Armor
+				ShowBuildingArmor(building);
+				//Range			
+				CreateImage(ENTITY_RANGE_ICON_POS, ENTITY_RANGE_ICON_RECT);
+				attribute_value_range = std::to_string(tower->GetRange());
+				attribute_pos = ENTITY_RANGE_ICON_POS;
+				attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT;
+				CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
 				break;
 			case B_WOOD_WALL:
 			case B_STONE_WALL:
 			case B_BRICK_WALL:
+				ShowBuildingArmor(building);
 				break;
 			case B_TOWNHALL:
+				ShowBuildingArmor(building);
 				break;
 			case B_UNIVERSITY:
+				ShowBuildingArmor(building);
 				break;
 
 			default:
@@ -149,6 +178,28 @@ void j1Gui::CreatePanel(std::vector<Entity*> selection)
 		case E_UNIT:
 			unit = (Unit*)selection[0];
 			CreateImage(ONE_SELECTED_IMAGE_POS, GetUnitIcon(unit));
+			//Attack
+			CreateImage(ENTITY_ATTACK_ICON_POS, ENTITY_ATTACK_ICON_RECT);
+			attribute_value_attack = std::to_string(unit->GetAttack());
+			attribute_pos = ENTITY_ATTACK_ICON_POS;
+			attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT;
+			CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_attack.c_str());
+			//Armor
+			CreateImage(ENTITY_ARMOR_ICON_POS, ENTITY_ARMOR_ICON_RECT);
+			attribute_value_armor = std::to_string(unit->GetArmor());
+			attribute_pos = ENTITY_ARMOR_ICON_POS;
+			attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT; 
+			CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_armor.c_str());
+			//Range
+			if (unit->GetUnitClass() == C_ARCHER || unit->GetUnitType() == U_MANGONEL)
+			{
+				CreateImage(ENTITY_RANGE_ICON_POS, ENTITY_RANGE_ICON_RECT);
+				attribute_value_range = std::to_string(unit->GetRange());
+				attribute_pos = ENTITY_RANGE_ICON_POS;
+				attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT; 
+				CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
+			}
+			//----
 			break;
 		case E_RESOURCE:
 			break;
@@ -157,6 +208,8 @@ void j1Gui::CreatePanel(std::vector<Entity*> selection)
 			break;
 		}
 	}
+	//--------------------------
+	//Multiple entities selected
 	else if (selection.size() > 1)
 	{
 		Building* building;
@@ -219,6 +272,7 @@ void j1Gui::CreatePanel(std::vector<Entity*> selection)
 			}
 		}
 	}
+	//--------------------------
 }
 
 // const getter for atlas
@@ -237,6 +291,15 @@ SDL_Rect j1Gui::GetUnitIcon(Unit * unit)
 		break;
 	}
 	return { 0,0,0,0 };
+}
+
+void j1Gui::ShowBuildingArmor(Building * building)
+{
+	CreateImage(ENTITY_ARMOR_ICON_POS, ENTITY_ARMOR_ICON_RECT);
+	attribute_value_armor = std::to_string(building->GetArmor());
+	iPoint attribute_pos = ENTITY_ARMOR_ICON_POS;
+	attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT;
+	CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_armor.c_str());
 }
 
 // class Gui ---------------------------------------------------
