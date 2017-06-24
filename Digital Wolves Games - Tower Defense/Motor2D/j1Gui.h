@@ -24,7 +24,7 @@ class Entity;
 class Building;
 class Unit;
 
-enum GUI_DATA_NAME
+enum GUI_DATA_NAME	//except rects in atlas
 {
 	NO_NAME,
 	SELECTED_ICON_START_POS,
@@ -32,9 +32,6 @@ enum GUI_DATA_NAME
 	ARMOR_ICON_POS,
 	RANGE_ICON_POS,
 	ATTRIBUTES_TEXT_DISPLACEMENT,
-	ATTACK_ICON_RECT,
-	ARMOR_ICON_RECT,
-	RANGE_ICON_RECT,
 	SPACE_BETWEEN_SELECTED_ICONS,
 	MAX_ICONS_IN_ROW
 };
@@ -51,6 +48,11 @@ struct GUI_Information
 	//------
 
 	//Icons
+		//Units--------------
+		SDL_Rect twohanded_icon;
+		SDL_Rect archer_icon;
+		//-------------------
+
 		//Positions----------
 		iPoint attack_icon_pos;
 		iPoint armor_icon_pos;

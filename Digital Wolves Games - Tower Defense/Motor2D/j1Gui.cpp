@@ -21,6 +21,8 @@
 
 #include "j1Gui.h"
 
+#define UPLOAD_XMLDATA_SDL_RECT { gui_atlas_icons_data_node.attribute("x").as_int(),gui_atlas_icons_data_node.attribute("y").as_int(),gui_atlas_icons_data_node.attribute("w").as_int(),gui_atlas_icons_data_node.attribute("h").as_int() }
+
 /*
 #define ONE_SELECTED_IMAGE_POS { 300, 300 }	//Position of the first icon in the selection (pixels)
 #define ENTITY_ATTACK_ICON_POS { 350, 300 } //Position of the attack icon in the selection (pixels)
@@ -50,13 +52,52 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 
 	atlas_file_name = conf.child("atlas").attribute("file").as_string("");
 
-	//Load data from gui/GuiDat.xml folder
-	std::string gui_data_folder = "gui/GuiData.xml";
+
+	//Load data from gui/GuiAtlasIcons.xml folder
+	std::string gui_atlas_icons_data_folder = "gui/GuiAtlasIcons.xml";
 
 	char* buff = nullptr;
-	int size = App->fs->Load(gui_data_folder.c_str(), &buff);
+	int size = App->fs->Load(gui_atlas_icons_data_folder.c_str(), &buff);
+	pugi::xml_document gui_atlas_icons_data;
+	pugi::xml_parse_result result = gui_atlas_icons_data.load_buffer(buff, size);
+	RELEASE(buff);
+
+	if (result == NULL)
+	{
+		LOG("Error loading GUI DATA from gui/GuiData.xml file: %s", result.description());
+		return false;
+	}
+
+	pugi::xml_node gui_atlas_icons_data_node = gui_atlas_icons_data.child("gui").first_child();
+	while (gui_atlas_icons_data_node != NULL)
+	{
+		std::string data_string = gui_atlas_icons_data_node.attribute("n").as_string();
+
+		if (data_string.compare("rect_attack_icon") == 0)
+			data.attack_icon = UPLOAD_XMLDATA_SDL_RECT;
+
+		else if (data_string.compare("rect_armor_icon") == 0)
+			data.armor_icon = UPLOAD_XMLDATA_SDL_RECT;
+
+		else if (data_string.compare("rect_range_icon") == 0)
+			data.range_icon = UPLOAD_XMLDATA_SDL_RECT;
+
+		else if (data_string.compare("twohandedswordman_icon") == 0)
+			data.twohanded_icon = UPLOAD_XMLDATA_SDL_RECT;
+
+		else if (data_string.compare("archer_icon") == 0)
+			data.archer_icon = UPLOAD_XMLDATA_SDL_RECT;
+
+		gui_atlas_icons_data_node = gui_atlas_icons_data_node.next_sibling();
+	}
+
+	//Load data from gui/GuiData.xml folder
+	std::string gui_data_folder = "gui/GuiData.xml";
+
+	buff = nullptr;
+	size = App->fs->Load(gui_data_folder.c_str(), &buff);
 	pugi::xml_document gui_data;
-	pugi::xml_parse_result result = gui_data.load_buffer(buff, size);
+	result = gui_data.load_buffer(buff, size);
 	RELEASE(buff);
 
 	if (result == NULL)
@@ -87,18 +128,6 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 			data.range_icon_pos = { gui_data_node.attribute("x").as_int(), gui_data_node.attribute("y").as_int() };
 			break;
 			//-------------
-
-			//SDL_Rects---
-		case ATTACK_ICON_RECT:
-			data.attack_icon = { gui_data_node.attribute("x").as_int(),gui_data_node.attribute("y").as_int(),gui_data_node.attribute("w").as_int(),gui_data_node.attribute("h").as_int() };
-			break;
-		case ARMOR_ICON_RECT:
-			data.armor_icon = { gui_data_node.attribute("x").as_int(),gui_data_node.attribute("y").as_int(),gui_data_node.attribute("w").as_int(),gui_data_node.attribute("h").as_int() };
-			break;
-		case RANGE_ICON_RECT:
-			data.range_icon = { gui_data_node.attribute("x").as_int(),gui_data_node.attribute("y").as_int(),gui_data_node.attribute("w").as_int(),gui_data_node.attribute("h").as_int() };
-			break;
-			//--------------
 
 			//Numbers
 		case MAX_ICONS_IN_ROW:
@@ -325,14 +354,14 @@ void j1Gui::CreatePanel(std::vector<Entity*> selection)
 			case E_UNIT:
 				unit = (Unit*)selection[i];
 				correct_pos = data.selection_start_pos;
-				if (i >= row_num * MAX_ICONS_IN_ROW)
+				if (i >= row_num * data.max_icons_in_row)
 				{
 					row_num++;
 					row_num_element = 0;
 				}
-				correct_pos.x += SPACE_BETWEEN_SELECTED_ICONS * row_num_element;
+				correct_pos.x += data.space_between_selected_icons * row_num_element;
 				row_num_element++;
-				correct_pos.y += SPACE_BETWEEN_SELECTED_ICONS * (row_num - 1);
+				correct_pos.y += data.space_between_selected_icons * (row_num - 1);
 				CreateImage(correct_pos, GetUnitIcon(unit));
 				break;
 			case E_RESOURCE:
@@ -354,16 +383,7 @@ const SDL_Texture* j1Gui::GetAtlas() const
 
 GUI_DATA_NAME j1Gui::DataStr2Enum(const std::string name)
 {
-	if (name == "rect_attack_icon")
-		return ATTACK_ICON_RECT;
-
-	else if (name == "rect_armor_icon")
-		return ARMOR_ICON_RECT;
-
-	else if (name == "rect_range_icon")
-		return RANGE_ICON_RECT;
-
-	else if (name == "selection_start_pos")
+	if (name == "selection_start_pos")
 		return SELECTED_ICON_START_POS;
 
 	else if (name == "pos_attack_icon")
@@ -392,6 +412,13 @@ SDL_Rect j1Gui::GetUnitIcon(Unit * unit)
 	switch (unit->GetUnitType())
 	{
 		//TODO: Get All atlas icons pos
+	case U_TWOHANDEDSWORDMAN:
+		return data.twohanded_icon;
+		break;
+	case U_ARCHER:
+		return data.archer_icon;
+		break;
+
 	default:
 		return { 774, 962, 25, 25 };// contorno { 1092, 827, 29, 29 };
 		break;
