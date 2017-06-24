@@ -24,6 +24,51 @@ class Entity;
 class Building;
 class Unit;
 
+enum GUI_DATA_NAME
+{
+	NO_NAME,
+	SELECTED_ICON_START_POS,
+	ATTACK_ICON_POS,
+	ARMOR_ICON_POS,
+	RANGE_ICON_POS,
+	ATTRIBUTES_TEXT_DISPLACEMENT,
+	ATTACK_ICON_RECT,
+	ARMOR_ICON_RECT,
+	RANGE_ICON_RECT,
+	SPACE_BETWEEN_SELECTED_ICONS,
+	MAX_ICONS_IN_ROW
+};
+
+struct GUI_Information
+{
+	GUI_Information(){}
+	~GUI_Information(){}
+
+	//Selection
+	iPoint selection_start_pos;
+	uint max_icons_in_row = 10;
+	uint space_between_selected_icons = 30; //pixels
+	//------
+
+	//Icons
+		//Positions----------
+		iPoint attack_icon_pos;
+		iPoint armor_icon_pos;
+		iPoint range_icon_pos;
+		//-------------------
+
+		//Atlas rectangles-----
+		SDL_Rect attack_icon;
+		SDL_Rect armor_icon;
+		SDL_Rect range_icon;
+		//---------------------
+
+		//Others--------------------
+		uint attributes_displacement = 40; //pixels
+		//--------------------------
+	//-----------------------------------------
+};
+
 class UI_Element
 {
 protected:
@@ -89,7 +134,8 @@ private:
 
 	std::vector<UI_Element*> ui_elements;
 
-
+	GUI_Information data;
+	GUI_DATA_NAME DataStr2Enum(const std::string name);
 	SDL_Rect GetUnitIcon(Unit* unit);
 	std::string attribute_value_attack;
 	std::string attribute_value_armor;

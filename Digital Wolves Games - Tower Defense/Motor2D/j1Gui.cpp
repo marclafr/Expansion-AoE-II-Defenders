@@ -9,6 +9,7 @@
 #include "Buildings.h"
 #include "Towers.h"
 #include "Units.h"
+#include "j1FileSystem.h"
 
 //UI_ELEMENTS
 #include "UI_AppearingLabel.h"
@@ -20,6 +21,7 @@
 
 #include "j1Gui.h"
 
+/*
 #define ONE_SELECTED_IMAGE_POS { 300, 300 }	//Position of the first icon in the selection (pixels)
 #define ENTITY_ATTACK_ICON_POS { 350, 300 } //Position of the attack icon in the selection (pixels)
 #define ENTITY_ARMOR_ICON_POS  { 350, 330 } //Position of the armor icon in the selection (pixels)
@@ -30,7 +32,7 @@
 #define ENTITY_RANGE_ICON_RECT { 956, 881, 35, 20 } //Range icon rectangle in atlas
 #define SPACE_BETWEEN_SELECTED_ICONS 30 //Space between one icon and another in a multiple entity selection
 #define MAX_ICONS_IN_ROW 3	//Max amount of icons there can be in a row before going into the bottom of them
-
+*/
 j1Gui::j1Gui() : j1Module()
 {
 	name.assign("gui");
@@ -47,6 +49,75 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 	bool ret = true;
 
 	atlas_file_name = conf.child("atlas").attribute("file").as_string("");
+
+	//Load data from gui/GuiDat.xml folder
+	std::string gui_data_folder = "gui/GuiData.xml";
+
+	char* buff = nullptr;
+	int size = App->fs->Load(gui_data_folder.c_str(), &buff);
+	pugi::xml_document gui_data;
+	pugi::xml_parse_result result = gui_data.load_buffer(buff, size);
+	RELEASE(buff);
+
+	if (result == NULL)
+	{
+		LOG("Error loading GUI DATA from gui/GuiData.xml file: %s", result.description());
+		return false;
+	}
+
+	pugi::xml_node gui_data_node = gui_data.child("gui").first_child();
+	while (gui_data_node != NULL)
+	{
+		std::string data_string = gui_data_node.attribute("n").as_string();
+		GUI_DATA_NAME data_name = DataStr2Enum(data_string.c_str());
+
+		switch (data_name)
+		{
+			//iPoints---
+		case SELECTED_ICON_START_POS:
+			data.selection_start_pos = { gui_data_node.attribute("x").as_int(), gui_data_node.attribute("y").as_int() };
+			break;
+		case ATTACK_ICON_POS:
+			data.attack_icon_pos = { gui_data_node.attribute("x").as_int(), gui_data_node.attribute("y").as_int() };
+			break;
+		case ARMOR_ICON_POS:
+			data.armor_icon_pos = { gui_data_node.attribute("x").as_int(), gui_data_node.attribute("y").as_int() };
+			break;
+		case RANGE_ICON_POS:
+			data.range_icon_pos = { gui_data_node.attribute("x").as_int(), gui_data_node.attribute("y").as_int() };
+			break;
+			//-------------
+
+			//SDL_Rects---
+		case ATTACK_ICON_RECT:
+			data.attack_icon = { gui_data_node.attribute("x").as_int(),gui_data_node.attribute("y").as_int(),gui_data_node.attribute("w").as_int(),gui_data_node.attribute("h").as_int() };
+			break;
+		case ARMOR_ICON_RECT:
+			data.armor_icon = { gui_data_node.attribute("x").as_int(),gui_data_node.attribute("y").as_int(),gui_data_node.attribute("w").as_int(),gui_data_node.attribute("h").as_int() };
+			break;
+		case RANGE_ICON_RECT:
+			data.range_icon = { gui_data_node.attribute("x").as_int(),gui_data_node.attribute("y").as_int(),gui_data_node.attribute("w").as_int(),gui_data_node.attribute("h").as_int() };
+			break;
+			//--------------
+
+			//Numbers
+		case MAX_ICONS_IN_ROW:
+			data.max_icons_in_row = gui_data_node.attribute("i").as_uint();
+			break;
+		case SPACE_BETWEEN_SELECTED_ICONS:
+			data.space_between_selected_icons = gui_data_node.attribute("i").as_uint();
+			break;
+		case ATTRIBUTES_TEXT_DISPLACEMENT:
+			data.attributes_displacement = gui_data_node.attribute("i").as_uint();
+			break;
+			//--------------
+
+		default:
+			break;
+		}
+
+		gui_data_node = gui_data_node.next_sibling();
+	}
 
 	return ret;
 }
@@ -145,18 +216,18 @@ void j1Gui::CreatePanel(std::vector<Entity*> selection)
 			case B_CANNON_UPGRADED_AIR:
 				tower = (Tower*)selection[0];
 				//Attack
-				CreateImage(ENTITY_ATTACK_ICON_POS, ENTITY_ATTACK_ICON_RECT);
+				CreateImage(data.attack_icon_pos, data.attack_icon);
 				attribute_value_attack = std::to_string(tower->GetAttack());
-				attribute_pos = ENTITY_ATTACK_ICON_POS;
-				attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT;
+				attribute_pos = data.attack_icon_pos;
+				attribute_pos.x += data.attributes_displacement;
 				CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_attack.c_str());
 				//Armor
 				ShowBuildingArmor(building);
 				//Range			
-				CreateImage(ENTITY_RANGE_ICON_POS, ENTITY_RANGE_ICON_RECT);
+				CreateImage(data.range_icon_pos, data.range_icon);
 				attribute_value_range = std::to_string(tower->GetRange());
-				attribute_pos = ENTITY_RANGE_ICON_POS;
-				attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT;
+				attribute_pos = data.range_icon_pos;
+				attribute_pos.x += data.attributes_displacement;
 				CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
 				break;
 			case B_WOOD_WALL:
@@ -177,26 +248,26 @@ void j1Gui::CreatePanel(std::vector<Entity*> selection)
 			break;
 		case E_UNIT:
 			unit = (Unit*)selection[0];
-			CreateImage(ONE_SELECTED_IMAGE_POS, GetUnitIcon(unit));
+			CreateImage(data.selection_start_pos, GetUnitIcon(unit));
 			//Attack
-			CreateImage(ENTITY_ATTACK_ICON_POS, ENTITY_ATTACK_ICON_RECT);
+			CreateImage(data.attack_icon_pos, data.attack_icon);
 			attribute_value_attack = std::to_string(unit->GetAttack());
-			attribute_pos = ENTITY_ATTACK_ICON_POS;
-			attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT;
+			attribute_pos = data.attack_icon_pos;
+			attribute_pos.x += data.attributes_displacement;
 			CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_attack.c_str());
 			//Armor
-			CreateImage(ENTITY_ARMOR_ICON_POS, ENTITY_ARMOR_ICON_RECT);
+			CreateImage(data.armor_icon_pos, data.armor_icon);
 			attribute_value_armor = std::to_string(unit->GetArmor());
-			attribute_pos = ENTITY_ARMOR_ICON_POS;
-			attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT; 
+			attribute_pos = data.armor_icon_pos;
+			attribute_pos.x += data.attributes_displacement;
 			CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_armor.c_str());
 			//Range
 			if (unit->GetUnitClass() == C_ARCHER || unit->GetUnitType() == U_MANGONEL)
 			{
-				CreateImage(ENTITY_RANGE_ICON_POS, ENTITY_RANGE_ICON_RECT);
+				CreateImage(data.range_icon_pos, data.range_icon);
 				attribute_value_range = std::to_string(unit->GetRange());
-				attribute_pos = ENTITY_RANGE_ICON_POS;
-				attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT; 
+				attribute_pos = data.range_icon_pos;
+				attribute_pos.x += data.attributes_displacement;
 				CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
 			}
 			//----
@@ -253,7 +324,7 @@ void j1Gui::CreatePanel(std::vector<Entity*> selection)
 				break;
 			case E_UNIT:
 				unit = (Unit*)selection[i];
-				correct_pos = ONE_SELECTED_IMAGE_POS;
+				correct_pos = data.selection_start_pos;
 				if (i >= row_num * MAX_ICONS_IN_ROW)
 				{
 					row_num++;
@@ -281,6 +352,41 @@ const SDL_Texture* j1Gui::GetAtlas() const
 	return atlas;
 }
 
+GUI_DATA_NAME j1Gui::DataStr2Enum(const std::string name)
+{
+	if (name == "rect_attack_icon")
+		return ATTACK_ICON_RECT;
+
+	else if (name == "rect_armor_icon")
+		return ARMOR_ICON_RECT;
+
+	else if (name == "rect_range_icon")
+		return RANGE_ICON_RECT;
+
+	else if (name == "selection_start_pos")
+		return SELECTED_ICON_START_POS;
+
+	else if (name == "pos_attack_icon")
+		return ATTACK_ICON_POS;
+
+	else if (name == "pos_armor_icon")
+		return ARMOR_ICON_POS;
+
+	else if (name == "pos_range_icon")
+		return RANGE_ICON_POS;
+
+	else if (name == "max_icons_in_a_row")
+		return MAX_ICONS_IN_ROW;
+
+	else if (name == "space_between_selected_icons")
+		return SPACE_BETWEEN_SELECTED_ICONS;
+
+	else if (name == "attributes_displacement")
+		return ATTRIBUTES_TEXT_DISPLACEMENT;
+		
+	return NO_NAME;
+}
+
 SDL_Rect j1Gui::GetUnitIcon(Unit * unit)
 {
 	switch (unit->GetUnitType())
@@ -295,10 +401,10 @@ SDL_Rect j1Gui::GetUnitIcon(Unit * unit)
 
 void j1Gui::ShowBuildingArmor(Building * building)
 {
-	CreateImage(ENTITY_ARMOR_ICON_POS, ENTITY_ARMOR_ICON_RECT);
+	CreateImage(data.armor_icon_pos, data.armor_icon);
 	attribute_value_armor = std::to_string(building->GetArmor());
-	iPoint attribute_pos = ENTITY_ARMOR_ICON_POS;
-	attribute_pos.x += ATTRIBUTES_TEXT_DISPLACEMENT;
+	iPoint attribute_pos = data.armor_icon_pos;
+	attribute_pos.x += data.attributes_displacement;
 	CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_armor.c_str());
 }
 
