@@ -5,7 +5,6 @@
 #include "UI_Label.h"
 
 #define TEXTS_COLOR {0, 0, 0, 255} //R G B ALPHA
-#define TEXT_RIGHT_DISPLACEMENT 5 //pixels
 
 UI_Label::UI_Label(iPoint pos, SDL_Rect atlas_rect, char * txt, bool not_in_world) : UI_Element(pos, atlas_rect, not_in_world)
 {
@@ -40,6 +39,7 @@ bool UI_Label::Update()
 		text->text_texture = App->font->Print(text->text, TEXTS_COLOR);
 		App->font->CalcSize(text->text, text->text_rect.w, text->text_rect.h);
 		text->text_rect.w += (2 * TEXT_RIGHT_DISPLACEMENT);
+		text_changed = false;
 	}
 	
 	return true;

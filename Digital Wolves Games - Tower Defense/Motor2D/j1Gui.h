@@ -5,9 +5,11 @@
 #include "SDL\include\SDL.h"
 #include "j1Module.h"
 #include "p2Point.h"
+#include "j1Fonts.h"
 
 #define CURSOR_WIDTH 2
 #define BACKGROUND_RECT_DEFAULT_TEXT { 400, 1750, 0, 0 }
+#define TEXT_RIGHT_DISPLACEMENT 5 //pixels
 
 	 //----------------||------------------||----------------\\
 	//----------------||         UI         ||----------------\\
@@ -15,6 +17,7 @@
 
 class UI_Image;
 class UI_Text;
+class UI_TextInput;
 class UI_Label;
 class UI_Button;
 class UI_AppearingLabel;
@@ -123,6 +126,7 @@ public:
 	UI_Image* CreateImage(iPoint pos, SDL_Rect atlas_rect, bool not_in_world = true);
 	UI_Button* CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description = nullptr, bool not_in_world = true, SDL_Rect description_background_rect = BACKGROUND_RECT_DEFAULT_TEXT);
 	UI_Label* CreateLabel(iPoint pos, SDL_Rect atlas_rect, char* txt, bool not_in_world = true);
+	UI_TextInput* CreateTextInput(iPoint pos, char* txt, FONT_NAME font_name = OPENSANS_REGULAR, SDL_Color color = { (255), (255), (255), (255) }, bool not_in_world = true);
 	//-----------------------
 
 	void CreatePanel(std::vector<Entity*> selection);

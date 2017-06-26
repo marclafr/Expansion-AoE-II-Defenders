@@ -17,11 +17,12 @@
 #include "UI_HPBar.h"
 #include "UI_Image.h"
 #include "UI_Label.h"
+#include "UI_Text_Input.h"
 //----------
 
 #include "j1Gui.h"
 
-#define UPLOAD_XMLDATA_SDL_RECT { gui_atlas_icons_data_node.attribute("x").as_int(),gui_atlas_icons_data_node.attribute("y").as_int(),gui_atlas_icons_data_node.attribute("w").as_int(),gui_atlas_icons_data_node.attribute("h").as_int() }
+#define UPLOAD_XMLDATA_ATLAS_RECTS { gui_atlas_icons_data_node.attribute("x").as_int(),gui_atlas_icons_data_node.attribute("y").as_int(),gui_atlas_icons_data_node.attribute("w").as_int(),gui_atlas_icons_data_node.attribute("h").as_int() }
 
 /*
 #define ONE_SELECTED_IMAGE_POS { 300, 300 }	//Position of the first icon in the selection (pixels)
@@ -74,19 +75,19 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 		std::string data_string = gui_atlas_icons_data_node.attribute("n").as_string();
 
 		if (data_string.compare("rect_attack_icon") == 0)
-			data.attack_icon = UPLOAD_XMLDATA_SDL_RECT;
+			data.attack_icon = UPLOAD_XMLDATA_ATLAS_RECTS;
 
 		else if (data_string.compare("rect_armor_icon") == 0)
-			data.armor_icon = UPLOAD_XMLDATA_SDL_RECT;
+			data.armor_icon = UPLOAD_XMLDATA_ATLAS_RECTS;
 
 		else if (data_string.compare("rect_range_icon") == 0)
-			data.range_icon = UPLOAD_XMLDATA_SDL_RECT;
+			data.range_icon = UPLOAD_XMLDATA_ATLAS_RECTS;
 
 		else if (data_string.compare("twohandedswordman_icon") == 0)
-			data.twohanded_icon = UPLOAD_XMLDATA_SDL_RECT;
+			data.twohanded_icon = UPLOAD_XMLDATA_ATLAS_RECTS;
 
 		else if (data_string.compare("archer_icon") == 0)
-			data.archer_icon = UPLOAD_XMLDATA_SDL_RECT;
+			data.archer_icon = UPLOAD_XMLDATA_ATLAS_RECTS;
 
 		gui_atlas_icons_data_node = gui_atlas_icons_data_node.next_sibling();
 	}
@@ -212,6 +213,14 @@ UI_Label * j1Gui::CreateLabel(iPoint pos, SDL_Rect atlas_rect, char * txt, bool 
 {
 	UI_Label* ret = nullptr;
 	ret = new UI_Label(pos, atlas_rect, txt, not_in_world);
+	ui_elements.push_back(ret);
+	return ret;
+}
+
+UI_TextInput * j1Gui::CreateTextInput(iPoint pos, char * txt, FONT_NAME font_name, SDL_Color color, bool not_in_world)
+{
+	UI_TextInput* ret = nullptr;
+	ret = new UI_TextInput(pos, txt, font_name, color, not_in_world);
 	ui_elements.push_back(ret);
 	return ret;
 }

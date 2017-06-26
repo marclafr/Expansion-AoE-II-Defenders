@@ -148,6 +148,9 @@
     <ClCompile Include="j1Gui.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Text_Input.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buildings.h">
@@ -306,6 +309,9 @@
     </ClInclude>
     <ClInclude Include="j1Gui.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Text_Input.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
