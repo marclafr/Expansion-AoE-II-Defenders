@@ -133,12 +133,16 @@ public:
 
 	const SDL_Texture* GetAtlas() const;
 
+	void SetFocusedText(UI_TextInput* text);
+	UI_TextInput* GetFocusedText();
+
 private:
 
 	SDL_Texture* atlas;
 	std::string atlas_file_name;
 
 	std::vector<UI_Element*> ui_elements;
+	UI_TextInput* focused_text = nullptr;
 
 	GUI_Information data;
 	GUI_DATA_NAME DataStr2Enum(const std::string name);

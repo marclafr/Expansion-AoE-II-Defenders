@@ -1,11 +1,13 @@
+#include "SDL/include/SDL.h"
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
-#include "j1Input.h"
 #include "j1Window.h"
 #include "j1Console.h"
 #include "j1Scene.h"
-#include "SDL/include/SDL.h"
+#include "j1Gui.h"
+#include "UI_Text_Input.h"
+#include "j1Input.h"
 
 #define MAX_KEYS 300
 
@@ -114,63 +116,71 @@ bool j1Input::PreUpdate()
 
 	while(SDL_PollEvent(&event) != 0)
 	{
-		switch(event.type)
+		int scale = 1;
+		switch (event.type)
 		{
-			case SDL_QUIT:
-				windowEvents[WE_QUIT] = true;
+		case SDL_QUIT:
+			windowEvents[WE_QUIT] = true;
 			break;
 
-			case SDL_WINDOWEVENT:
-				switch(event.window.event)
-				{
-					//case SDL_WINDOWEVENT_LEAVE:
-					case SDL_WINDOWEVENT_HIDDEN:
-					case SDL_WINDOWEVENT_MINIMIZED:
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-					windowEvents[WE_HIDE] = true;
-					break;
-
-					//case SDL_WINDOWEVENT_ENTER:
-					case SDL_WINDOWEVENT_SHOWN:
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-					case SDL_WINDOWEVENT_MAXIMIZED:
-					case SDL_WINDOWEVENT_RESTORED:
-					windowEvents[WE_SHOW] = true;
-					break;
-				}
-			break;
-
-			case SDL_MOUSEBUTTONDOWN:
-				mouse_buttons[event.button.button - 1] = KEY_DOWN;
-				if(App->scene->active)
-					App->scene->HandleInput(event);
-			break;
-
-			case SDL_MOUSEBUTTONUP:
-
-				mouse_buttons[event.button.button - 1] = KEY_UP;
-				if (App->scene->active)
-					App->scene->HandleInput(event);
-			break;
-
-			case SDL_KEYDOWN:
-
-				if (App->scene->active)
-					App->scene->HandleInput(event);
-
+		case SDL_WINDOWEVENT:
+			switch (event.window.event)
+			{
+				//case SDL_WINDOWEVENT_LEAVE:
+			case SDL_WINDOWEVENT_HIDDEN:
+			case SDL_WINDOWEVENT_MINIMIZED:
+			case SDL_WINDOWEVENT_FOCUS_LOST:
+				windowEvents[WE_HIDE] = true;
 				break;
 
-			case SDL_KEYUP:
-				if (App->scene->active)
-					App->scene->HandleInput(event);
+				//case SDL_WINDOWEVENT_ENTER:
+			case SDL_WINDOWEVENT_SHOWN:
+			case SDL_WINDOWEVENT_FOCUS_GAINED:
+			case SDL_WINDOWEVENT_MAXIMIZED:
+			case SDL_WINDOWEVENT_RESTORED:
+				windowEvents[WE_SHOW] = true;
 				break;
+			}
+			break;
 
-			case SDL_MOUSEMOTION:
-				int scale = App->win->GetScale();
-				mouse_motion_x = event.motion.xrel / scale;
-				mouse_motion_y = event.motion.yrel / scale;
-				mouse_x = event.motion.x / scale;
-				mouse_y = event.motion.y / scale;
+		case SDL_MOUSEBUTTONDOWN:
+			mouse_buttons[event.button.button - 1] = KEY_DOWN;
+			if (App->scene->active)
+				App->scene->HandleInput(event);
+			break;
+
+		case SDL_MOUSEBUTTONUP:
+
+			mouse_buttons[event.button.button - 1] = KEY_UP;
+			if (App->scene->active)
+				App->scene->HandleInput(event);
+			break;
+
+		case SDL_KEYDOWN:
+
+			if (App->scene->active)
+				App->scene->HandleInput(event);
+
+			break;
+
+		case SDL_KEYUP:
+			if (App->scene->active)
+				App->scene->HandleInput(event);
+			break;
+
+		case SDL_MOUSEMOTION:
+			scale = App->win->GetScale();
+			mouse_motion_x = event.motion.xrel / scale;
+			mouse_motion_y = event.motion.yrel / scale;
+			mouse_x = event.motion.x / scale;
+			mouse_y = event.motion.y / scale;
+			break;
+
+		case SDL_TEXTINPUT:
+			char_input = event.text.text;
+			UI_TextInput* text_input = App->gui->GetFocusedText();
+			if (text_input != nullptr)
+				text_input->InputTextChanged();
 			break;
 		}
 	}

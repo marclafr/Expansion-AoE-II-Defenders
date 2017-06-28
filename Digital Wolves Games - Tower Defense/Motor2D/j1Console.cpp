@@ -2,12 +2,15 @@
 #include "j1Render.h"
 #include "j1Fonts.h"
 #include "Camera.h"
-#include "j1Console.h"
 #include "j1SceneManager.h"
+#include "j1Gui.h"
+#include "j1Console.h"
 
+#define CONSOLE_INPUT_POS { 333, 333 }
 
 bool j1Console::Start()
 {
+	App->gui->CreateTextInput(CONSOLE_INPUT_POS, "Console input text");
 	return true;
 }
 
@@ -80,8 +83,15 @@ void j1Console::BlitText()
 void j1Console::TurnOnOff()
 {
 	if (on == true)
+	{
+		SDL_StopTextInput();
 		on = false;
+	}
+
 	else
+	{
+		SDL_StartTextInput();
 		on = true;
+	}
 }
 

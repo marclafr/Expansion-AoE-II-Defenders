@@ -390,6 +390,16 @@ const SDL_Texture* j1Gui::GetAtlas() const
 	return atlas;
 }
 
+void j1Gui::SetFocusedText(UI_TextInput* text)
+{
+	focused_text = text;
+}
+
+UI_TextInput * j1Gui::GetFocusedText()
+{
+	return focused_text;
+}
+
 GUI_DATA_NAME j1Gui::DataStr2Enum(const std::string name)
 {
 	if (name == "selection_start_pos")

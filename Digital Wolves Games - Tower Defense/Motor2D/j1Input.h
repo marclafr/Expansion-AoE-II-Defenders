@@ -83,6 +83,8 @@ public:
 
 	SDL_Scancode move_up, move_down, move_right, move_left, build_turret, build_bombard_turret, build_walls, menu, center_to_townhall;
 
+	char* char_input;
+
 private:
 	bool		windowEvents[WE_COUNT];
 	j1KeyState*	keyboard;
