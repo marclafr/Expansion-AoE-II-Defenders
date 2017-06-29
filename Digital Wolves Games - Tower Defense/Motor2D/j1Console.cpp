@@ -10,7 +10,7 @@
 
 bool j1Console::Start()
 {
-	App->gui->CreateTextInput(CONSOLE_INPUT_POS, "Console input text");
+	console_input_text = App->gui->CreateTextInput(CONSOLE_INPUT_POS, "Console input text");
 	return true;
 }
 
@@ -86,12 +86,19 @@ void j1Console::TurnOnOff()
 	{
 		SDL_StopTextInput();
 		on = false;
+		App->gui->SetFocusedText(nullptr);
 	}
 
 	else
 	{
 		SDL_StartTextInput();
 		on = true;
+		App->gui->SetFocusedText(console_input_text);
 	}
+}
+
+UI_TextInput * j1Console::GetConsoleInputText()
+{
+	return console_input_text;
 }
 

@@ -2,6 +2,7 @@
 #define __UI_TEXT_INPUT_H__
 
 #include "j1Gui.h"
+#include "j1Timer.h"
 
 class _TTF_Font;
 
@@ -21,11 +22,15 @@ private:
 	SDL_Texture* tex;
 	SDL_Color color = { (0), (0), (0), (255) };
 	bool text_changed = false;
+	int writing_pos = 0; // character number we are writing on
+	j1Timer writing_pos_appear_timer;
+	j1Timer repeat_timer;
 
 	bool Update();
 	bool Draw(SDL_Texture* atlas);
 
 	bool MouseInsideText();
+	void DeleteChar();
 };
 
 #endif //__UI_TEXT_INPUT_H__
