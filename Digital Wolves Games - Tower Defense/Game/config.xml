@@ -19,6 +19,15 @@
   <gui>
     <atlas file="gui/atlas.png"/>
   </gui>
+  
+  <console>
+  <!-- 
+  relation command - number:
+  	NO_COMMAND = 0,
+	CREATE_GOD = 1  
+  -->
+	<command text="god" action="1"/> <!-- Creates a GOD unit -->
+  </console>
     
   <window>
     <resolution width="1366" height="768" scale="1"/>

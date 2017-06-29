@@ -11,6 +11,22 @@
 
 class UI_TextInput;
 
+enum COMMAND
+{
+	NO_COMMAND = 0,
+	CREATE_GOD = 1
+};
+
+struct Command
+{
+	Command(const char* command_name, int action_num);
+	Command(const char* command_name, COMMAND action_num);
+	~Command();
+
+	std::string name;
+	COMMAND action;
+};
+
 class j1Console : public j1Module
 {
 private:
@@ -19,8 +35,15 @@ private:
 	std::vector<SDL_Texture*> text_textures;
 	bool on = false;
 	UI_TextInput* console_input_text;
+	std::vector<Command> commands;
 
 public:
+
+	j1Console();
+	~j1Console();
+	
+	bool Awake(pugi::xml_node& config);	
+
 	// Called before the first frame
 	virtual bool Start();
 

@@ -4,18 +4,68 @@
 #include "Camera.h"
 #include "j1SceneManager.h"
 #include "j1Gui.h"
+#include "UI_Text_Input.h"
+#include "j1Input.h"
+#include "j1FileSystem.h"
 #include "j1Console.h"
 
 #define CONSOLE_INPUT_POS { 333, 333 }
 
+j1Console::j1Console() : j1Module()
+{
+	name.assign("console");
+}
+
+j1Console::~j1Console()
+{
+}
+
+bool j1Console::Awake(pugi::xml_node & config)
+{
+	bool ret = true;
+
+	config = config.child("command");
+	while (config != NULL)
+	{
+		commands.push_back(Command(config.attribute("text").as_string(), config.attribute("action").as_int()));
+		config = config.next_sibling("command");
+	}
+	
+	return ret;
+}
+
 bool j1Console::Start()
 {
-	console_input_text = App->gui->CreateTextInput(CONSOLE_INPUT_POS, "Console input text");
+	console_input_text = App->gui->CreateTextInput(CONSOLE_INPUT_POS, "Console input text", OPENSANS_BOLD);
 	return true;
 }
 
 bool j1Console::PreUpdate()
 {
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_RETURN2) == KEY_DOWN)
+	{
+		std::string input = console_input_text->GetText();
+		console_input_text->DeleteText();
+
+		for (int i = 0; i < commands.size(); i++)
+		{
+			if (input.compare(commands[i].name) == 0)
+			{
+				switch (commands[i].action)
+				{
+				case CREATE_GOD:
+
+					break;
+
+				case NO_COMMAND:
+				default:
+					break;
+				}
+			}
+		}
+
+	}
+	
 	return true;
 }
 
@@ -102,3 +152,14 @@ UI_TextInput * j1Console::GetConsoleInputText()
 	return console_input_text;
 }
 
+Command::Command(const char* command_name, int action_num) : name(command_name), action((COMMAND)action_num)
+{
+}
+
+Command::Command(const char * command_name, COMMAND action_num) : name(command_name), action(action_num)
+{
+}
+
+Command::~Command()
+{
+}

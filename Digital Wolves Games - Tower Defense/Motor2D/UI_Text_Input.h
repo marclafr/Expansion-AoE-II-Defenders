@@ -14,6 +14,8 @@ public:
 
 	bool SetFont(FONT_NAME name);
 	void InputTextChanged();
+	const char* GetText();
+	void DeleteText();
 
 private:
 	std::string text;
