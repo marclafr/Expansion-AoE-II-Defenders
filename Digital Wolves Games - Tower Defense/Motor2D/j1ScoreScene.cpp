@@ -1,5 +1,4 @@
 #include "p2Defs.h"
-#include "p2Log.h"
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Textures.h"
@@ -34,7 +33,6 @@ j1ScoreScene::~j1ScoreScene()
 // Called before render is available
 bool j1ScoreScene::Awake()
 {
-	LOG("Loading ScoreScene");
 	bool ret = true;
 
 	return ret;
@@ -110,7 +108,6 @@ bool j1ScoreScene::PostUpdate()
 // Called before quitting
 bool j1ScoreScene::CleanUp()
 {
-	LOG("Freeing  MainMenu");
 
 	//App->score->Disable();
 	//App->uimanager->SetAllToDelete();

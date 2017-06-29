@@ -21,7 +21,6 @@ j1Fonts::~j1Fonts()
 // Called before render is available
 bool j1Fonts::Awake(pugi::xml_node& conf)
 {
-	LOG("Init True Type Font library");
 	bool ret = true;
 
 	if (TTF_Init() == -1)
@@ -49,8 +48,6 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 // Called before quitting
 bool j1Fonts::CleanUp()
 {
-	LOG("Freeing True Type fonts and library");
-
 	std::list<TTF_Font*>::iterator item;
 
 	for (std::list<Font*>::iterator item = App->font->fonts.begin(); item != App->font->fonts.end(); item++)
@@ -72,7 +69,6 @@ TTF_Font* const j1Fonts::Load(const char* path, int size)
 	}
 	else
 	{
-		LOG("Successfully loaded font %s size %d", path, size);
 		std::string s = path;
 		int pos = s.find("OpenSans-"); 
 		pos += 9;// 9 because OpenSans- 

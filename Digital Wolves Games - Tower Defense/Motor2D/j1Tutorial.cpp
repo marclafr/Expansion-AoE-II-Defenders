@@ -1,5 +1,4 @@
 /*#include "p2Defs.h"
-#include "p2Log.h"
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Textures.h"
@@ -31,7 +30,6 @@ j1Tutorial::~j1Tutorial()
 // Called before render is available
 bool j1Tutorial::Awake()
 {
-	LOG("Loading Tutorial");
 	bool ret = true;
 
 	return ret;
@@ -129,7 +127,6 @@ bool j1Tutorial::PostUpdate()
 // Called before quitting
 bool j1Tutorial::CleanUp()
 {
-	LOG("Freeing  MainMenu");
 	//App->uimanager->SetAllToDelete();
 	tutorial = false;
 	tutorial1_deleted = false;

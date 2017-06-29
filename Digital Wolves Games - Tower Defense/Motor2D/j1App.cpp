@@ -457,8 +457,6 @@ void j1App::FinishGame(const char * file)
 {
 	save_game.assign(file);
 
-	LOG("Saving Game State to %s...", save_game.c_str());
-
 	// xml object were we will store all data
 	pugi::xml_document data;
 	pugi::xml_node root;
@@ -472,8 +470,6 @@ void j1App::FinishGame(const char * file)
 
 		// we are done, so write data to disk
 	fs->Save(save_game.c_str(), stream.str().c_str(), stream.str().length());
-	LOG("... finished saving", save_game.c_str());
-
 	data.reset();
 
 }
@@ -481,8 +477,6 @@ void j1App::FinishGame(const char * file)
 void j1App::SaveAchievements(const char * file)
 {
 	save_game.assign(file);
-
-	LOG("Saving Game State to %s...", save_game.c_str());
 
 	// xml object were we will store all data
 	pugi::xml_document data;
@@ -533,7 +527,6 @@ void j1App::SaveAchievements(const char * file)
 
 	// we are done, so write data to disk
 	fs->Save(save_game.c_str(), stream.str().c_str(), stream.str().length());
-	LOG("... finished saving", save_game.c_str());
 
 	data.reset();
 }
@@ -635,8 +628,6 @@ bool j1App::LoadGameNow()
 
 		if (result != NULL)
 		{
-			LOG("Loading new Game State from %s...", load_game.c_str());
-
 			root = data.child("game_state");
 
 			std::list<j1Module*>::iterator item = modules.begin();
@@ -649,9 +640,7 @@ bool j1App::LoadGameNow()
 			}
 
 			data.reset();
-			if (ret == true)
-				LOG("...finished loading");
-			else
+			if (ret == false)
 				LOG("...loading process interrupted with error on module %s", (*item != NULL) ? (*item)->name.c_str() : "unknown");
 		}
 		else
@@ -667,8 +656,6 @@ bool j1App::LoadGameNow()
 bool j1App::SavegameNow() const
 {
 	bool ret = true;
-
-	LOG("Saving Game State to %s...", save_game.c_str());
 
 	// xml object were we will store all data
 	pugi::xml_document data;
@@ -691,7 +678,6 @@ bool j1App::SavegameNow() const
 
 		// we are done, so write data to disk
 		fs->Save(save_game.c_str(), stream.str().c_str(), stream.str().length());
-		LOG("... finished saving", save_game.c_str());
 	}
 	else
 		LOG("Save process halted from an error in module %s", (*item != NULL) ? (*item)->name.c_str() : "unknown");

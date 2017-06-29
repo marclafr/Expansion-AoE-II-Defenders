@@ -18,8 +18,6 @@ j1Intro::~j1Intro()
 // Called before render is available
 bool j1Intro::Awake()
 {
-	//LOG("Loading Scene");
-
 	bool ret = true;
 
 	return ret;

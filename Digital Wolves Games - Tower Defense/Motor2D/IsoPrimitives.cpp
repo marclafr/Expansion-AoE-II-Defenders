@@ -1,10 +1,9 @@
-#include "IsoPrimitives.h"
+#include <math.h>
 
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Map.h"
-#include <math.h>
-#include "p2Log.h"
+#include "IsoPrimitives.h"
 
 ///Class Primitive ------------------------------
 //Constructors ==============

@@ -126,7 +126,7 @@ void Building::Draw()
 			App->render->PushInGameSprite(this);
 
 		//BUILDINGS FIRE IF DAMAGED
-
+		/*TODO
 		if (building_type == B_TOWNHALL)
 		{
 			if (GetHp() <= GetMaxHp()/4)
@@ -165,6 +165,7 @@ void Building::Draw()
 				App->render->PushUISprite(App->tex->GetTexture(T_BUILDINGS_FIRE), GetX(), GetY() - 100, &fire_rect, SDL_FLIP_NONE, fire_pivot.x, fire_pivot.y - 100);
 			}
 		}
+		*/
 		
 	}
 	else

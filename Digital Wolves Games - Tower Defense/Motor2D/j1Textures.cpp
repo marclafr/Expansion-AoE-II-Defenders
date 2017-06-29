@@ -23,7 +23,6 @@ j1Textures::~j1Textures()
 // Called before render is available
 bool j1Textures::Awake(pugi::xml_node& config)
 {
-	LOG("Init Image library");
 	bool ret = true;
 	// load support for the PNG image format
 	int flags = IMG_INIT_PNG;
@@ -42,7 +41,6 @@ bool j1Textures::Awake(pugi::xml_node& config)
 bool j1Textures::Start()
 {
 	bool ret = true;
-	LOG("start textures");
 
 	//ADD UNIT: IF ANY UNIT IS ADDED ADD CODE HERE:
 	//Units
@@ -165,7 +163,6 @@ bool j1Textures::Start()
 // Called before quitting
 bool j1Textures::CleanUp()
 {
-	LOG("Freeing textures and Image library");
 	std::vector<Texture*>::iterator item;
 	for (item = textures.begin(); item != textures.end(); ++item)
 	{

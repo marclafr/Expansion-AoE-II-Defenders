@@ -23,7 +23,6 @@ j1Achievements::~j1Achievements()
 // Called before render is available
 bool j1Achievements::Awake()
 {
-	LOG("Loading Achievements");
 	bool ret = true;
 
 	return ret;
@@ -58,7 +57,6 @@ bool j1Achievements::PostUpdate()
 // Called before quitting
 bool j1Achievements::CleanUp()
 {
-	LOG("Freeing  MainMenu");
 	//App->uimanager->SetAllToDelete();
 	return true;
 }

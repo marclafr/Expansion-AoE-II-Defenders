@@ -3,6 +3,15 @@
 #include "p2Defs.h"
 #include "j1Animation.h"
 
+ProjectileManager::ProjectileManager() : j1Module()
+{
+	name.assign("projectile_manager");
+}
+
+ProjectileManager::~ProjectileManager()
+{
+}
+
 bool ProjectileManager::Start()
 {
 	fx_cannon_shoot = App->audio->LoadFx("audio/fx/Cannon01.wav");

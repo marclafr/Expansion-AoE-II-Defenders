@@ -3,6 +3,15 @@
 #include "j1Render.h"
 #include "j1Scene.h"
 
+j1Mouse::j1Mouse() : j1Module()
+{
+	name.assign("mouse");
+}
+
+j1Mouse::~j1Mouse()
+{
+}
+
 bool j1Mouse::Start()
 {
 	SDL_ShowCursor(SDL_DISABLE);

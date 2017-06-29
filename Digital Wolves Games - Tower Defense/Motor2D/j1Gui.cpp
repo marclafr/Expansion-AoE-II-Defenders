@@ -48,7 +48,6 @@ j1Gui::~j1Gui()
 // Called before render is available
 bool j1Gui::Awake(pugi::xml_node& conf)
 {
-	LOG("Loading GUI atlas");
 	bool ret = true;
 
 	atlas_file_name = conf.child("atlas").attribute("file").as_string("");
@@ -186,10 +185,7 @@ bool j1Gui::PostUpdate()
 // Called before quitting
 bool j1Gui::CleanUp()
 {
-	LOG("Freeing GUI");
-
 	ui_elements.clear();
-
 	return true;
 }
 
@@ -223,6 +219,18 @@ UI_TextInput * j1Gui::CreateTextInput(iPoint pos, char * txt, FONT_NAME font_nam
 	ret = new UI_TextInput(pos, txt, font_name, color, not_in_world);
 	ui_elements.push_back(ret);
 	return ret;
+}
+
+void j1Gui::DeleteImage(UI_Image * img)
+{
+	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
+		if (*it == img)
+		{
+			ui_elements.erase(it);
+			break;
+		}
+
+	DELETE_PTR(img);
 }
 
 void j1Gui::CreatePanel(std::vector<Entity*> selection)
@@ -300,7 +308,7 @@ void j1Gui::CreatePanel(std::vector<Entity*> selection)
 			attribute_pos.x += data.attributes_displacement;
 			CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_armor.c_str());
 			//Range
-			if (unit->GetUnitClass() == C_ARCHER || unit->GetUnitType() == U_MANGONEL)
+			//if (unit->GetUnitClass() == C_ARCHER || unit->GetUnitType() == U_MANGONEL)
 			{
 				CreateImage(data.range_icon_pos, data.range_icon);
 				attribute_value_range = std::to_string(unit->GetRange());

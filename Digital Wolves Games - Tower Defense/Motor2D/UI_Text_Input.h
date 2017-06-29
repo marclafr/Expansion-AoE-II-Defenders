@@ -14,6 +14,8 @@ public:
 
 	bool SetFont(FONT_NAME name);
 	void InputTextChanged();
+	const char* GetText();
+	void DeleteText();
 
 private:
 	std::string text;
@@ -29,6 +31,7 @@ private:
 	bool Update();
 	bool Draw(SDL_Texture* atlas);
 
+	void DrawTextInput(SDL_Texture* atlas);
 	bool MouseInsideText();
 	void DeleteChar();
 };

@@ -29,7 +29,6 @@ j1Input::~j1Input()
 // Called before render is available
 bool j1Input::Awake(pugi::xml_node& config)
 {
-	LOG("Init SDL input event system");
 	bool ret = true;
 	SDL_Init(0);
 
@@ -98,7 +97,7 @@ bool j1Input::PreUpdate()
 
 	for (int i = 0; i < MAX_KEYS; ++i)
 	{
-		if (keys[i] == 1)
+		if (keys[i] == KEY_DOWN)
 		{
 			if (keyboard[i] == KEY_IDLE)
 				keyboard[i] = KEY_DOWN;
@@ -157,15 +156,19 @@ bool j1Input::PreUpdate()
 			break;
 
 		case SDL_KEYDOWN:
-
-			if (App->scene->active)
-				App->scene->HandleInput(event);
-
+			if (SDL_IsTextInputActive() == false)
+			{
+				if (App->scene->active)
+					App->scene->HandleInput(event);
+			}
 			break;
 
 		case SDL_KEYUP:
-			if (App->scene->active)
-				App->scene->HandleInput(event);
+			if (SDL_IsTextInputActive() == false)
+			{
+				if (App->scene->active)
+					App->scene->HandleInput(event);
+			}
 			break;
 
 		case SDL_MOUSEMOTION:
@@ -239,7 +242,6 @@ bool j1Input::Update(float dt)
 // Called before quitting
 bool j1Input::CleanUp()
 {
-	LOG("Quitting SDL event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }

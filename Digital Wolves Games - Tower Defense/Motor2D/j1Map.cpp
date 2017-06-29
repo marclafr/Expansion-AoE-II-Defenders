@@ -21,7 +21,6 @@ j1Map::~j1Map()
 // Called before render is available
 bool j1Map::Awake(pugi::xml_node& config)
 {
-	LOG("Loading Map Parser");
 	bool ret = true;
 
 	folder = (config.child("folder").child_value());
@@ -323,8 +322,6 @@ SDL_Rect TileSet::GetTileRect(int id) const
 // Called before quitting
 bool j1Map::CleanUp()
 {
-	LOG("Unloading map");
-
 	// Remove all tilesets
 	for (std::vector<TileSet*>::iterator item = data.tilesets.begin(); item != data.tilesets.end(); ++item)
 	{

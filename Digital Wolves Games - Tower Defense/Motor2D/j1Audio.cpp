@@ -21,7 +21,6 @@ j1Audio::~j1Audio()
 // Called before render is available
 bool j1Audio::Awake(pugi::xml_node& config)
 {
-	LOG("Loading Audio Mixer");
 	bool ret = true;
 	SDL_Init(0);
 
@@ -59,8 +58,6 @@ bool j1Audio::CleanUp()
 {
 	if (!active)
 		return true;
-
-	LOG("Freeing sound FX, closing Mixer and Audio subsystem");
 
 	if (music != NULL)
 	{
@@ -130,7 +127,6 @@ bool j1Audio::PlayMusic(const char* path, float fade_time)
 		}
 	}
 
-	LOG("Successfully playing %s", path);
 	return ret;
 }
 

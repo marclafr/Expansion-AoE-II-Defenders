@@ -12,6 +12,8 @@ private:
 	int pivot_y = 0;
 
 public:
+	j1Mouse();
+	~j1Mouse();
 	// Called before the first frame
 	bool Start();
 
