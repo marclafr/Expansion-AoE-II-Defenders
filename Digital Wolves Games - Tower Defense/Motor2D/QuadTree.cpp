@@ -839,12 +839,12 @@ TiledIsoRect::TiledIsoRect(const iPoint& tile_pos, const uint x_tiles, const uin
 	if (x_tiles != y_tiles)
 	{
 		iPoint equal_side_right_tile(tile_pos.x + y_tiles - 1.0f, tile_pos.y);
-		iPoint equal_side_right_vertex = App->map->MapToWorld(right_tile);
+		iPoint equal_side_right_vertex = App->map->MapToWorld(equal_side_right_tile);
 		equal_side_right_vertex.x += tile_width / 2.0f;
 		equal_side_right_vertex.y += tile_height / 2.0f + 0.5f;
 
 		iPoint equal_side_bottom_tile(tile_pos.x + y_tiles - 1.0f, tile_pos.y + y_tiles - 1.0f);
-		iPoint equal_side_bottom_vertex = App->map->MapToWorld(bottom_tile);
+		iPoint equal_side_bottom_vertex = App->map->MapToWorld(equal_side_bottom_tile);
 		equal_side_bottom_vertex.y += tile_height + 1.0f;
 
 		//equal side triangle
@@ -861,7 +861,7 @@ TiledIsoRect::TiledIsoRect(const iPoint& tile_pos, const uint x_tiles, const uin
 		float center_right_equal_side_lenght = sqrt(powf(center_right_equal_side_vec.x, 2) + powf(center_right_equal_side_vec.y, 2));
 		float top_center_equal_side_lenght = sqrt(powf(top_center_equal_side_vec.x, 2) + powf(top_center_equal_side_vec.y, 2));
 
-		float triangle_two_angle = acosf(powf(center_right_equal_side_lenght, 2) + powf(top_center_equal_side_lenght, 2) - powf(y_side_lenght, 2)) / (2.0f * center_right_equal_side_lenght * top_center_equal_side_lenght);
+		float triangle_two_angle = acosf((powf(center_right_equal_side_lenght, 2) + powf(top_center_equal_side_lenght, 2) - powf(y_side_lenght, 2)) / (2.0f * center_right_equal_side_lenght * top_center_equal_side_lenght));
 
 		//non equal side triangle
 		fPoint top_right_vec(right_pixel_vertex.x - top_pixel_vertex.x, right_pixel_vertex.y - top_pixel_vertex.y);
@@ -873,33 +873,12 @@ TiledIsoRect::TiledIsoRect(const iPoint& tile_pos, const uint x_tiles, const uin
 		float center_right_lenght = sqrt(powf(center_right_vec.x, 2) + powf(center_right_vec.y, 2));
 		float top_center_lenght = sqrt(powf(top_center_vec.x, 2) + powf(top_center_vec.y, 2));
 
-		float triangle_one_angle = acosf(powf(center_right_lenght, 2) + powf(top_center_lenght, 2) - powf(x_side_lenght, 2)) / (2.0f * center_right_lenght * top_center_lenght);
+		float triangle_one_angle = acosf((powf(center_right_lenght, 2) + powf(top_center_lenght, 2) - powf(x_side_lenght, 2)) / (2.0f * center_right_lenght * top_center_lenght));
 
 		//Diff Angle
-		angle = triangle_one_angle - triangle_two_angle;
+		angle = -(triangle_one_angle - triangle_two_angle);
 	}
 
-	/*
-	float angle = 0.0f;
-	float distance_top_left = sqrt(abs(top_pixel_vertex.x - left_pixel_vertex.x) * abs(top_pixel_vertex.x - left_pixel_vertex.x) + abs(top_pixel_vertex.y - left_pixel_vertex.y) * abs(top_pixel_vertex.y - left_pixel_vertex.y));
-	float distance_top_right = sqrt(abs(top_pixel_vertex.x - right_pixel_vertex.x) * abs(top_pixel_vertex.x - right_pixel_vertex.x) + abs(top_pixel_vertex.y - right_pixel_vertex.y) * abs(top_pixel_vertex.y - right_pixel_vertex.y));
-	
-	if (distance_top_left != distance_top_right)
-	{
-		float distance_left_right = sqrt(abs(left_pixel_vertex.x - right_pixel_vertex.x) * abs(left_pixel_vertex.x - right_pixel_vertex.x) + abs(left_pixel_vertex.y - right_pixel_vertex.y) * abs(left_pixel_vertex.y - right_pixel_vertex.y));
-
-		float angle_one = 0.5f * acosf((powf(distance_left_right, 2.0f) - powf(distance_top_right, 2.0f) - powf(distance_top_left, 2.0f)) / (2.0f * distance_top_right * distance_top_left));
-
-		float fact1 = distance_top_right + distance_top_left;
-		float fact2 = (powf(distance_left_right, 2.0f) - powf(distance_top_right, 2.0f) - powf(distance_top_left, 2.0f)) / (2.0f * distance_top_right);
-		float fact3 = (powf(distance_left_right, 2.0f) + powf(distance_top_right, 2.0f) + powf(distance_top_left, 2.0f)) / (2.0f * distance_top_left);
-		float angle_two = acosf((fact1 + fact2 - fact3) / (distance_top_left * (distance_top_right - distance_top_left) * distance_left_right));
-
-		angle = angle_one - angle_two;
-	}	
-
-	float diagonal_angle = asinf(0.5f * sin(angle));
-	*/
 	rect = new IsoRect(center_triangle_one, width, height, angle,  displacement);
 }
 
