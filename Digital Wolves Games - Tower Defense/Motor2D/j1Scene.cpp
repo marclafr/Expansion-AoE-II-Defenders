@@ -61,6 +61,8 @@ bool j1Scene::Start()
 	App->gui->CreateButton({ 500, 500 }, { 1190,936,25,25 }, { 1216,936,25,25 }, { 1242,936,25,25 }, "This is another test");
 	App->gui->CreateLabel({ 250,250 }, { 400,1750,25,25 }, "This is a test.");
 	App->gui->CreateImage({ 0,0 }, { 0,1011,1367,23 });
+	App->gui->CreateTextInput({ 750,100 }, "TextInput Test (input not working atm)", OPENSANS_BOLD, { 255,0,0,255 });
+	App->gui->CreateTextInput({ 750,150 }, "TextInput Test2 (input not working atm)", OPENSANS_LIGHT, { 0,255,0,255 });
 	//---
 	
 	App->pathfinding->Enable();
@@ -738,6 +740,12 @@ void j1Scene::HandleInput( SDL_Event event)
 		{
 			iPoint tile = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);
 			App->entity_manager->CreateUnit(U_TWOHANDEDSWORDMAN, tile, S_ALLY);
+		}
+
+		if (event.button.button == SDL_SCANCODE_O)
+		{
+			iPoint tile = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);
+			App->entity_manager->CreateUnit(U_ARCHER, tile, S_ALLY);
 		}
 
 		if (event.button.button == App->input->center_to_townhall)

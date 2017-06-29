@@ -24,10 +24,8 @@ public:
 
 private:
 	Text* text;
-	bool text_changed = true;
 
 	bool Draw(SDL_Texture* atlas);
-	bool Update();
 };
 
 #endif //__UI_LABEL_H__

@@ -9,6 +9,8 @@
 #define RECT_WIDHT 375
 #define RECT_HEIGHT 130
 
+class UI_TextInput;
+
 class j1Console : public j1Module
 {
 private:
@@ -16,6 +18,7 @@ private:
 	char * text;
 	std::vector<SDL_Texture*> text_textures;
 	bool on = false;
+	UI_TextInput* console_input_text;
 
 public:
 	// Called before the first frame
@@ -37,7 +40,7 @@ public:
 	void BlitText();
 
 	void TurnOnOff();
-
+	UI_TextInput* GetConsoleInputText();
 };
 
 

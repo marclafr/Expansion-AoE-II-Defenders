@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "SDL\include\SDL_pixels.h"
+#include <list>
 
 #define DEFAULT_FONT "fonts/open_sans/OpenSans-Regular.ttf"
 #define DEFAULT_FONT_SIZE 12
@@ -11,6 +12,21 @@ struct SDL_Texture;
 struct _TTF_Font;
 
 enum TextureID;
+
+enum FONT_NAME
+{
+	OPENSANS_BOLD,
+	OPENSANS_LIGHT,
+	OPENSANS_REGULAR
+};
+
+struct Font
+{
+	Font(_TTF_Font* f, FONT_NAME n) : font(f), name(n){}
+	~Font() { DELETE_PTR(font) }
+	_TTF_Font* font;
+	FONT_NAME name;
+};
 
 class j1Fonts : public j1Module
 {
@@ -38,9 +54,8 @@ public:
 
 public:
 
-	std::list<_TTF_Font*>	fonts;
-	_TTF_Font*				default;
+	std::list<Font*>	fonts;
+	_TTF_Font*			default;
 };
-
 
 #endif // __j1FONTS_H__

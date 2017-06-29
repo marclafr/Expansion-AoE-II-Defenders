@@ -36,6 +36,13 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 		default = Load(path, size);
 	}
 
+	for (pugi::xml_node node = conf.child("font"); node; node = node.next_sibling("font"))
+	{
+		const char* path = node.attribute("file").as_string();
+		int size = node.attribute("size").as_int();
+		Load(path, size);
+	}
+
 	return ret;
 }
 
@@ -46,11 +53,9 @@ bool j1Fonts::CleanUp()
 
 	std::list<TTF_Font*>::iterator item;
 
-	for (item = fonts.begin(); item != fonts.end(); ++item)
-	{
-		TTF_CloseFont(*item);
-	}
-
+	for (std::list<Font*>::iterator item = App->font->fonts.begin(); item != App->font->fonts.end(); item++)
+		TTF_CloseFont(item._Ptr->_Myval->font);
+	
 	fonts.clear();
 	TTF_Quit();
 	return true;
@@ -68,7 +73,21 @@ TTF_Font* const j1Fonts::Load(const char* path, int size)
 	else
 	{
 		LOG("Successfully loaded font %s size %d", path, size);
-		fonts.push_back(font);
+		std::string s = path;
+		int pos = s.find("OpenSans-"); 
+		pos += 9;// 9 because OpenSans- 
+		s = s.substr(pos, s.length() - pos - 4);	// 4 because ".ttf"
+		Font* new_font;
+		if (s.compare("Bold") == 0)
+			new_font = new Font(font, OPENSANS_BOLD);
+
+		else if (s.compare("Light") == 0)
+			new_font = new Font(font, OPENSANS_LIGHT);
+
+		else if (s.compare("Regular") == 0)
+			new_font = new Font(font, OPENSANS_REGULAR);
+
+		fonts.push_back(new_font);
 	}
 
 	return font;
