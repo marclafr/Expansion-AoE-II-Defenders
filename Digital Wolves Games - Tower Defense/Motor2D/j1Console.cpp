@@ -7,6 +7,7 @@
 #include "UI_Text_Input.h"
 #include "j1Input.h"
 #include "j1FileSystem.h"
+#include "p2Log.h"
 #include "j1Console.h"
 
 #define CONSOLE_INPUT_POS { 333, 333 }
@@ -55,22 +56,27 @@ bool j1Console::PreUpdate()
 				{
 				case CREATE_GOD:
 					//TODO
+					LOG("God Created");
 					break;
 
 				case ADD_FOOD:
 					App->debug_features.add_food = true;
+					LOG("1000 Food added");
 					break;
 
 				case ADD_WOOD:
 					App->debug_features.add_wood = true;
+					LOG("1000 Wood added");
 					break;
 
 				case ADD_GOLD:
 					App->debug_features.add_gold = true;
+					LOG("1000 Gold added");
 					break;
 
 				case ADD_STONE:
 					App->debug_features.add_stone = true;
+					LOG("1000 Stone added");
 					break;
 
 				case ADD_RESOURCES:
@@ -78,6 +84,7 @@ bool j1Console::PreUpdate()
 					App->debug_features.add_wood = true;
 					App->debug_features.add_gold = true;
 					App->debug_features.add_stone = true;
+					LOG("1000 of every resource added");
 					break;
 
 				case NO_COMMAND:
@@ -144,7 +151,7 @@ void j1Console::BlitText()
 	for (int i = 0; i < text_textures.size(); i++)
 	{
 		SDL_QueryTexture(text_textures[i], format, acces, &width, &height);
-		App->render->Blit(text_textures[i],x,y);
+		App->render->Blit(text_textures[i], x, y);
 		y += height;
 		
 		SDL_DestroyTexture(text_textures[i]);

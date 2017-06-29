@@ -32,8 +32,6 @@ bool j1PathFinding::Start()
 // Called before quitting
 bool j1PathFinding::CleanUp()
 {
-	LOG("Freeing pathfinding library");
-
 	last_path.clear();
 	if(map != nullptr) RELEASE_ARRAY(map);
 	if (node_map != nullptr) RELEASE_ARRAY(node_map);

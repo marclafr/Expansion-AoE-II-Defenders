@@ -25,8 +25,6 @@ j1App* App = NULL;
 
 int main(int argc, char* args[])
 {
-	LOG("Engine starting ... %d");
-
 	MainState state = MainState::CREATE;
 	int result = EXIT_FAILURE;
 
@@ -37,10 +35,8 @@ int main(int argc, char* args[])
 
 			// Allocate the engine --------------------------------------------
 			case CREATE:
-			LOG("CREATION PHASE ===============================");
 
 			App = new j1App(argc, args);
-
 			if(App != NULL)
 				state = AWAKE;
 			else
@@ -50,7 +46,6 @@ int main(int argc, char* args[])
 
 			// Awake all modules -----------------------------------------------
 			case AWAKE:
-			LOG("AWAKE PHASE ===============================");
 			if(App->Awake() == true)
 				state = START;
 			else
@@ -63,11 +58,9 @@ int main(int argc, char* args[])
 
 			// Call all modules before first frame  ----------------------------
 			case START:
-			LOG("START PHASE ===============================");
 			if(App->Start() == true)
 			{
 				state = LOOP;
-				LOG("UPDATE PHASE ===============================");
 			}
 			else
 			{
@@ -84,7 +77,6 @@ int main(int argc, char* args[])
 
 			// Cleanup allocated memory -----------------------------------------
 			case CLEAN:
-			LOG("CLEANUP PHASE ===============================");
 			if(App->CleanUp() == true)
 			{
 				RELEASE(App);
@@ -104,8 +96,6 @@ int main(int argc, char* args[])
 			break;
 		}
 	}
-
-	LOG("... Bye! :)\n");
 
 	// Dump memory leaks
 	return result;

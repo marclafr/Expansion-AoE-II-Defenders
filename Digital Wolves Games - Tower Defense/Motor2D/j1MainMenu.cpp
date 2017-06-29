@@ -1,6 +1,5 @@
 #include "SDL\include\SDL_pixels.h"
 #include "p2Defs.h"
-#include "p2Log.h"
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Textures.h"
@@ -31,9 +30,7 @@ j1MainMenu::~j1MainMenu()
 // Called before render is available
 bool j1MainMenu::Awake()
 {
-	LOG("Loading MainMenu");
 	bool ret = true;
-
 	return ret;
 }
 
@@ -121,7 +118,6 @@ bool j1MainMenu::PostUpdate()
 // Called before quitting
 bool j1MainMenu::CleanUp()
 {
-	LOG("Freeing  MainMenu");
 	//App->uimanager->SetAllToDelete();
 	return true;
 }

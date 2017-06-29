@@ -32,16 +32,12 @@ j1Render::~j1Render()
 // Called before render is available
 bool j1Render::Awake(pugi::xml_node& config)
 {
-	LOG("Create SDL rendering context");
 	bool ret = true;
 	// load flags
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
-	if(config.child("vsync").attribute("value").as_bool(true) == true)
-	{
+	if (config.child("vsync").attribute("value").as_bool(true) == true)
 		flags |= SDL_RENDERER_PRESENTVSYNC;
-		LOG("Using vsync");
-	}
 
 	renderer = SDL_CreateRenderer(App->win->window, -1, flags);
 
@@ -61,7 +57,6 @@ bool j1Render::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Render::Start()
 {
-	LOG("render start");
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
 	return true;
@@ -89,7 +84,6 @@ bool j1Render::CleanUp()
 {
 	delete camera; 
 
-	LOG("Destroying SDL render");
 	if (renderer != nullptr)
 	{
 		SDL_DestroyRenderer(renderer);

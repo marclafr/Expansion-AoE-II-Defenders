@@ -1,5 +1,4 @@
 #include "p2Defs.h"
-#include "p2Log.h"
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Textures.h"
@@ -48,7 +47,6 @@ j1Scene::~j1Scene()
 // Called before render is available
 bool j1Scene::Awake()
 {
-	LOG("Loading Scene");
 	bool ret = true;
 
 	return ret;
@@ -248,8 +246,6 @@ bool j1Scene::PostUpdate()
 // Called before quitting
 bool j1Scene::CleanUp()
 {
-	LOG("Freeing scene");
-
 	//delete resources;
 
 	//App->score->active = false;

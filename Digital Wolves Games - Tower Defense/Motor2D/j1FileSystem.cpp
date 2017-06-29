@@ -30,7 +30,6 @@ j1FileSystem::~j1FileSystem()
 // Called before render is available
 bool j1FileSystem::Awake(pugi::xml_node& config)
 {
-	LOG("Loading File System");
 	bool ret = true;
 
 	// Add all paths in configuration in order

@@ -7,9 +7,9 @@
 #include "Buildings.h"
 #include "Towers.h"
 #include "Units.h"
-#include "p2Log.h"
 #include "j1Tutorial.h"
 #include "j1WaveManager.h"
+#include "p2Log.h"
 /*#include "UIComponents.h"
 #include "j1UIManager.h"
 #include "UIHUDMenuInGame.h"*/

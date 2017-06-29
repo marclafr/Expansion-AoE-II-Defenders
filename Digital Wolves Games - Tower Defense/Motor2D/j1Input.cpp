@@ -29,7 +29,6 @@ j1Input::~j1Input()
 // Called before render is available
 bool j1Input::Awake(pugi::xml_node& config)
 {
-	LOG("Init SDL input event system");
 	bool ret = true;
 	SDL_Init(0);
 
@@ -243,7 +242,6 @@ bool j1Input::Update(float dt)
 // Called before quitting
 bool j1Input::CleanUp()
 {
-	LOG("Quitting SDL event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }

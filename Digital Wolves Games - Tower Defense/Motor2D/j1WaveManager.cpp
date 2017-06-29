@@ -7,7 +7,6 @@
 #include "j1Map.h"
 #include "Units.h"
 #include "j1Pathfinding.h"
-#include "p2Log.h"
 #include "j1Score.h"
 #include "j1Scene.h"
 
