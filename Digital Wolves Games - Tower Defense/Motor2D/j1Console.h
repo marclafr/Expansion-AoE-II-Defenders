@@ -14,7 +14,12 @@ class UI_TextInput;
 enum COMMAND
 {
 	NO_COMMAND = 0,
-	CREATE_GOD = 1
+	CREATE_GOD = 1,
+	ADD_FOOD = 2,
+	ADD_WOOD = 3,
+	ADD_GOLD = 4,
+	ADD_STONE = 5,
+	ADD_RESOURCES = 6
 };
 
 struct Command
@@ -63,6 +68,7 @@ public:
 	void BlitText();
 
 	void TurnOnOff();
+	bool IsOn();
 	UI_TextInput* GetConsoleInputText();
 };
 

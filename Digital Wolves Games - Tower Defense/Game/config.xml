@@ -22,11 +22,20 @@
   
   <console>
   <!-- 
-  relation command - number:
-  	NO_COMMAND = 0,
-	CREATE_GOD = 1  
+  relation command - number - description:
+	CREATE_GOD ---	= 1, -----	Creates a GOD unit
+	ADD_FOOD ------	= 2, -----	Adds 1000 food
+	ADD_WOOD ------	= 3, -----	Adds 1000 wood
+	ADD_GOLD ------	= 4, -----	Adds 1000 gold
+	ADD_STONE -----	= 5, -----	Adds 1000 stone
+	ADD_RESOURCES -	= 6, -----	Adds 1000 of every resource
   -->
-	<command text="god" action="1"/> <!-- Creates a GOD unit -->
+	<command text="god" action="1"/>
+	<command text="pepperoni pizza" action="2"/>
+	<command text="woodstock" action="3"/>
+	<command text="coinage" action="4"/>
+	<command text="quarry" action="5"/>
+	<command text="ayy lmao" action="6"/>
   </console>
     
   <window>

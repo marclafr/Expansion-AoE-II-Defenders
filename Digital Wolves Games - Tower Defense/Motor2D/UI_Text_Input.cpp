@@ -62,6 +62,10 @@ const char* UI_TextInput::GetText()
 void UI_TextInput::DeleteText()
 {
 		text.clear();
+		//Clears the image aswell
+		tex = App->font->Print(text.c_str(), color, font);
+		App->font->CalcSize(text.c_str(), text_atlas_rect.w, text_atlas_rect.h, font);
+		text_atlas_rect.w += (2 * TEXT_RIGHT_DISPLACEMENT);
 }
 
 bool UI_TextInput::Update()
@@ -120,9 +124,9 @@ bool UI_TextInput::Update()
 		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
 			repeat_timer.Start();
 
-		//Go to Start Text TODO
-		//if (App->input->GetKey(SDL_SCANCODE_????) == KEY_DOWN)
-		//	writing_pos = 0;
+		//Go to Start Text
+		if (App->input->GetKey(SDL_SCANCODE_HOME) == KEY_DOWN)
+			writing_pos = 0;
 
 		//Go to End Text
 		if (App->input->GetKey(SDL_SCANCODE_END) == KEY_DOWN)
@@ -147,6 +151,18 @@ bool UI_TextInput::Update()
 }
 
 bool UI_TextInput::Draw(SDL_Texture * atlas)
+{
+	if (this == App->console->GetConsoleInputText())
+	{
+		if (App->console->IsOn() == true)
+			DrawTextInput(atlas);
+	}
+	else
+		DrawTextInput(atlas);
+	return true;
+}
+
+void UI_TextInput::DrawTextInput(SDL_Texture* atlas)
 {
 	if (not_in_world == true)
 	{
@@ -181,8 +197,6 @@ bool UI_TextInput::Draw(SDL_Texture * atlas)
 				writing_pos_appear_timer.Start();
 		}
 	}
-
-	return true;
 }
 
 bool UI_TextInput::MouseInsideText()

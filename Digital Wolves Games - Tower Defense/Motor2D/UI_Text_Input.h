@@ -31,6 +31,7 @@ private:
 	bool Update();
 	bool Draw(SDL_Texture* atlas);
 
+	void DrawTextInput(SDL_Texture* atlas);
 	bool MouseInsideText();
 	void DeleteChar();
 };

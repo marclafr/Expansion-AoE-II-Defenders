@@ -54,7 +54,30 @@ bool j1Console::PreUpdate()
 				switch (commands[i].action)
 				{
 				case CREATE_GOD:
+					//TODO
+					break;
 
+				case ADD_FOOD:
+					App->debug_features.add_food = true;
+					break;
+
+				case ADD_WOOD:
+					App->debug_features.add_wood = true;
+					break;
+
+				case ADD_GOLD:
+					App->debug_features.add_gold = true;
+					break;
+
+				case ADD_STONE:
+					App->debug_features.add_stone = true;
+					break;
+
+				case ADD_RESOURCES:
+					App->debug_features.add_food = true;
+					App->debug_features.add_wood = true;
+					App->debug_features.add_gold = true;
+					App->debug_features.add_stone = true;
 					break;
 
 				case NO_COMMAND:
@@ -145,6 +168,11 @@ void j1Console::TurnOnOff()
 		on = true;
 		App->gui->SetFocusedText(console_input_text);
 	}
+}
+
+bool j1Console::IsOn()
+{
+	return on;
 }
 
 UI_TextInput * j1Console::GetConsoleInputText()
