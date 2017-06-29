@@ -87,18 +87,17 @@ public:
 //Rectangle isometric primitive
 class IsoRect : public Primitive
 {
+protected:
+	float width = 0.0f;
+	float height = 0.0f;
+	float diagonal_angle = 0.0f;
+
 public:
 	IsoRect();
-	IsoRect(const fPoint& position, float width, float height, const iPoint& displacement = { 0,0 });
-	IsoRect(const iPoint& position, float width, float height, const iPoint& displacement = { 0,0 });
+	IsoRect(const fPoint& position, float width, float height, float diagonal_angle = 0.0f, const iPoint& displacement = { 0,0 });
+	IsoRect(const iPoint& position, float width, float height, float diagonal_angle = 0.0f, const iPoint& displacement = { 0,0 });
 	IsoRect(const IsoRect& copy);
 	~IsoRect();
-
-protected:
-	float width = 0;
-	float height = 0;
-
-public:
 
 	//Functionality ---------
 	//Draw
@@ -123,7 +122,7 @@ class PivotedRect : public Primitive
 {
 public:
 
-	PivotedRect(const fPoint& origin = { 0,0 }, const iPoint& goal = { 0,0 }, uint width = 0, uint height = 0);
+	PivotedRect(const fPoint& origin = {0,0}, const iPoint& goal = {0,0}, uint width = 0, uint height = 0);
 	PivotedRect(const PivotedRect& copy);
 	~PivotedRect();
 

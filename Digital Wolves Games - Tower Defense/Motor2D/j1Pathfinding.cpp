@@ -318,7 +318,7 @@ const iPoint& j1PathFinding::FindNearestWalkableToDestination(const Unit* unit) 
 	//----------------||A* + JPS algorithm||----------------\\
    //----------------||____________________||----------------\\
 
-bool j1PathFinding::CalculatePath(iPoint start, const iPoint & end, std::vector<iPoint>& vec_to_fill)
+bool j1PathFinding::CalculatePath(iPoint& start, const iPoint & end, std::vector<iPoint>& vec_to_fill)
 {
 	CleanUpJPS();
 

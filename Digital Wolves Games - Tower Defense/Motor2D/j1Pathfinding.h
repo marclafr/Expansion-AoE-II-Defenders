@@ -105,7 +105,7 @@ public:
 
 	//JPS
 	//Main function of JPS Algorithm
-	bool CalculatePath(iPoint origin,const iPoint& destination, std::vector<iPoint>& vec_to_fill);
+	bool CalculatePath(iPoint& origin,const iPoint& destination, std::vector<iPoint>& vec_to_fill);
 
 private:
 

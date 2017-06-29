@@ -658,7 +658,7 @@ void QuadTreeNode::DrawArea()
 			}
 			else
 				break;
-		}		
+		}
 
 	area->SetColor(SDL_Color{ 255,0,0,255 });
 	area->Draw();
@@ -833,7 +833,27 @@ TiledIsoRect::TiledIsoRect(const iPoint& tile_pos, const uint x_tiles, const uin
 
 	uint width = x_tiles * tile_width;
 	uint height = y_tiles * tile_height + (x_tiles + y_tiles) / 2.0f;
-	rect = new IsoRect(center_first_vec, width, height, displacement);
+
+	float angle = 0.0f;
+	float distance_top_left = sqrt(abs(top_pixel_vertex.x - left_pixel_vertex.x) * abs(top_pixel_vertex.x - left_pixel_vertex.x) + abs(top_pixel_vertex.y - left_pixel_vertex.y) * abs(top_pixel_vertex.y - left_pixel_vertex.y));
+	float distance_top_right = sqrt(abs(top_pixel_vertex.x - right_pixel_vertex.x) * abs(top_pixel_vertex.x - right_pixel_vertex.x) + abs(top_pixel_vertex.y - right_pixel_vertex.y) * abs(top_pixel_vertex.y - right_pixel_vertex.y));
+	
+	if (distance_top_left != distance_top_right)
+	{
+		float distance_left_right = sqrt(abs(left_pixel_vertex.x - right_pixel_vertex.x) * abs(left_pixel_vertex.x - right_pixel_vertex.x) + abs(left_pixel_vertex.y - right_pixel_vertex.y) * abs(left_pixel_vertex.y - right_pixel_vertex.y));
+
+		float angle_one = 0.5f * acosf((powf(distance_left_right, 2.0f) - powf(distance_top_right, 2.0f) - powf(distance_top_left, 2.0f)) / (2.0f * distance_top_right * distance_top_left));
+
+		float fact1 = distance_top_right + distance_top_left;
+		float fact2 = (powf(distance_left_right, 2.0f) - powf(distance_top_right, 2.0f) - powf(distance_top_left, 2.0f)) / (2.0f * distance_top_right);
+		float fact3 = (powf(distance_left_right, 2.0f) + powf(distance_top_right, 2.0f) + powf(distance_top_left, 2.0f)) / (2.0f * distance_top_left);
+		float angle_two = acosf((fact1 + fact2 - fact3) / (distance_top_left * (distance_top_right - distance_top_left) * distance_left_right));
+
+		angle = angle_one - angle_two;
+	}	
+
+	float diagonal_angle = asinf(0.5f * sin(angle));
+	rect = new IsoRect(center_first_vec, width, height, diagonal_angle,  displacement);
 }
 
 TiledIsoRect::~TiledIsoRect()
@@ -848,6 +868,12 @@ void TiledIsoRect::SetColor(SDL_Color color)
 
 void TiledIsoRect::Draw() const
 {
+	//Top Position
+	iPoint position = App->map->MapToWorld(tile_pos);
+	SDL_Rect square{ position.x - 3, position.y - 3, 6,6 };
+	App->render->DrawQuad(square, 0, 255, 255, 255, true, true);
+
+	//rect
 	rect->Draw();
 }
 
