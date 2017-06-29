@@ -825,15 +825,61 @@ TiledIsoRect::TiledIsoRect(const iPoint& tile_pos, const uint x_tiles, const uin
 	fPoint top_bottom_vec(bottom_pixel_vertex.x - top_pixel_vertex.x, bottom_pixel_vertex.y - top_pixel_vertex.y);
 	fPoint right_left_vec(left_pixel_vertex.x - right_pixel_vertex.x, left_pixel_vertex.y - right_pixel_vertex.y);
 
-	fPoint center_first_vec(top_pixel_vertex.x + top_bottom_vec.x / 2.0f, top_pixel_vertex.y + top_bottom_vec.y / 2.0f);
+	fPoint center_triangle_one(top_pixel_vertex.x + top_bottom_vec.x / 2.0f, top_pixel_vertex.y + top_bottom_vec.y / 2.0f);// first vec to get it
 	fPoint center_second_vec(right_pixel_vertex.x + right_left_vec.x / 2.0f, right_pixel_vertex.y + right_left_vec.y / 2.0f);
 
-	if (center_first_vec.x != center_second_vec.x || center_first_vec.y != center_second_vec.y)
+	if (center_triangle_one.x != center_second_vec.x || center_triangle_one.y != center_second_vec.y)
 		LOG("TiledIsoRect diagonal centers not equal");
 
 	uint width = x_tiles * tile_width;
 	uint height = y_tiles * tile_height + (x_tiles + y_tiles) / 2.0f;
 
+	float angle = 0.0f;
+	
+	if (x_tiles != y_tiles)
+	{
+		iPoint equal_side_right_tile(tile_pos.x + y_tiles - 1.0f, tile_pos.y);
+		iPoint equal_side_right_vertex = App->map->MapToWorld(right_tile);
+		equal_side_right_vertex.x += tile_width / 2.0f;
+		equal_side_right_vertex.y += tile_height / 2.0f + 0.5f;
+
+		iPoint equal_side_bottom_tile(tile_pos.x + y_tiles - 1.0f, tile_pos.y + y_tiles - 1.0f);
+		iPoint equal_side_bottom_vertex = App->map->MapToWorld(bottom_tile);
+		equal_side_bottom_vertex.y += tile_height + 1.0f;
+
+		//equal side triangle
+		fPoint top_bottom_equal_side_vec(equal_side_bottom_vertex.x - top_pixel_vertex.x, equal_side_bottom_vertex.y - top_pixel_vertex.y);
+		fPoint right_left_equal_side_vec(left_pixel_vertex.x - equal_side_right_vertex.x, left_pixel_vertex.y - equal_side_right_vertex.y);
+		fPoint top_right_equal_side_vec(equal_side_right_vertex.x - top_pixel_vertex.x, equal_side_right_vertex.y - top_pixel_vertex.y);
+
+		iPoint center_triangle_two(top_pixel_vertex.x + top_bottom_equal_side_vec.x / 2.0f, top_pixel_vertex.y + top_bottom_equal_side_vec.y / 2.0f);
+
+		fPoint center_right_equal_side_vec(equal_side_right_vertex.x - center_triangle_two.x, equal_side_right_vertex.y - center_triangle_two.y);
+		fPoint top_center_equal_side_vec(center_triangle_two.x - top_pixel_vertex.x, center_triangle_two.y - top_pixel_vertex.y);
+
+		float y_side_lenght = sqrt(powf(top_right_equal_side_vec.x,2) + powf(top_right_equal_side_vec.y, 2));
+		float center_right_equal_side_lenght = sqrt(powf(center_right_equal_side_vec.x, 2) + powf(center_right_equal_side_vec.y, 2));
+		float top_center_equal_side_lenght = sqrt(powf(top_center_equal_side_vec.x, 2) + powf(top_center_equal_side_vec.y, 2));
+
+		float triangle_two_angle = acosf(powf(center_right_equal_side_lenght, 2) + powf(top_center_equal_side_lenght, 2) - powf(y_side_lenght, 2)) / (2.0f * center_right_equal_side_lenght * top_center_equal_side_lenght);
+
+		//non equal side triangle
+		fPoint top_right_vec(right_pixel_vertex.x - top_pixel_vertex.x, right_pixel_vertex.y - top_pixel_vertex.y);
+
+		fPoint center_right_vec(right_pixel_vertex.x - center_triangle_one.x, right_pixel_vertex.y - center_triangle_one.y);
+		fPoint top_center_vec(center_triangle_one.x - top_pixel_vertex.x, center_triangle_one.y - top_pixel_vertex.y);
+
+		float x_side_lenght = sqrt(powf(top_right_vec.x, 2) + powf(top_right_vec.y, 2));
+		float center_right_lenght = sqrt(powf(center_right_vec.x, 2) + powf(center_right_vec.y, 2));
+		float top_center_lenght = sqrt(powf(top_center_vec.x, 2) + powf(top_center_vec.y, 2));
+
+		float triangle_one_angle = acosf(powf(center_right_lenght, 2) + powf(top_center_lenght, 2) - powf(x_side_lenght, 2)) / (2.0f * center_right_lenght * top_center_lenght);
+
+		//Diff Angle
+		angle = triangle_one_angle - triangle_two_angle;
+	}
+
+	/*
 	float angle = 0.0f;
 	float distance_top_left = sqrt(abs(top_pixel_vertex.x - left_pixel_vertex.x) * abs(top_pixel_vertex.x - left_pixel_vertex.x) + abs(top_pixel_vertex.y - left_pixel_vertex.y) * abs(top_pixel_vertex.y - left_pixel_vertex.y));
 	float distance_top_right = sqrt(abs(top_pixel_vertex.x - right_pixel_vertex.x) * abs(top_pixel_vertex.x - right_pixel_vertex.x) + abs(top_pixel_vertex.y - right_pixel_vertex.y) * abs(top_pixel_vertex.y - right_pixel_vertex.y));
@@ -853,7 +899,8 @@ TiledIsoRect::TiledIsoRect(const iPoint& tile_pos, const uint x_tiles, const uin
 	}	
 
 	float diagonal_angle = asinf(0.5f * sin(angle));
-	rect = new IsoRect(center_first_vec, width, height, diagonal_angle,  displacement);
+	*/
+	rect = new IsoRect(center_triangle_one, width, height, angle,  displacement);
 }
 
 TiledIsoRect::~TiledIsoRect()
