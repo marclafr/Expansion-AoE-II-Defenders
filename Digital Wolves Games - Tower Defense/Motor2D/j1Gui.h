@@ -9,6 +9,7 @@
 
 #define CURSOR_WIDTH 2
 #define BACKGROUND_RECT_DEFAULT_TEXT { 400, 1750, 0, 0 }
+#define NO_RECT { 0, 0, 0, 0 }
 #define TEXT_RIGHT_DISPLACEMENT 5 //pixels
 
 	 //----------------||------------------||----------------\\
@@ -22,6 +23,8 @@ class UI_Label;
 class UI_Button;
 class UI_AppearingLabel;
 class UI_HPBar;
+class UI_PanelInfoSingleEntity;
+class UI_PanelInfoMultipleEntities;
 
 class Entity;
 class Building;
@@ -30,6 +33,7 @@ class Unit;
 enum GUI_DATA_NAME	//except rects in atlas
 {
 	NO_NAME,
+	PANEL_INFO_POS,
 	SELECTED_ICON_START_POS,
 	ATTACK_ICON_POS,
 	ARMOR_ICON_POS,
@@ -57,12 +61,14 @@ struct GUI_Information
 		//-------------------
 
 		//Positions----------
+		iPoint panel_info_pos;
 		iPoint attack_icon_pos;
 		iPoint armor_icon_pos;
 		iPoint range_icon_pos;
 		//-------------------
 
 		//Atlas rectangles-----
+		SDL_Rect panel_background_rect;
 		SDL_Rect attack_icon;
 		SDL_Rect armor_icon;
 		SDL_Rect range_icon;
@@ -83,7 +89,8 @@ enum UI_ELEMENT_TYPE
 	UI_E_TEXT_INPUT,
 	UI_E_HP_BAR,
 	UI_E_APPEARING_LABEL,
-	UI_E_PANEL_INFO
+	UI_E_PANEL_INFO_SINGLE,
+	UI_E_PANEL_INFO_MULTIPLE,
 };
 
 class UI_Element
@@ -137,37 +144,38 @@ public:
 	// Gui creation functions
 	UI_Image* CreateImage(iPoint pos, SDL_Rect atlas_rect, bool not_in_world = true);
 	UI_Button* CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description = nullptr, bool not_in_world = true, SDL_Rect description_background_rect = BACKGROUND_RECT_DEFAULT_TEXT);
-	UI_Label* CreateLabel(iPoint pos, SDL_Rect atlas_rect, char* txt, bool not_in_world = true);
+	UI_Label* CreateLabel(iPoint pos, SDL_Rect atlas_rect, char* txt, bool has_background = true, bool not_in_world = true);
 	UI_TextInput* CreateTextInput(iPoint pos, char* txt, FONT_NAME font_name = OPENSANS_REGULAR, SDL_Color color = { (0), (0), (0), (255) }, bool not_in_world = true);
+	UI_PanelInfoSingleEntity* CreatePanel(Entity* selection);
+	UI_PanelInfoMultipleEntities* CreatePanel(std::vector<Entity*> selection);
 	//-----------------------
 	// Gui creation functions
 	void DeleteImage(UI_Image* img);
 	void DeleteButton(UI_Button* button);
 	void DeleteLabel(UI_Label* label);
 	void DeleteTextInput(UI_TextInput* txt_input);
+	void DeletePanelInfo(UI_PanelInfoSingleEntity* panel_info);
+	void DeletePanelInfo(UI_PanelInfoMultipleEntities* panel_info);
 	//-----------------------
 
-	void CreatePanel(std::vector<Entity*> selection);
 
 	const SDL_Texture* GetAtlas() const;
 
 	void SetFocusedText(UI_TextInput* text);
 	UI_TextInput* GetFocusedText();
 
-private:
+	GUI_Information data;
+	SDL_Rect GetUnitIcon(Unit* unit);
 
+private:
 	SDL_Texture* atlas;
 	std::string atlas_file_name;
 
 	std::vector<UI_Element*> ui_elements;
 	UI_TextInput* focused_text = nullptr;
 
-	GUI_Information data;
 	GUI_DATA_NAME DataStr2Enum(const std::string name);
-	SDL_Rect GetUnitIcon(Unit* unit);
-	std::string attribute_value_attack;
-	std::string attribute_value_armor;
-	std::string attribute_value_range;
+
 
 	void ShowBuildingArmor(Building* building);
 };

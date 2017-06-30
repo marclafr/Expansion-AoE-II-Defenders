@@ -311,3 +311,10 @@ void Building::Save(pugi::xml_node &data)
 		ActualBuilding.append_attribute("hp") = GetHp();
 
 }
+
+bool Building::IsTower()
+{
+	if (building_type == B_TURRET || building_type == B_CANNON || building_type == B_TURRET_UPGRADED_FIRE || building_type == B_TURRET_UPGRADED_ICE	|| 
+		building_type == B_TURRET_UPGRADED_AIR || building_type == B_CANNON_UPGRADED_FIRE || building_type == B_CANNON_UPGRADED_ICE || building_type == B_CANNON_UPGRADED_AIR)
+		return true;
+}

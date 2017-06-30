@@ -18,6 +18,7 @@
 #include "UI_Image.h"
 #include "UI_Label.h"
 #include "UI_Text_Input.h"
+#include "UI_PanelInfo.h"
 //----------
 
 #include "j1Gui.h"
@@ -73,7 +74,10 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 	{
 		std::string data_string = gui_atlas_icons_data_node.attribute("n").as_string();
 
-		if (data_string.compare("rect_attack_icon") == 0)
+		if (data_string.compare("panel_background_rect") == 0)
+			data.panel_background_rect = UPLOAD_XMLDATA_ATLAS_RECTS;
+
+		else if (data_string.compare("rect_attack_icon") == 0)
 			data.attack_icon = UPLOAD_XMLDATA_ATLAS_RECTS;
 
 		else if (data_string.compare("rect_armor_icon") == 0)
@@ -115,6 +119,9 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 		switch (data_name)
 		{
 			//iPoints---
+		case PANEL_INFO_POS:
+			data.panel_info_pos = { gui_data_node.attribute("x").as_int(), gui_data_node.attribute("y").as_int() };
+			break;
 		case SELECTED_ICON_START_POS:
 			data.selection_start_pos = { gui_data_node.attribute("x").as_int(), gui_data_node.attribute("y").as_int() };
 			break;
@@ -205,10 +212,10 @@ UI_Button * j1Gui::CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect a
 	return ret;
 }
 
-UI_Label * j1Gui::CreateLabel(iPoint pos, SDL_Rect atlas_rect, char * txt, bool not_in_world)
+UI_Label * j1Gui::CreateLabel(iPoint pos, SDL_Rect atlas_rect, char * txt, bool has_background, bool not_in_world)
 {
 	UI_Label* ret = nullptr;
-	ret = new UI_Label(pos, atlas_rect, txt, not_in_world);
+	ret = new UI_Label(pos, atlas_rect, txt, has_background, not_in_world);
 	ui_elements.push_back(ret);
 	return ret;
 }
@@ -220,6 +227,180 @@ UI_TextInput * j1Gui::CreateTextInput(iPoint pos, char * txt, FONT_NAME font_nam
 	ui_elements.push_back(ret);
 	return ret;
 }
+
+UI_PanelInfoSingleEntity * j1Gui::CreatePanel(Entity * selection)
+{
+	UI_PanelInfoSingleEntity* ret = nullptr;
+	ret = new UI_PanelInfoSingleEntity(data.panel_info_pos, data.panel_background_rect, selection);
+	ui_elements.push_back(ret);
+	return ret;
+}
+
+UI_PanelInfoMultipleEntities* j1Gui::CreatePanel(std::vector<Entity*> selection)
+{
+	UI_PanelInfoMultipleEntities* ret = nullptr;
+	ret = new UI_PanelInfoMultipleEntities(data.panel_info_pos, data.panel_background_rect, selection);
+	ui_elements.push_back(ret);
+	return ret;
+	/*
+	//One entity selected
+	if (selection.size() == 1)
+	{
+	Building* building;
+	Tower* tower;
+	Unit* unit;
+	iPoint attribute_pos;
+	switch (selection[0]->GetEntityType())
+	{
+	case E_NO_ENTITY:
+	break;
+	case E_BUILDING:
+	building = (Building*)selection[0];
+	switch (building->GetBuildingType())
+	{
+	case B_NO_BUILDING:
+	break;
+	case B_TURRET:
+	case B_CANNON:
+	case B_TURRET_UPGRADED_FIRE:
+	case B_TURRET_UPGRADED_ICE:
+	case B_TURRET_UPGRADED_AIR:
+	case B_CANNON_UPGRADED_FIRE:
+	case B_CANNON_UPGRADED_ICE:
+	case B_CANNON_UPGRADED_AIR:
+	tower = (Tower*)selection[0];
+	//Attack
+	CreateImage(data.attack_icon_pos, data.attack_icon);
+	attribute_value_attack = std::to_string(tower->GetAttack());
+	attribute_pos = data.attack_icon_pos;
+	attribute_pos.x += data.attributes_displacement;
+	CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_attack.c_str());
+	//Armor
+	ShowBuildingArmor(building);
+	//Range
+	CreateImage(data.range_icon_pos, data.range_icon);
+	attribute_value_range = std::to_string(tower->GetRange());
+	attribute_pos = data.range_icon_pos;
+	attribute_pos.x += data.attributes_displacement;
+	CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
+	break;
+	case B_WOOD_WALL:
+	case B_STONE_WALL:
+	case B_BRICK_WALL:
+	ShowBuildingArmor(building);
+	break;
+	case B_TOWNHALL:
+	ShowBuildingArmor(building);
+	break;
+	case B_UNIVERSITY:
+	ShowBuildingArmor(building);
+	break;
+
+	default:
+	break;
+	}
+	break;
+	case E_UNIT:
+	unit = (Unit*)selection[0];
+	CreateImage(data.selection_start_pos, GetUnitIcon(unit));
+	//Attack
+	CreateImage(data.attack_icon_pos, data.attack_icon);
+	attribute_value_attack = std::to_string(unit->GetAttack());
+	attribute_pos = data.attack_icon_pos;
+	attribute_pos.x += data.attributes_displacement;
+	CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_attack.c_str());
+	//Armor
+	CreateImage(data.armor_icon_pos, data.armor_icon);
+	attribute_value_armor = std::to_string(unit->GetArmor());
+	attribute_pos = data.armor_icon_pos;
+	attribute_pos.x += data.attributes_displacement;
+	CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_armor.c_str());
+	//Range
+	//if (unit->GetUnitClass() == C_ARCHER || unit->GetUnitType() == U_MANGONEL)
+	{
+	CreateImage(data.range_icon_pos, data.range_icon);
+	attribute_value_range = std::to_string(unit->GetRange());
+	attribute_pos = data.range_icon_pos;
+	attribute_pos.x += data.attributes_displacement;
+	CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
+	}
+	//----
+	break;
+	case E_RESOURCE:
+	break;
+
+	default:
+	break;
+	}
+	}
+	//--------------------------
+	//Multiple entities selected
+	else if (selection.size() > 1)
+	{
+	Building* building;
+	Unit* unit;
+	iPoint correct_pos;
+	int row_num = 0;
+	int row_num_element = 0;
+	for (int i = 0; i < selection.size(); i++)
+	{
+	switch (selection[i]->GetEntityType())
+	{
+	case E_NO_ENTITY:
+	break;
+	case E_BUILDING:
+	building = (Building*)selection[i];
+	switch (building->GetBuildingType())
+	{
+	case B_NO_BUILDING:
+	break;
+	case B_TURRET:
+	case B_CANNON:
+	case B_TURRET_UPGRADED_FIRE:
+	case B_TURRET_UPGRADED_ICE:
+	case B_TURRET_UPGRADED_AIR:
+	case B_CANNON_UPGRADED_FIRE:
+	case B_CANNON_UPGRADED_ICE:
+	case B_CANNON_UPGRADED_AIR:
+	break;
+	case B_WOOD_WALL:
+	case B_STONE_WALL:
+	case B_BRICK_WALL:
+	break;
+	case B_TOWNHALL:
+	break;
+	case B_UNIVERSITY:
+	break;
+
+	default:
+	break;
+	}
+	break;
+	case E_UNIT:
+	unit = (Unit*)selection[i];
+	correct_pos = data.selection_start_pos;
+	if (i >= row_num * data.max_icons_in_row)
+	{
+	row_num++;
+	row_num_element = 0;
+	}
+	correct_pos.x += data.space_between_selected_icons * row_num_element;
+	row_num_element++;
+	correct_pos.y += data.space_between_selected_icons * (row_num - 1);
+	CreateImage(correct_pos, GetUnitIcon(unit));
+	break;
+	case E_RESOURCE:
+	break;
+
+	default:
+	break;
+	}
+	}
+	}
+	//--------------------------
+	*/
+}
+
 
 void j1Gui::DeleteImage(UI_Image* img)
 {
@@ -269,163 +450,28 @@ void j1Gui::DeleteTextInput(UI_TextInput * txt_input)
 	DELETE_PTR(txt_input);
 }
 
-void j1Gui::CreatePanel(std::vector<Entity*> selection)
+void j1Gui::DeletePanelInfo(UI_PanelInfoSingleEntity * panel_info)
 {
-	//One entity selected
-	if (selection.size() == 1)
-	{
-		Building* building;
-		Tower* tower;
-		Unit* unit;
-		iPoint attribute_pos;
-		switch (selection[0]->GetEntityType())
+	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
+		if (*it == panel_info)
 		{
-		case E_NO_ENTITY:
-			break;
-		case E_BUILDING:
-			building = (Building*)selection[0];
-			switch (building->GetBuildingType())
-			{
-			case B_NO_BUILDING:
-				break;
-			case B_TURRET:
-			case B_CANNON:
-			case B_TURRET_UPGRADED_FIRE:
-			case B_TURRET_UPGRADED_ICE:
-			case B_TURRET_UPGRADED_AIR:
-			case B_CANNON_UPGRADED_FIRE:
-			case B_CANNON_UPGRADED_ICE:
-			case B_CANNON_UPGRADED_AIR:
-				tower = (Tower*)selection[0];
-				//Attack
-				CreateImage(data.attack_icon_pos, data.attack_icon);
-				attribute_value_attack = std::to_string(tower->GetAttack());
-				attribute_pos = data.attack_icon_pos;
-				attribute_pos.x += data.attributes_displacement;
-				CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_attack.c_str());
-				//Armor
-				ShowBuildingArmor(building);
-				//Range			
-				CreateImage(data.range_icon_pos, data.range_icon);
-				attribute_value_range = std::to_string(tower->GetRange());
-				attribute_pos = data.range_icon_pos;
-				attribute_pos.x += data.attributes_displacement;
-				CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
-				break;
-			case B_WOOD_WALL:
-			case B_STONE_WALL:
-			case B_BRICK_WALL:
-				ShowBuildingArmor(building);
-				break;
-			case B_TOWNHALL:
-				ShowBuildingArmor(building);
-				break;
-			case B_UNIVERSITY:
-				ShowBuildingArmor(building);
-				break;
-
-			default:
-				break;
-			}
-			break;
-		case E_UNIT:
-			unit = (Unit*)selection[0];
-			CreateImage(data.selection_start_pos, GetUnitIcon(unit));
-			//Attack
-			CreateImage(data.attack_icon_pos, data.attack_icon);
-			attribute_value_attack = std::to_string(unit->GetAttack());
-			attribute_pos = data.attack_icon_pos;
-			attribute_pos.x += data.attributes_displacement;
-			CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_attack.c_str());
-			//Armor
-			CreateImage(data.armor_icon_pos, data.armor_icon);
-			attribute_value_armor = std::to_string(unit->GetArmor());
-			attribute_pos = data.armor_icon_pos;
-			attribute_pos.x += data.attributes_displacement;
-			CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_armor.c_str());
-			//Range
-			//if (unit->GetUnitClass() == C_ARCHER || unit->GetUnitType() == U_MANGONEL)
-			{
-				CreateImage(data.range_icon_pos, data.range_icon);
-				attribute_value_range = std::to_string(unit->GetRange());
-				attribute_pos = data.range_icon_pos;
-				attribute_pos.x += data.attributes_displacement;
-				CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
-			}
-			//----
-			break;
-		case E_RESOURCE:
-			break;
-
-		default:
+			ui_elements.erase(it);
 			break;
 		}
-	}
-	//--------------------------
-	//Multiple entities selected
-	else if (selection.size() > 1)
-	{
-		Building* building;
-		Unit* unit;
-		iPoint correct_pos;
-		int row_num = 0;
-		int row_num_element = 0;
-		for (int i = 0; i < selection.size(); i++)
+
+	DELETE_PTR(panel_info);
+}
+
+void j1Gui::DeletePanelInfo(UI_PanelInfoMultipleEntities * panel_info)
+{
+	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
+		if (*it == panel_info)
 		{
-			switch (selection[i]->GetEntityType())
-			{
-			case E_NO_ENTITY:
-				break;
-			case E_BUILDING:
-				building = (Building*)selection[i];
-				switch (building->GetBuildingType())
-				{
-				case B_NO_BUILDING:
-					break;
-				case B_TURRET:
-				case B_CANNON:
-				case B_TURRET_UPGRADED_FIRE:
-				case B_TURRET_UPGRADED_ICE:
-				case B_TURRET_UPGRADED_AIR:
-				case B_CANNON_UPGRADED_FIRE:
-				case B_CANNON_UPGRADED_ICE:
-				case B_CANNON_UPGRADED_AIR:
-					break;
-				case B_WOOD_WALL:
-				case B_STONE_WALL:
-				case B_BRICK_WALL:
-					break;
-				case B_TOWNHALL:
-					break;
-				case B_UNIVERSITY:
-					break;
-
-				default:
-					break;
-				}
-				break;
-			case E_UNIT:
-				unit = (Unit*)selection[i];
-				correct_pos = data.selection_start_pos;
-				if (i >= row_num * data.max_icons_in_row)
-				{
-					row_num++;
-					row_num_element = 0;
-				}
-				correct_pos.x += data.space_between_selected_icons * row_num_element;
-				row_num_element++;
-				correct_pos.y += data.space_between_selected_icons * (row_num - 1);
-				CreateImage(correct_pos, GetUnitIcon(unit));
-				break;
-			case E_RESOURCE:
-				break;
-
-			default:
-				break;
-			}
+			ui_elements.erase(it);
+			break;
 		}
-	}
-	//--------------------------
+
+	DELETE_PTR(panel_info);
 }
 
 // const getter for atlas
@@ -446,7 +492,10 @@ UI_TextInput * j1Gui::GetFocusedText()
 
 GUI_DATA_NAME j1Gui::DataStr2Enum(const std::string name)
 {
-	if (name == "selection_start_pos")
+	if (name == "panel_info_pos")
+		return PANEL_INFO_POS;
+
+	else if (name == "selection_start_pos")
 		return SELECTED_ICON_START_POS;
 
 	else if (name == "pos_attack_icon")
@@ -489,6 +538,7 @@ SDL_Rect j1Gui::GetUnitIcon(Unit * unit)
 	return { 0,0,0,0 };
 }
 
+/*
 void j1Gui::ShowBuildingArmor(Building * building)
 {
 	CreateImage(data.armor_icon_pos, data.armor_icon);
@@ -497,7 +547,7 @@ void j1Gui::ShowBuildingArmor(Building * building)
 	attribute_pos.x += data.attributes_displacement;
 	CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_armor.c_str());
 }
-
+*/
 // class Gui ---------------------------------------------------
 
 UI_Element::UI_Element(UI_ELEMENT_TYPE type, iPoint pos, SDL_Rect atlas_rect, bool not_in_world) : element_type(type), pos(pos), atlas_rect(atlas_rect), not_in_world(not_in_world)

@@ -150,8 +150,10 @@ void j1EntityManager::SelectInQuad(const SDL_Rect& select_rect, std::vector<Enti
 	else if (selection.size() > MAX_SELECTION)
 		selection.resize(MAX_SELECTION);
 
-	App->gui->CreatePanel(App->scene->selection);
-	//App->uimanager->CreatePanelInfo(selection);
+	if (App->scene->selection.size() == 1)
+		App->scene->panel_info = (UI_Element*)App->gui->CreatePanel(App->scene->selection[0]);
+	else
+		App->scene->panel_info = (UI_Element*)App->gui->CreatePanel(App->scene->selection);
 }
 
 void j1EntityManager::UnselectEverything() const
@@ -159,14 +161,16 @@ void j1EntityManager::UnselectEverything() const
 	for (int i = 0; i < App->scene->selection.size(); i++)
 		App->scene->selection[i]->SetEntityStatus(ST_NON_SELECTED);
 
-	App->scene->selection.clear();
-			//TODO: Delete panel info here
+	if (App->scene->selection.size() == 1)
+		App->gui->DeletePanelInfo((UI_PanelInfoSingleEntity*)App->scene->panel_info);
+	else if(App->scene->selection.size() > 1)
+		App->gui->DeletePanelInfo((UI_PanelInfoMultipleEntities*)App->scene->panel_info);
 
-	//App->uimanager->DeleteSelectionPanelInfo();
-	//App->uimanager->SetPanelButtons(nullptr);
+	App->scene->selection.clear();
 }
 
-//TODO: This function is unused
+/*
+//TODO: This function is unused   Why???
 void j1EntityManager::Select(Entity * select) const
 {
 	App->entity_manager->UnselectEverything();
@@ -175,6 +179,7 @@ void j1EntityManager::Select(Entity * select) const
 	App->gui->CreatePanel(App->scene->selection);
 	//App->uimanager->CreatePanelInfo(App->scene->selection);
 }
+*/
 
 Entity * j1EntityManager::LookForEnemies(int pixel_range, iPoint pos, Side side, Entity* attacker, ENTITY_TYPE entity_type) const
 {
