@@ -74,19 +74,6 @@ struct GUI_Information
 	//-----------------------------------------
 };
 
-/*
-class UI_PanelInfo : UI_Element
-{
-private:
-std::vector<UI_Element*> panel_elements;
-
-public:
-UI_PanelInfo();
-~UI_PanelInfo();
-void PushBack(UI_Element* element);
-};
-*/
-
 enum UI_ELEMENT_TYPE
 {
 	UI_E_UNKNOWN = 0,
@@ -95,7 +82,8 @@ enum UI_ELEMENT_TYPE
 	UI_E_LABEL,
 	UI_E_TEXT_INPUT,
 	UI_E_HP_BAR,
-	UI_E_APPEARING_LABEL
+	UI_E_APPEARING_LABEL,
+	UI_E_PANEL_INFO
 };
 
 class UI_Element

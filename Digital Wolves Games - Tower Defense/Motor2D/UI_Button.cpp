@@ -6,7 +6,7 @@
 
 UI_Button::UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top, SDL_Rect rect_clicking, char* descript, SDL_Rect description_background_rect, bool not_in_world) : UI_Element(UI_E_BUTTON, pos, rect_idle, not_in_world)
 {
-	img_idle = new UI_Image(pos, rect_idle, not_in_world);
+	img_idle = App->gui->CreateImage(pos, rect_idle, not_in_world);
 
 	int extra_w_mot = rect_mouse_on_top.w - rect_idle.w;
 	int extra_h_mot = rect_mouse_on_top.h - rect_idle.h;
@@ -14,10 +14,10 @@ UI_Button::UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top,
 	if (extra_w_mot != 0 || extra_h_mot != 0)
 	{
 		iPoint new_pos = { pos.x - extra_w_mot / 2 , pos.y - extra_h_mot / 2 };
-		img_mouse_on_top = new UI_Image(new_pos, rect_mouse_on_top, not_in_world);
+		img_mouse_on_top = App->gui->CreateImage(new_pos, rect_mouse_on_top, not_in_world);
 	}
 	else
-		img_mouse_on_top = new UI_Image(pos, rect_mouse_on_top, not_in_world);
+		img_mouse_on_top = App->gui->CreateImage(pos, rect_mouse_on_top, not_in_world);
 
 	int extra_w_click = rect_clicking.w - rect_idle.w;
 	int extra_h_click = rect_clicking.h - rect_idle.h;
@@ -25,10 +25,10 @@ UI_Button::UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top,
 	if (extra_w_click != 0 || extra_h_click != 0)
 	{
 		iPoint new_pos = { pos.x - extra_w_click / 2 , pos.y - extra_h_click / 2 };
-		img_clicking = new UI_Image(new_pos, rect_clicking, not_in_world);
+		img_clicking = App->gui->CreateImage(new_pos, rect_clicking, not_in_world);
 	}
 	else
-		img_clicking = new UI_Image(pos, rect_clicking, not_in_world);
+		img_clicking = App->gui->CreateImage(pos, rect_clicking, not_in_world);
 
 	if (descript != nullptr)
 	{

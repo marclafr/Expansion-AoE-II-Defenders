@@ -235,6 +235,18 @@ void j1Gui::DeleteImage(UI_Image* img)
 
 void j1Gui::DeleteButton(UI_Button* button)
 {
+	if (button->description != nullptr)
+	{
+		DeleteLabel(button->description);
+		button->description = nullptr;
+	}
+	DeleteImage(button->img_idle);
+	DeleteImage(button->img_mouse_on_top);
+	DeleteImage(button->img_clicking);
+	button->img_idle = nullptr;
+	button->img_mouse_on_top = nullptr;
+	button->img_clicking = nullptr;
+
 	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
 		if (*it == button)
 		{
