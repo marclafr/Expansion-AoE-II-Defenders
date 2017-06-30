@@ -43,10 +43,14 @@ UI_Button::UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top,
 
 UI_Button::~UI_Button()
 {
-	DELETE_PTR(img_idle);
-	DELETE_PTR(img_mouse_on_top);
-	DELETE_PTR(img_clicking);
-	DELETE_PTR(description);
+	if (description != nullptr)
+	{
+		App->gui->DeleteLabel(description);
+		description = nullptr;
+	}
+	App->gui->DeleteImage(img_idle);
+	App->gui->DeleteImage(img_mouse_on_top);
+	App->gui->DeleteImage(img_clicking);
 }
 
 bool UI_Button::Draw(SDL_Texture * atlas)
