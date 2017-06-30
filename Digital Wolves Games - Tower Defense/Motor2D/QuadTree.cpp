@@ -900,14 +900,14 @@ void TiledIsoRect::DrawSquare() const
 void TiledIsoRect::DrawTiles() const
 {
 	//Tiles
-	for (int i = 0; i < x_tiles; i++)
+	for (int i = 0; i <= x_tiles; i++)
 	{
 		iPoint start = App->map->MapToWorld(i, 0);
 		iPoint end = App->map->MapToWorld(i, y_tiles);
 		App->render->DrawLine(start.x, start.y, end.x, end.y, 206, 255, 29, 255, true);
 	}
 
-	for (int i = 0; i < y_tiles; i++)
+	for (int i = 0; i <= y_tiles; i++)
 	{
 		iPoint start = App->map->MapToWorld(0, i);
 		iPoint end = App->map->MapToWorld(x_tiles, i);
