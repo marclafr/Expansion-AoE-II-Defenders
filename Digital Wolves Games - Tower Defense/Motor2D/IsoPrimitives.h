@@ -90,18 +90,20 @@ class IsoRect : public Primitive
 protected:
 	float width = 0.0f;
 	float height = 0.0f;
-	float diagonal_angle = 0.0f;
+	double diagonal_horizontal_angle = 0.0f;
+	double diagonal_verical_angle = 0.0f;
 
 public:
 	IsoRect();
-	IsoRect(const fPoint& position, float width, float height, float diagonal_angle = 0.0f, const iPoint& displacement = { 0,0 });
-	IsoRect(const iPoint& position, float width, float height, float diagonal_angle = 0.0f, const iPoint& displacement = { 0,0 });
+	IsoRect(const fPoint& position, float width, float height, double diagonal_horizontal_angle = 0.0f, double diagonal_verical_angle = 0.0f, const iPoint& displacement = { 0,0 });
+	IsoRect(const iPoint& position, float width, float height, double diagonal_angle = 0.0f, double diagonal_verical_angle = 0.0f, const iPoint& displacement = { 0,0 });
 	IsoRect(const IsoRect& copy);
 	~IsoRect();
 
 	//Functionality ---------
 	//Draw
 	bool	Draw() const;
+	void	DrawDiagonals() const;
 	//Set Methods
 	void	SetWidth(uint w);
 	void	SetHeight(uint h);

@@ -208,13 +208,13 @@ IsoRect::IsoRect() :Primitive({ 0,0 }, { 0,0 }), width(0), height(0)
 
 ///Class Rectangle ------------------------------
 //Constructors ==============
-IsoRect::IsoRect(const fPoint& position, float width, float height, float diagonal_angle, const iPoint& displacement) :Primitive(position, displacement), width(width), height(height), diagonal_angle(diagonal_angle)
+IsoRect::IsoRect(const fPoint& position, float width, float height, double diagonal_horizontal_angle, double diagonal_verical_angle, const iPoint& displacement) :Primitive(position, displacement), width(width), height(height), diagonal_horizontal_angle(diagonal_horizontal_angle), diagonal_verical_angle(diagonal_verical_angle)
 {}
 
-IsoRect::IsoRect(const iPoint & position, float width, float height, float diagonal_angle, const iPoint & displacement) : Primitive(fPoint(position.x,position.y), displacement), width(width), height(height), diagonal_angle(diagonal_angle)
+IsoRect::IsoRect(const iPoint& position, float width, float height, double diagonal_horizontal_angle, double diagonal_verical_angle, const iPoint& displacement) : Primitive(fPoint(position.x,position.y), displacement), width(width), height(height), diagonal_horizontal_angle(diagonal_horizontal_angle), diagonal_verical_angle(diagonal_verical_angle)
 {}
 
-IsoRect::IsoRect(const IsoRect& copy) : Primitive(copy), width(copy.width), height(copy.height), diagonal_angle(copy.diagonal_angle)
+IsoRect::IsoRect(const IsoRect& copy) : Primitive(copy), width(copy.width), height(copy.height), diagonal_horizontal_angle(copy.diagonal_horizontal_angle), diagonal_verical_angle(copy.diagonal_verical_angle)
 {}
 
 //Destructors ===============
@@ -224,36 +224,33 @@ IsoRect::~IsoRect()
 //Functionality =============
 bool IsoRect::Draw() const
 {
-	//Draw lines with the correct angles and coordinates to form the rotated quad
-	//Need to take into acount non straight diagonals
-
-	iPoint bottom_vertex (position.x + 0.5f * height * cosf(PI / 2.0f - diagonal_angle), position.y + 0.5f * height * sinf(PI / 2.0f - diagonal_angle));
-	iPoint top_vertex (position.x - 0.5f * height * cosf(PI / 2.0f - diagonal_angle), position.y - 0.5f * height * sinf(PI / 2.0f - diagonal_angle));
-	iPoint right_vertex (position.x + 0.5f * width * cosf(diagonal_angle), position.y - 0.5f * width * sinf(diagonal_angle));
-	iPoint left_vertex (position.x - 0.5f * width * cosf(diagonal_angle), position.y + 0.5f * width * sinf(diagonal_angle));
+	iPoint bottom_vertex (position.x + 0.5f * height * sinf(diagonal_verical_angle), position.y + 0.5f * height * cosf(diagonal_verical_angle));
+	iPoint top_vertex (position.x - 0.5f * height * sinf(diagonal_verical_angle), position.y - 0.5f * height * cosf(diagonal_verical_angle));
+	iPoint right_vertex (position.x + 0.5f * width * cosf(diagonal_horizontal_angle), position.y + 0.5f * width * sinf(diagonal_horizontal_angle));
+	iPoint left_vertex (position.x - 0.5f * width * cosf(diagonal_horizontal_angle), position.y - 0.5f * width * sinf(diagonal_horizontal_angle));
 
 	App->render->DrawLine(top_vertex.x, top_vertex.y, right_vertex.x, right_vertex.y, color.r, color.g, color.b, color.a, true);
 	App->render->DrawLine(top_vertex.x, top_vertex.y, left_vertex.x, left_vertex.y, color.r, color.g, color.b, color.a, true);
 	App->render->DrawLine(bottom_vertex.x, bottom_vertex.y, right_vertex.x, right_vertex.y, color.r, color.g, color.b, color.a, true);
 	App->render->DrawLine(bottom_vertex.x, bottom_vertex.y, left_vertex.x, left_vertex.y, color.r, color.g, color.b, color.a, true);
-
-	//Diagonals
-	App->render->DrawLine(top_vertex.x, top_vertex.y, bottom_vertex.x, bottom_vertex.y, 0, 255, 0, 255, true);
-	App->render->DrawLine(right_vertex.x, right_vertex.y, left_vertex.x, left_vertex.y, 0, 255, 0, 255, true);
 	
 	//Center
 	SDL_Rect rect{ position.x - 3, position.y - 3, 6,6 };
 	App->render->DrawQuad(rect, 255, 255, 0, 255, true, true);
 
-	/*
-	iPoint draw_pos(position.x + displacement.x, position.y + displacement.y);
-	App->render->DrawLine(draw_pos.x - width * 0.5f, draw_pos.y, draw_pos.x, draw_pos.y - height*sin(x_angle), color.r, color.g, color.b, color.a, true);
-	App->render->DrawLine(draw_pos.x - width * 0.5f, draw_pos.y, draw_pos.x, draw_pos.y + height*sin(x_angle), color.r, color.g, color.b, color.a, true);
-	App->render->DrawLine(draw_pos.x + width * 0.5f, draw_pos.y, draw_pos.x, draw_pos.y - height*sin(x_angle), color.r, color.g, color.b, color.a, true);
-	App->render->DrawLine(draw_pos.x + width * 0.5f, draw_pos.y, draw_pos.x, draw_pos.y + height*sin(x_angle), color.r, color.g, color.b, color.a, true);
-	*/
-
 	return true;
+}
+
+void IsoRect::DrawDiagonals() const
+{
+	iPoint bottom_vertex(position.x + 0.5f * height * sinf(diagonal_verical_angle), position.y + 0.5f * height * cosf(diagonal_verical_angle));
+	iPoint top_vertex(position.x - 0.5f * height * sinf(diagonal_verical_angle), position.y - 0.5f * height * cosf(diagonal_verical_angle));
+	iPoint right_vertex(position.x + 0.5f * width * cosf(diagonal_horizontal_angle), position.y + 0.5f * width * sinf(diagonal_horizontal_angle));
+	iPoint left_vertex(position.x - 0.5f * width * cosf(diagonal_horizontal_angle), position.y - 0.5f * width * sinf(diagonal_horizontal_angle));
+
+	//Diagonals
+	App->render->DrawLine(top_vertex.x, top_vertex.y, bottom_vertex.x, bottom_vertex.y, 0, 255, 0, 255, true);
+	App->render->DrawLine(right_vertex.x, right_vertex.y, left_vertex.x, left_vertex.y, 0, 255, 0, 255, true);
 }
 
 void IsoRect::SetWidth(uint w)

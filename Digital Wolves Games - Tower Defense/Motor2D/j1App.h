@@ -43,7 +43,7 @@ class j1ScoreScene;
 struct DebugFeatures
 {
 public:
-	DebugFeatures() : debug_mode(false), print_walkability_map(false), add_wood(false), add_stone(false), add_food(false), add_gold(false), pf(false), quadtree(false)
+	DebugFeatures()
 	{}
 
 	~DebugFeatures(){}
@@ -58,8 +58,13 @@ public:
 	bool add_stone = false;
 	bool add_gold = false;
 	bool pf = false;
-	bool quadtree = false;
 	bool unlock_investigations = false;
+	bool qt_entities = false;
+	bool qt_area = false;
+	bool tiles = false;
+	bool qt_vertex = false;
+	bool qt_diagonals = false;
+	bool qt_center = false;
 };
 
 class j1App

@@ -47,7 +47,12 @@ public:
 	void Update(float dt);
 	void DeleteEntities();
 	void CheckUnitCollisions(const Unit* ptr) const;
-	void DrawArea();
+
+	//Draw
+	void Draw() const;
+	void DrawEntities() const;
+	void DrawTiles() const;
+
 	void SaveAll(pugi::xml_node& node);
 	//void BlitMinimap();
 
@@ -90,6 +95,7 @@ public:
 
 	void DeleteEntities() const;
 
+	//Draw
 	void Draw() const;
 
 	void SaveAll(pugi::xml_node& node);
@@ -114,7 +120,13 @@ public:
 	~TiledIsoRect();
 
 	void SetColor(SDL_Color color);
-	void Draw() const;
+
+	//Draw Tile
+	void DrawSquare() const;
+	void DrawTiles() const;
+	void DrawVertex() const;
+	void DrawDiagonals() const;
+	void DrawCenter() const;
 
 	//Get Methods
 	uint GetPixelWidth()const;

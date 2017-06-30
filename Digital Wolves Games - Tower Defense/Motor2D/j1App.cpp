@@ -710,11 +710,12 @@ void DebugFeatures::UpdateDebug()
 	{
 		App->scene->resources->AddGold(1000);
 		App->debug_features.add_gold = false;
-	}
+	}*/
 
 	if (pf)
 		App->pathfinding->Debug();
 
+	/*
 	if (unlock_investigations)
 	{
 		App->investigations->InstaUnlockAllInvestigations();

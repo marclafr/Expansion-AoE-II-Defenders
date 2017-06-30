@@ -643,25 +643,50 @@ void QuadTreeNode::CheckUnitCollisions(const Unit * ptr) const
 				childs[i]->CheckUnitCollisions(ptr);
 }
 
-void QuadTreeNode::DrawArea()
+void QuadTreeNode::Draw() const
 {
 	if (childs[0] != nullptr)
 		for (int i = 0; i < 4; i++)
-			childs[i]->DrawArea();
-	else
+			childs[i]->Draw();
+
+	if (App->debug_features.qt_entities)
+		DrawEntities();
+
+	if (App->debug_features.qt_area)
+		area->DrawSquare();
+
+	if (App->debug_features.qt_vertex)
+		area->DrawVertex();
+
+	if (App->debug_features.qt_diagonals)
+		area->DrawDiagonals();
+
+	if (App->debug_features.qt_center)
+		area->DrawCenter();
+
+}
+
+void QuadTreeNode::DrawEntities() const
+{
+	if (childs[0] == nullptr)
+	{
 		for (int i = 0; i < NODE_ENTITIES; i++)
 		{
 			if (entities[i] != nullptr)
 			{
+				//change to full tile
 				SDL_Rect point{ entities[i]->GetPixelPosition().x, entities[i]->GetPixelPosition().y + area->GetTileHeight() / 2.0f, 5, 5 };
 				App->render->DrawQuad(point, 0, 255, 0, 255);
 			}
 			else
 				break;
 		}
+	}
+}
 
-	area->SetColor(SDL_Color{ 255,0,0,255 });
-	area->Draw();
+void QuadTreeNode::DrawTiles() const
+{
+	area->DrawTiles();
 }
 
 void QuadTreeNode::SaveAll(pugi::xml_node & node)
@@ -784,8 +809,12 @@ void QuadTree::DeleteEntities() const
 
 void QuadTree::Draw() const
 {
-	origin->DrawArea();
+	origin->Draw();
+
+	if (App->debug_features.tiles)
+		origin->DrawTiles();
 }
+
 
 void QuadTree::SaveAll(pugi::xml_node & node)
 {
@@ -825,61 +854,31 @@ TiledIsoRect::TiledIsoRect(const iPoint& tile_pos, const uint x_tiles, const uin
 	fPoint top_bottom_vec(bottom_pixel_vertex.x - top_pixel_vertex.x, bottom_pixel_vertex.y - top_pixel_vertex.y);
 	fPoint right_left_vec(left_pixel_vertex.x - right_pixel_vertex.x, left_pixel_vertex.y - right_pixel_vertex.y);
 
-	fPoint center_triangle_one(top_pixel_vertex.x + top_bottom_vec.x / 2.0f, top_pixel_vertex.y + top_bottom_vec.y / 2.0f);// first vec to get it
+	fPoint center(top_pixel_vertex.x + top_bottom_vec.x / 2.0f, top_pixel_vertex.y + top_bottom_vec.y / 2.0f);// first vec to get it
 	fPoint center_second_vec(right_pixel_vertex.x + right_left_vec.x / 2.0f, right_pixel_vertex.y + right_left_vec.y / 2.0f);
 
-	if (center_triangle_one.x != center_second_vec.x || center_triangle_one.y != center_second_vec.y)
+	if (center.x != center_second_vec.x || center.y != center_second_vec.y)
 		LOG("TiledIsoRect diagonal centers not equal");
 
-	uint width = x_tiles * tile_width;
-	uint height = y_tiles * tile_height + (x_tiles + y_tiles) / 2.0f;
+	//uint width = x_tiles * tile_width;
+	//uint height = y_tiles * tile_height + (x_tiles + y_tiles) / 2.0f;
 
-	float angle = 0.0f;
+	uint width = sqrt(pow(right_left_vec.x, 2) + pow(right_left_vec.y, 2)); 
+	uint height = sqrt(pow(top_bottom_vec.x,2) + pow(top_bottom_vec.y,2));
+
+	double angle_horizontal_diagonal = 0.0f;
+	double angle_vertical_diagonal = 0.0f;
 	
 	if (x_tiles != y_tiles)
 	{
-		iPoint equal_side_right_tile(tile_pos.x + y_tiles - 1.0f, tile_pos.y);
-		iPoint equal_side_right_vertex = App->map->MapToWorld(equal_side_right_tile);
-		equal_side_right_vertex.x += tile_width / 2.0f;
-		equal_side_right_vertex.y += tile_height / 2.0f + 0.5f;
+		fPoint top_center_vec(center.x - top_pixel_vertex.x, center.y - top_pixel_vertex.y);
+		fPoint right_center_vec(center.x - right_pixel_vertex.x, center.y - right_pixel_vertex.y);
 
-		iPoint equal_side_bottom_tile(tile_pos.x + y_tiles - 1.0f, tile_pos.y + y_tiles - 1.0f);
-		iPoint equal_side_bottom_vertex = App->map->MapToWorld(equal_side_bottom_tile);
-		equal_side_bottom_vertex.y += tile_height + 1.0f;
-
-		//equal side triangle
-		fPoint top_bottom_equal_side_vec(equal_side_bottom_vertex.x - top_pixel_vertex.x, equal_side_bottom_vertex.y - top_pixel_vertex.y);
-		fPoint right_left_equal_side_vec(left_pixel_vertex.x - equal_side_right_vertex.x, left_pixel_vertex.y - equal_side_right_vertex.y);
-		fPoint top_right_equal_side_vec(equal_side_right_vertex.x - top_pixel_vertex.x, equal_side_right_vertex.y - top_pixel_vertex.y);
-
-		iPoint center_triangle_two(top_pixel_vertex.x + top_bottom_equal_side_vec.x / 2.0f, top_pixel_vertex.y + top_bottom_equal_side_vec.y / 2.0f);
-
-		fPoint center_right_equal_side_vec(equal_side_right_vertex.x - center_triangle_two.x, equal_side_right_vertex.y - center_triangle_two.y);
-		fPoint top_center_equal_side_vec(center_triangle_two.x - top_pixel_vertex.x, center_triangle_two.y - top_pixel_vertex.y);
-
-		float y_side_lenght = sqrt(powf(top_right_equal_side_vec.x,2) + powf(top_right_equal_side_vec.y, 2));
-		float center_right_equal_side_lenght = sqrt(powf(center_right_equal_side_vec.x, 2) + powf(center_right_equal_side_vec.y, 2));
-		float top_center_equal_side_lenght = sqrt(powf(top_center_equal_side_vec.x, 2) + powf(top_center_equal_side_vec.y, 2));
-
-		float triangle_two_angle = acosf((powf(center_right_equal_side_lenght, 2) + powf(top_center_equal_side_lenght, 2) - powf(y_side_lenght, 2)) / (2.0f * center_right_equal_side_lenght * top_center_equal_side_lenght));
-
-		//non equal side triangle
-		fPoint top_right_vec(right_pixel_vertex.x - top_pixel_vertex.x, right_pixel_vertex.y - top_pixel_vertex.y);
-
-		fPoint center_right_vec(right_pixel_vertex.x - center_triangle_one.x, right_pixel_vertex.y - center_triangle_one.y);
-		fPoint top_center_vec(center_triangle_one.x - top_pixel_vertex.x, center_triangle_one.y - top_pixel_vertex.y);
-
-		float x_side_lenght = sqrt(powf(top_right_vec.x, 2) + powf(top_right_vec.y, 2));
-		float center_right_lenght = sqrt(powf(center_right_vec.x, 2) + powf(center_right_vec.y, 2));
-		float top_center_lenght = sqrt(powf(top_center_vec.x, 2) + powf(top_center_vec.y, 2));
-
-		float triangle_one_angle = acosf((powf(center_right_lenght, 2) + powf(top_center_lenght, 2) - powf(x_side_lenght, 2)) / (2.0f * center_right_lenght * top_center_lenght));
-
-		//Diff Angle
-		angle = -(triangle_one_angle - triangle_two_angle);
+		angle_horizontal_diagonal = atan(right_center_vec.y / right_center_vec.x);
+		angle_vertical_diagonal = atan(top_center_vec.x / top_center_vec.y);
 	}
 
-	rect = new IsoRect(center_triangle_one, width, height, angle,  displacement);
+	rect = new IsoRect(center, width, height, angle_horizontal_diagonal, angle_vertical_diagonal,  displacement);
 }
 
 TiledIsoRect::~TiledIsoRect()
@@ -892,15 +891,71 @@ void TiledIsoRect::SetColor(SDL_Color color)
 	rect->SetColor(color);
 }
 
-void TiledIsoRect::Draw() const
+void TiledIsoRect::DrawSquare() const
 {
-	//Top Position
-	iPoint position = App->map->MapToWorld(tile_pos);
-	SDL_Rect square{ position.x - 3, position.y - 3, 6,6 };
-	App->render->DrawQuad(square, 0, 255, 255, 255, true, true);
-
-	//rect
+	//Rect
 	rect->Draw();
+}
+
+void TiledIsoRect::DrawTiles() const
+{
+	//Tiles
+	for (int i = 0; i < x_tiles; i++)
+	{
+		iPoint start = App->map->MapToWorld(i, 0);
+		iPoint end = App->map->MapToWorld(i, y_tiles);
+		App->render->DrawLine(start.x, start.y, end.x, end.y, 206, 255, 29, 255, true);
+	}
+
+	for (int i = 0; i < y_tiles; i++)
+	{
+		iPoint start = App->map->MapToWorld(0, i);
+		iPoint end = App->map->MapToWorld(x_tiles, i);
+		App->render->DrawLine(start.x, start.y, end.x, end.y, 206, 255, 29, 255, true);
+	}
+}
+
+void TiledIsoRect::DrawVertex() const
+{
+	//Vertex
+	//Top Position
+	iPoint top_pixel_vertex = App->map->MapToWorld(tile_pos);
+	SDL_Rect square_top{ top_pixel_vertex.x - 3, top_pixel_vertex.y - 3, 6,6 };
+	App->render->DrawQuad(square_top, 255, 0, 255, 255, true, true);
+
+	//Left
+	iPoint left_tile(tile_pos.x, tile_pos.y + y_tiles - 1.0f);
+	iPoint left_pixel_vertex = App->map->MapToWorld(left_tile);
+	left_pixel_vertex.x -= tile_width / 2.0f;
+	left_pixel_vertex.y += tile_height / 2.0f + 0.5f;
+	SDL_Rect square_left{ left_pixel_vertex.x - 3, left_pixel_vertex.y - 3, 6,6 };
+	App->render->DrawQuad(square_left, 255, 0, 255, 255, true, true);
+
+	//Right
+	iPoint right_tile(tile_pos.x + x_tiles - 1.0f, tile_pos.y);
+	iPoint right_pixel_vertex = App->map->MapToWorld(right_tile);
+	right_pixel_vertex.x += tile_width / 2.0f;
+	right_pixel_vertex.y += tile_height / 2.0f + 0.5f;
+	SDL_Rect square_right{ right_pixel_vertex.x - 3, right_pixel_vertex.y - 3, 6,6 };
+	App->render->DrawQuad(square_right, 255, 0, 255, 255, true, true);
+
+	//Bottom
+	iPoint bottom_tile(tile_pos.x + x_tiles - 1.0f, tile_pos.y + y_tiles - 1.0f);
+	iPoint bottom_pixel_vertex = App->map->MapToWorld(bottom_tile);
+	bottom_pixel_vertex.y += tile_height + 1.0f;
+	SDL_Rect square_bot{ bottom_pixel_vertex.x - 3, bottom_pixel_vertex.y - 3, 6,6 };
+	App->render->DrawQuad(square_bot, 255, 0, 255, 255, true, true);
+}
+
+void TiledIsoRect::DrawDiagonals() const
+{
+	rect->DrawDiagonals();
+}
+
+void TiledIsoRect::DrawCenter() const
+{
+	SDL_Rect square_center{	rect->GetPosition().x - 3, rect->GetPosition().y - 3, 6,6 };
+	App->render->DrawQuad(square_center, 255, 0, 255, 255, true, true);
 }
 
 uint TiledIsoRect::GetPixelWidth() const

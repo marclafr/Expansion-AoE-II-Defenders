@@ -199,9 +199,18 @@ bool j1Input::Update(float dt)
 	if (GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		App->console->TurnOnOff();
 
-	if (GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		App->debug_features.quadtree = !App->debug_features.quadtree;
-
+	if (GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
+		App->debug_features.qt_entities = !App->debug_features.qt_entities;
+	if (GetKey(SDL_SCANCODE_X) == KEY_DOWN)
+		App->debug_features.qt_area = !App->debug_features.qt_area;
+	if (GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+		App->debug_features.tiles = !App->debug_features.tiles;
+	if (GetKey(SDL_SCANCODE_V) == KEY_DOWN)
+		App->debug_features.qt_vertex = !App->debug_features.qt_vertex;
+	if (GetKey(SDL_SCANCODE_B) == KEY_DOWN)
+		App->debug_features.qt_diagonals = !App->debug_features.qt_diagonals;
+	if (GetKey(SDL_SCANCODE_N) == KEY_DOWN)
+		App->debug_features.qt_center = !App->debug_features.qt_center;
 
 	if (App->debug_features.debug_mode == true)
 	{

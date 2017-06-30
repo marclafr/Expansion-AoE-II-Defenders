@@ -500,8 +500,7 @@ void j1Render::BlitGameScene()
 	BlitInGame();
 	BlitSelection();
 
-	if(App->debug_features.quadtree)
-		App->entity_manager->DrawQuadTree();
+	App->entity_manager->DrawQuadTree();
 
 	BlitSelectingRect();
 	BlitUI();
