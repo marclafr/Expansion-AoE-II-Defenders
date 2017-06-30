@@ -6,7 +6,7 @@
 
 #define TEXTS_COLOR {0, 0, 0, 255} //R G B ALPHA
 
-UI_Label::UI_Label(iPoint pos, SDL_Rect atlas_rect, char * txt, bool not_in_world) : UI_Element(pos, atlas_rect, not_in_world)
+UI_Label::UI_Label(iPoint pos, SDL_Rect atlas_rect, char * txt, bool has_background, bool not_in_world) : UI_Element(UI_E_LABEL, pos, atlas_rect, not_in_world), has_background(has_background)
 {
 	text = new Text(txt);
 	text->text_rect.x = atlas_rect.x;
@@ -26,12 +26,14 @@ bool UI_Label::Draw(SDL_Texture* atlas)
 {
 	if (not_in_world == true)
 	{
-		App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &text->text_rect);
+		if (has_background == true)
+			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &text->text_rect);
 		App->render->PushUISprite(text->text_texture, pos.x + TEXT_RIGHT_DISPLACEMENT - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y);
 	}
 	else
 	{
-		App->render->PushUISprite(atlas, pos.x, pos.y, &text->text_rect);
+		if (has_background == true)
+			App->render->PushUISprite(atlas, pos.x, pos.y, &text->text_rect);
 		App->render->PushUISprite(text->text_texture, pos.x + TEXT_RIGHT_DISPLACEMENT, pos.y);
 	}
 	return true;

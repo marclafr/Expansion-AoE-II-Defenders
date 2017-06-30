@@ -17,6 +17,9 @@ public:
 	const char* GetText();
 	void DeleteText();
 
+	bool Draw(SDL_Texture* atlas);
+	bool Update();
+
 private:
 	std::string text;
 	SDL_Rect text_atlas_rect;
@@ -27,9 +30,6 @@ private:
 	int writing_pos = 0; // character number we are writing on
 	j1Timer writing_pos_appear_timer;
 	j1Timer repeat_timer;
-
-	bool Update();
-	bool Draw(SDL_Texture* atlas);
 
 	void DrawTextInput(SDL_Texture* atlas);
 	bool MouseInsideText();

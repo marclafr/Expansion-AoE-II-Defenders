@@ -47,11 +47,13 @@ bool j1Console::PreUpdate()
 	{
 		std::string input = console_input_text->GetText();
 		console_input_text->DeleteText();
-
+		bool command_understood = false;
 		for (int i = 0; i < commands.size(); i++)
 		{
 			if (input.compare(commands[i].name) == 0)
 			{
+				command_understood = true;
+
 				switch (commands[i].action)
 				{
 				case CREATE_GOD:
@@ -89,11 +91,13 @@ bool j1Console::PreUpdate()
 
 				case NO_COMMAND:
 				default:
+					LOG("Command wasn't understood");
 					break;
 				}
 			}
 		}
-
+		if (!command_understood)
+			LOG("Command wasn't understood");
 	}
 	
 	return true;

@@ -151,6 +151,9 @@
     <ClCompile Include="UI_Text_Input.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="UI_PanelInfo.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buildings.h">
@@ -311,6 +314,9 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="UI_Text_Input.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_PanelInfo.h">
       <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -36,7 +36,7 @@ public:
 
 	void SelectInQuad(const SDL_Rect& select_rect, std::vector<Entity*>& selection) const;
 	void UnselectEverything() const;
-	void Select(Entity* select) const;	//TODO: This function is unused
+	//void Select(Entity* select) const;	//TODO: This function is unused
 	void CheckClick(int mouse_x, int mouse_y)  const;
 	bool AreUnitsInRect(const SDL_Rect& rect) const;
 

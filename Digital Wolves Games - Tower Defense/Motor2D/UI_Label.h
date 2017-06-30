@@ -19,13 +19,14 @@ public:
 class UI_Label : public UI_Element
 {
 public:
-	UI_Label(iPoint pos, SDL_Rect atlas_rect, char* txt, bool not_in_world = true);
+	UI_Label(iPoint pos, SDL_Rect atlas_rect, char* txt, bool has_background = true, bool not_in_world = true);
 	~UI_Label();
+
+	bool Draw(SDL_Texture* atlas);
 
 private:
 	Text* text;
-
-	bool Draw(SDL_Texture* atlas);
+	bool has_background = true;
 };
 
 #endif //__UI_LABEL_H__

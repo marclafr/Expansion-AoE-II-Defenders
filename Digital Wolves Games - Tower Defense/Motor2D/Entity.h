@@ -78,7 +78,7 @@ public:
 	const float GetX() const;
 	const float GetY() const;
 	const iPoint GetPosition() const;
-	const int GetAttack() const;
+	virtual const int GetAttack() const;
 	const iPoint GetPivot() const;
 	const SDL_Rect GetRect() const;
 	const TextureID GetTextureID() const;

@@ -21,6 +21,7 @@ enum RESOURCE_TYPE;
 enum BUILDING_TYPE;
 class AnimationManager;
 class UIComponents;
+class UI_Element;
 
 enum PlacingWallDirection 
 {
@@ -116,6 +117,7 @@ public:
 	//ResourceManager* resources = nullptr;
 
 	std::vector<Entity*> selection;
+	UI_Element* panel_info;
 };
 
 #endif // __j1SCENE_H__
