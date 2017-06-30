@@ -6,7 +6,7 @@
 
 #define TEXTS_COLOR {0, 0, 0, 255} //R G B ALPHA
 
-UI_Label::UI_Label(iPoint pos, SDL_Rect atlas_rect, char * txt, bool not_in_world) : UI_Element(pos, atlas_rect, not_in_world)
+UI_Label::UI_Label(iPoint pos, SDL_Rect atlas_rect, char * txt, bool not_in_world) : UI_Element(UI_E_LABEL, pos, atlas_rect, not_in_world)
 {
 	text = new Text(txt);
 	text->text_rect.x = atlas_rect.x;

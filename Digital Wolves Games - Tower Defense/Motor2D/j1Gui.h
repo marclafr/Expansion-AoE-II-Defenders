@@ -87,15 +87,26 @@ void PushBack(UI_Element* element);
 };
 */
 
+enum UI_ELEMENT_TYPE
+{
+	UI_E_UNKNOWN = 0,
+	UI_E_IMAGE,
+	UI_E_BUTTON,
+	UI_E_LABEL,
+	UI_E_TEXT_INPUT,
+	UI_E_HP_BAR,
+	UI_E_APPEARING_LABEL
+};
+
 class UI_Element
 {
 protected:
-	UI_Element(iPoint pos, SDL_Rect atlas_rect, bool not_in_world = true);
+	UI_Element(UI_ELEMENT_TYPE type, iPoint pos, SDL_Rect atlas_rect, bool not_in_world = true);
 	~UI_Element();
 
 	iPoint pos;
 	SDL_Rect atlas_rect;
-	//TODO TYPE
+	UI_ELEMENT_TYPE element_type = UI_E_UNKNOWN;
 	bool not_in_world = true;
 
 public:
@@ -143,7 +154,9 @@ public:
 	//-----------------------
 	// Gui creation functions
 	void DeleteImage(UI_Image* img);
-	//TODO DELETE THE REST
+	void DeleteButton(UI_Button* button);
+	void DeleteLabel(UI_Label* label);
+	void DeleteTextInput(UI_TextInput* txt_input);
 	//-----------------------
 
 	void CreatePanel(std::vector<Entity*> selection);

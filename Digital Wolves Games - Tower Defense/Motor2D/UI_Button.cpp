@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "UI_Button.h"
 
-UI_Button::UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top, SDL_Rect rect_clicking, char* descript, SDL_Rect description_background_rect, bool not_in_world) : UI_Element(pos, rect_idle, not_in_world)
+UI_Button::UI_Button(iPoint pos, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top, SDL_Rect rect_clicking, char* descript, SDL_Rect description_background_rect, bool not_in_world) : UI_Element(UI_E_BUTTON, pos, rect_idle, not_in_world)
 {
 	img_idle = new UI_Image(pos, rect_idle, not_in_world);
 

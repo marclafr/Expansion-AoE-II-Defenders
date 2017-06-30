@@ -221,7 +221,7 @@ UI_TextInput * j1Gui::CreateTextInput(iPoint pos, char * txt, FONT_NAME font_nam
 	return ret;
 }
 
-void j1Gui::DeleteImage(UI_Image * img)
+void j1Gui::DeleteImage(UI_Image* img)
 {
 	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
 		if (*it == img)
@@ -231,6 +231,42 @@ void j1Gui::DeleteImage(UI_Image * img)
 		}
 
 	DELETE_PTR(img);
+}
+
+void j1Gui::DeleteButton(UI_Button* button)
+{
+	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
+		if (*it == button)
+		{
+			ui_elements.erase(it);
+			break;
+		}
+
+	DELETE_PTR(button);
+}
+
+void j1Gui::DeleteLabel(UI_Label * label)
+{
+	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
+		if (*it == label)
+		{
+			ui_elements.erase(it);
+			break;
+		}
+
+	DELETE_PTR(label);
+}
+
+void j1Gui::DeleteTextInput(UI_TextInput * txt_input)
+{
+	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
+		if (*it == txt_input)
+		{
+			ui_elements.erase(it);
+			break;
+		}
+
+	DELETE_PTR(txt_input);
 }
 
 void j1Gui::CreatePanel(std::vector<Entity*> selection)
@@ -464,7 +500,7 @@ void j1Gui::ShowBuildingArmor(Building * building)
 
 // class Gui ---------------------------------------------------
 
-UI_Element::UI_Element(iPoint pos, SDL_Rect atlas_rect, bool not_in_world) : pos(pos), atlas_rect(atlas_rect), not_in_world(not_in_world)
+UI_Element::UI_Element(UI_ELEMENT_TYPE type, iPoint pos, SDL_Rect atlas_rect, bool not_in_world) : element_type(type), pos(pos), atlas_rect(atlas_rect), not_in_world(not_in_world)
 {
 }
 
