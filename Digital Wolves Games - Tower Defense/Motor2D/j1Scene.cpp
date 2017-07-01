@@ -237,7 +237,7 @@ bool j1Scene::PostUpdate()
 	App->input->GetMousePosition(x,y);
 	iPoint map_pos = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);
 	iPoint world_pos = App->map->MapToWorld(map_pos);
-	SDL_Rect point{ world_pos.x, world_pos.y, 5, 5 };
+	SDL_Rect point{ world_pos.x - 3, world_pos.y - 3, 6, 6 };
 	App->render->DrawQuad(point,0,0,255,255);
 
 	return ret;
