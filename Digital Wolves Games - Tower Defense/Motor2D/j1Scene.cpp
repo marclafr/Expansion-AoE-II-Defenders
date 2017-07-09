@@ -709,7 +709,7 @@ void j1Scene::HandleInput( SDL_Event event)
 					if ((*it)->GetSide() == S_ALLY)
 					{
 						unit = (Unit*)(*it);
-						unit->GoTo(mouse_click_objective);
+						unit->GoToTile(App->map->WorldToMap(mouse_click_objective.x, mouse_click_objective.y));
 					}
 				}
 			}

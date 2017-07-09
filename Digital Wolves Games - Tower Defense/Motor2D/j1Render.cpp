@@ -434,13 +434,15 @@ void j1Render::BlitInGame() const
 
 void j1Render::BlitSelection() const
 {
+	iPoint blit_pos;
+
 	for (std::vector<Entity*>::iterator it = App->scene->selection.begin(); it != App->scene->selection.end(); ++it)
 	{
+		Unit* unit = (Unit*)*it;
+		blit_pos = (*it)->GetPixelPosition();
+
 		if ((*it)->GetEntityType() == E_UNIT)
-		{
-			Unit* unit = (Unit*)*it;
-			DrawElipse(unit->GetX() + camera->GetPosition().x, unit->GetY() + camera->GetPosition().y, unit->GetUnitRadius(), 255, 255, 255, 20);
-		}
+			DrawElipse(blit_pos.x + camera->GetPosition().x, blit_pos.y + camera->GetPosition().y, unit->GetUnitRadius(), 255, 255, 255, 20);
 
 		if ((*it)->GetEntityType() == E_BUILDING)
 		{
@@ -450,7 +452,7 @@ void j1Render::BlitSelection() const
 			if (building->GetBuildingType() == B_TURRET || building->GetBuildingType() == B_CANNON || building->GetBuildingType() == B_TURRET_UPGRADED_FIRE  || building->GetBuildingType() == B_TURRET_UPGRADED_ICE || building->GetBuildingType() == B_TURRET_UPGRADED_AIR || building->GetBuildingType() == B_CANNON_UPGRADED_FIRE || building->GetBuildingType() == B_CANNON_UPGRADED_ICE || building->GetBuildingType() == B_CANNON_UPGRADED_AIR)
 			{
 				int range = ((Tower*)building)->GetRange();
-				DrawCircle(building->GetX() + camera->GetPosition().x, building->GetY() + camera->GetPosition().y, range, 255, 255, 255, 255);
+				DrawCircle(blit_pos.x + camera->GetPosition().x, blit_pos.y + camera->GetPosition().y, range, 255, 255, 255, 255);
 			}
 		}
 	}

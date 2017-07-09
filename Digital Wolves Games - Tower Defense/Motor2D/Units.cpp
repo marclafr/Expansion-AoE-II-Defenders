@@ -583,8 +583,7 @@ bool Unit::GetPath(iPoint dest)
 
 bool Unit::GetTilePath(iPoint & tile)
 {
-	iPoint ori = App->map->WorldToMap(GetX(), GetY());
-	if (App->pathfinding->CalculatePath(ori, tile, path_vec) == false)
+	if (App->pathfinding->CalculatePath(GetPosition(), tile, path_vec) == false)
 		return false;
 	return true;
 }
@@ -668,7 +667,7 @@ void Unit::LookAt(iPoint pos)
 
 }
 
-bool Unit::GoTo( iPoint dest)
+/*bool Unit::GoTo( iPoint dest)
 {
 	if (GetPath(dest) != false)
 	{
@@ -679,7 +678,7 @@ bool Unit::GoTo( iPoint dest)
 		return true;
 	}
 	return false;
-}
+}*/
 
 bool Unit::GoToTile(iPoint & tile)
 {

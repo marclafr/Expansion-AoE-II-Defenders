@@ -182,7 +182,7 @@ public:
 	void SetAction(const ACTION action);
 
 	void LookAt(iPoint pos);
-	bool GoTo(iPoint dest);
+	//bool GoTo(iPoint dest);
 	bool GoToTile(iPoint& tile);
 	bool ChangeDirection(iPoint dest);
 	bool ChangeDirectionTile(iPoint& tile);
