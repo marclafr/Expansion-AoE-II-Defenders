@@ -346,8 +346,8 @@ void j1Render::PushMapSprite(SDL_Texture * texture, int x, int y, const SDL_Rect
 void j1Render::PushInGameSprite(const Entity* entity)
 {
 	iPoint in_camera_pos;
-	in_camera_pos.x = (int)(camera->GetPosition().x) + entity->GetPosition().x;
-	in_camera_pos.y = (int)(camera->GetPosition().y) + entity->GetPosition().y;
+	in_camera_pos.x = (int)(camera->GetPosition().x) + entity->GetPixelPosition().x;
+	in_camera_pos.y = (int)(camera->GetPosition().y) + entity->GetPixelPosition().y;
 
 	if (camera->InsideRenderTarget(in_camera_pos.x, in_camera_pos.y))
 	{
@@ -355,15 +355,13 @@ void j1Render::PushInGameSprite(const Entity* entity)
 
 		if (entity->GetEntityType() == E_UNIT)
 		{
-			Unit* unit = (Unit*)entity;
-
-			if (unit->GetDir() == D_NORTH_EAST || unit->GetDir() == D_EAST || unit->GetDir() == D_SOUTH_EAST)
-				entity_sprite = new Sprite(App->tex->GetTexture(unit->GetTextureID()), unit->GetX(), unit->GetY(), &unit->GetRect(), SDL_FLIP_HORIZONTAL, unit->GetPivot().x, unit->GetPivot().y);
+			if (((Unit*)entity)->GetDir() == D_NORTH_EAST || ((Unit*)entity)->GetDir() == D_EAST || ((Unit*)entity)->GetDir() == D_SOUTH_EAST)
+				entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_HORIZONTAL, entity->GetPivot().x, entity->GetPivot().y);
 			else
-				entity_sprite = new Sprite(App->tex->GetTexture(unit->GetTextureID()), unit->GetX(), unit->GetY(), &unit->GetRect(), SDL_FLIP_NONE, unit->GetPivot().x, unit->GetPivot().y);
+				entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y);
 		}
 		else
-			entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetX(), entity->GetY(), &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y);
+			entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y);
 
 		PushInGameSprite(entity_sprite);
 	}

@@ -540,9 +540,11 @@ void Unit::Draw()
 
 }
 
-const iPoint Unit::GetPixelPosition()
+const iPoint Unit::GetPixelPosition() const
 {
-	return App->map->MapToWorld(GetPosition()) - position_in_tile; 
+	iPoint ret = App->map->MapToWorld(GetPosition());
+	ret.y += App->map->data.tile_height / 2.0f;
+	return ret - position_in_tile;
 }
 
 const DIRECTION Unit::GetDir() const

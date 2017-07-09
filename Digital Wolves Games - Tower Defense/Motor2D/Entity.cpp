@@ -35,35 +35,42 @@ void Entity::Save(pugi::xml_node & node)
 
 bool Entity::Inside(SDL_Rect rect) const
 {
+	iPoint pixel_pos = GetPixelPosition();
+
 	//top-left to down right
-	if (rect.x < position.x
-		&& rect.x + rect.w > position.x
-		&& rect.y < position.y
-		&& rect.y + rect.h > position.y)
+	if (rect.x < pixel_pos.x
+		&& rect.x + rect.w > pixel_pos.x
+		&& rect.y < pixel_pos.y
+		&& rect.y + rect.h > pixel_pos.y)
 		return true;
 	
 	//down-right to top-left
-	if (rect.x > position.x
-		&& rect.x + rect.w < position.x
-		&& rect.y > position.y
-		&& rect.y + rect.h < position.y)
+	if (rect.x > pixel_pos.x
+		&& rect.x + rect.w < pixel_pos.x
+		&& rect.y > pixel_pos.y
+		&& rect.y + rect.h < pixel_pos.y)
 		return true;
 
 	//down-left to top-right
-	if (rect.x < position.x
-		&& rect.x + rect.w > position.x
-		&& rect.y > position.y
-		&& rect.y + rect.h < position.y)
+	if (rect.x < pixel_pos.x
+		&& rect.x + rect.w > pixel_pos.x
+		&& rect.y > pixel_pos.y
+		&& rect.y + rect.h < pixel_pos.y)
 		return true;
 
 	//top-right to down-left
-	if (rect.x > position.x
-		&& rect.x + rect.w < position.x
-		&& rect.y < position.y
-		&& rect.y + rect.h > position.y)
+	if (rect.x > pixel_pos.x
+		&& rect.x + rect.w < pixel_pos.x
+		&& rect.y < pixel_pos.y
+		&& rect.y + rect.h > pixel_pos.y)
 		return true;
 
 	return false;
+}
+
+const iPoint Entity::GetPixelPosition() const
+{
+	return App->map->MapToWorld(GetPosition());
 }
 
 bool Entity::ToDelete() const

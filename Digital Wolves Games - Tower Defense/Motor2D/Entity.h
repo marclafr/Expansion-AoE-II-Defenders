@@ -53,7 +53,6 @@ public:
 	virtual void Update(float dt) = 0;
 	virtual void AI() = 0;
 	virtual void Draw() = 0;
-	virtual const iPoint GetPixelPosition() = 0;
 	virtual void Die();//to_delete = true
 
 	void DT(float dt);
@@ -62,14 +61,8 @@ public:
 	bool Inside(SDL_Rect rect) const;
 
 	//Geters
+	virtual const iPoint GetPixelPosition() const;
 	bool ToDelete() const;
-
-	void SetEntityStatus(ENTITY_STATUS status);
-	void SetPosition(float x, float y);
-	float GetArrowPos() const;
-	void ResetArrowPos();
-	void UpdateArrow(int start_height, iPoint target_pos, int curve_height, float time_secs);
-
 	ENTITY_TYPE GetEntityType() const;
 	ENTITY_STATUS GetEntityStatus();
 	const int GetHp() const;
@@ -86,6 +79,14 @@ public:
 	const float GetAIDT() const;
 	const iPoint GetTile()const;
 
+
+	void SetEntityStatus(ENTITY_STATUS status);
+	void SetPosition(float x, float y);
+	float GetArrowPos() const;
+	void ResetArrowPos();
+	void UpdateArrow(int start_height, iPoint target_pos, int curve_height, float time_secs);
+
+	
 	void Attack(Entity*);
 	void Damaged(int dmg);
 	void UpgradeUnit(int plushealth);

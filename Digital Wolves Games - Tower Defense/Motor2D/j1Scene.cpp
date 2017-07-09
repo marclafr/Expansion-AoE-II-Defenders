@@ -191,10 +191,8 @@ bool j1Scene::Update(float dt)
 	if (exclamation_timer.ReadSec() >= 5.0f && can_click_next_wave)
 	{
 		new_wave_exclamation->SetToDelete();
-		can_click_next_wave = false;
-		
+		can_click_next_wave = false;		
 	}
-
 
 	SDL_Rect anim_rect;
 	iPoint anim_pivot;

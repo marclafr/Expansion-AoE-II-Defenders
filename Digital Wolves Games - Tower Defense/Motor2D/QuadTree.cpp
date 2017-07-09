@@ -675,7 +675,7 @@ void QuadTreeNode::DrawEntities() const
 			if (entities[i] != nullptr)
 			{
 				//change to full tile
-				SDL_Rect point{ entities[i]->GetPixelPosition().x, entities[i]->GetPixelPosition().y + area->GetTileHeight() / 2.0f, 5, 5 };
+				SDL_Rect point{ entities[i]->GetPixelPosition().x, entities[i]->GetPixelPosition().y, 5, 5 };
 				App->render->DrawQuad(point, 0, 255, 0, 255);
 			}
 			else

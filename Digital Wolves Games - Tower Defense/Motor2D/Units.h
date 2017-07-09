@@ -163,7 +163,7 @@ public:
 	void AI();
 	void Draw();
 
-	const iPoint GetPixelPosition();
+	const iPoint GetPixelPosition() const;
 	const DIRECTION GetDir() const;
 	const UNIT_TYPE GetUnitType() const;
 	const UNIT_CLASS GetUnitClass() const;
