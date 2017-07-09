@@ -677,7 +677,7 @@ void QuadTreeNode::DrawEntities() const
 				//change to full tile
 				SDL_Rect current_point{ entities[i]->GetPixelPosition().x, entities[i]->GetPixelPosition().y, 5, 5 };
 				iPoint going_to = App->map->MapToWorld(entities[i]->GetPosition());
-
+				going_to.y += App->map->data.tile_height / 2.0f;
 				SDL_Rect going_to_point{ going_to.x, going_to.y, 5, 5 };
 
 				App->render->DrawQuad(current_point, 0, 255, 0, 255);
