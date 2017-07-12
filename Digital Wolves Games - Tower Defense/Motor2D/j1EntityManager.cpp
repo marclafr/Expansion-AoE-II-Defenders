@@ -61,6 +61,7 @@ Entity * j1EntityManager::CreateUnit(UNIT_TYPE u_type,const iPoint& pos, Side si
 	Entity* new_entity = (Entity*) new Unit(u_type, pos, side);
 	entity_quadtree->PushBack(new_entity);
 	App->score_scene->units_count++;
+	App->pathfinding->MakeNoWalkable(pos);
 	return new_entity;
 }
 

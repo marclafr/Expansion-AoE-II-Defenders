@@ -433,15 +433,16 @@ void Unit::AI()
 				break;
 			}
 		}
-		
-		if (DestinationFull())
+
+		//TODO Probablly erase
+		/*if (DestinationFull())
 		{
 			if (target != nullptr)
 				GoToEnemy();
 			else
 				GetNewDestination();
 			break;
-		}
+		}*/
 
 		EnemyInSight();
 
@@ -602,9 +603,16 @@ const int Unit::GetUnitRadius() const
 
 bool Unit::GetPath(const iPoint& destination)
 {
-	if (App->pathfinding->CalculatePath(GetPosition(), destination, path_vec) == false)
-		return false;
-	return true;
+	bool ret = false;
+
+	App->pathfinding->MakeWalkable(position);
+
+	if (App->pathfinding->CalculatePath(GetPosition(), destination, path_vec))
+		ret = true;
+
+	App->pathfinding->MakeNoWalkable(position);
+
+	return ret;
 }
 
 const int Unit::GetAttack() const
@@ -763,48 +771,62 @@ void Unit::GetNextPathPosition()
 
 void Unit::MoveToNextTile()
 {
-	iPoint pos_now = App->map->MapToWorld(position);
+	int dx = 0;
+	int dy = 0;
 
 	switch (direction)
 	{
 	case D_NO_DIRECTION:
 		break;
 	case D_NORTH:
-		position.x--;
-		position.y--;
+		dx--;
+		dy--;
 		break;
 	case D_NORTH_EAST:
-		position.y--;
+		dy--;
 		break;
 	case D_EAST:
-		position.x++;
-		position.y--;
+		dx++;
+		dy--;
 		break;
 	case D_SOUTH_EAST:
-		position.x++;
+		dx++;
 		break;
 	case D_SOUTH:
-		position.x++;
-		position.y++;
+		dx++;
+		dy++;
 		break;
 	case D_SOUTH_WEST:
-		position.y++;
+		dy++;
 		break;
 	case D_WEST:
-		position.x--;
-		position.y++;
+		dx--;
+		dy++;
 		break;
 	case D_NORTH_WEST:
-		position.x--;
+		dx--;
 		break;
 	default:
 		break;
 	}
 
-	iPoint pos_later = App->map->MapToWorld(position);
+	if (App->pathfinding->IsWalkable(iPoint(position.x + dx, position.y + dy)))
+	{
+		App->pathfinding->MakeWalkable(position);
 
-	position_in_tile.x = pos_later.x - pos_now.x;
-	position_in_tile.y = pos_later.y - pos_now.y;
+		iPoint pos_now = App->map->MapToWorld(position);
+
+		position.x += dx;
+		position.y += dy;
+
+		App->pathfinding->MakeNoWalkable(position);
+
+		iPoint pos_later = App->map->MapToWorld(position);
+
+		position_in_tile.x = pos_later.x - pos_now.x;
+		position_in_tile.y = pos_later.y - pos_now.y;
+
+	}
 }
 
 void Unit::PlayAttackSound() const
