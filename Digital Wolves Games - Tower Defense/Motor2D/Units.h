@@ -105,6 +105,7 @@ private:
 	int attack;
 	int range;
 	float speed;
+	fPoint directional_speed;
 	float rate_of_fire; // maybe attackSpeed?
 
 	iPoint destination; //tile

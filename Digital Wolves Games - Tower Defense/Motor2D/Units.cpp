@@ -351,7 +351,7 @@ bool Unit::Move()
 				|| (position_in_tile.x < 0 && position_in_tile.x - speed * dir_factor_x > 0))
 				position_in_tile.x = 0;
 			else
-				position_in_tile.x -= speed * dir_factor_x;
+				position_in_tile.x -= directional_speed.x * dir_factor_x;
 		}
 
 		if (position_in_tile.y != 0)
@@ -360,7 +360,7 @@ bool Unit::Move()
 				|| (position_in_tile.y < 0 && position_in_tile.y - speed * dir_factor_y > 0))
 				position_in_tile.y = 0;
 			else
-				position_in_tile.y -= speed * dir_factor_y;
+				position_in_tile.y -= directional_speed.y * dir_factor_y;
 		}
 	}
 	return false;
@@ -648,19 +648,19 @@ const DIRECTION Unit::GetDirection(iPoint objective) const
 	if (direction_vec.x < 0 && direction_vec.y < 0)
 		return D_NORTH;
 	if (direction_vec.x == 0 && direction_vec.y < 0)
-		return D_NORTH_WEST;
+		return D_NORTH_EAST;
 	if (direction_vec.x > 0 && direction_vec.y < 0)
-		return D_WEST;
+		return D_EAST;
 	if (direction_vec.x > 0 && direction_vec.y == 0)
-		return D_SOUTH_WEST;
+		return D_SOUTH_EAST;
 	if (direction_vec.x > 0 && direction_vec.y > 0)
 		return D_SOUTH;
 	if (direction_vec.x == 0 && direction_vec.y > 0)
-		return D_SOUTH_EAST;
+		return D_SOUTH_WEST;
 	if (direction_vec.x < 0 && direction_vec.y > 0)
-		return D_EAST;
+		return D_WEST;
 	if (direction_vec.x < 0 && direction_vec.y == 0)
-		return D_NORTH_EAST;
+		return D_NORTH_WEST;
 }
 
 void Unit::SetAction(const ACTION action)
@@ -755,6 +755,12 @@ void Unit::GetNextPathPosition()
 {
 	path_position--;
 	LookAt(path_vec[path_position]);
+
+	iPoint distance = position - path_vec[path_position];
+	float angle = atanf((float)distance.x / (float)distance.y);
+
+	directional_speed.x = speed * cosf(angle);
+	directional_speed.y = speed * sinf(angle);
 }
 
 void Unit::MoveToNextTile()
@@ -770,11 +776,11 @@ void Unit::MoveToNextTile()
 		position.y--;
 		break;
 	case D_NORTH_EAST:
-		position.x--;
+		position.y--;
 		break;
 	case D_EAST:
-		position.x--;
-		position.y++;
+		position.x++;
+		position.y--;
 		break;
 	case D_SOUTH_EAST:
 		position.y++;
@@ -784,14 +790,14 @@ void Unit::MoveToNextTile()
 		position.y++;
 		break;
 	case D_SOUTH_WEST:
-		position.x++;
+		position.y++;
 		break;
 	case D_WEST:
-		position.x++;
-		position.y--;
+		position.x--;
+		position.y++;
 		break;
 	case D_NORTH_WEST:
-		position.y--;
+		position.x--;
 		break;
 	default:
 		break;
