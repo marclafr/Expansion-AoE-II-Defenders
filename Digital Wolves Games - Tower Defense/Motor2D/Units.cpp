@@ -931,6 +931,7 @@ void Unit::DoDamage()
 		LOG("NOT EQUAL!!!!!!!");
 }
 
+/*TODO
 bool Unit::AproachEnemy()
 {
 	SetAttackPosition();
@@ -941,8 +942,9 @@ bool Unit::AproachEnemy()
 	if (GetPosition().DistanceTo(target->GetPosition()) <= APPROACH)
 		return true;
 	return false;
-}
+}*/
 
+/*TODO
 void Unit::SetAttackPosition()
 {
 	if (range != CLOSE_COMBAT_RANGE || GetUnitType() == U_SIEGERAM)
@@ -962,7 +964,7 @@ void Unit::SetAttackPosition()
 		move_vector.x = move_vector.x / modul;
 		move_vector.y = move_vector.y / modul;
 	}
-}
+}*/
 
 void Unit::StartAttack()
 {
@@ -1054,6 +1056,8 @@ void Unit::CheckUnitsBuffs()
 }
 */
 
+//TODO or erase
+/*
 void Unit::GoToTileCenter()
 {
 	iPoint tile = GetTile();
@@ -1068,7 +1072,7 @@ void Unit::GoToTileCenter()
 
 	move_vector.x = move_vector.x / modul;
 	move_vector.y = move_vector.y / modul;
-}
+}*/
 
 void Unit::CenterUnit()
 {
