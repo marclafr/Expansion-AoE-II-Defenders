@@ -731,11 +731,34 @@ void Unit::GetNextPathPosition()
 	path_position--;
 	LookAt(path_vec[path_position]);
 
-	iPoint distance = App->map->MapToWorld(position) - App->map->MapToWorld(path_vec[path_position]);
-	float angle = atanf((float)distance.y / (float)distance.x);
+	iPoint distance = App->map->MapToWorld(path_vec[path_position]) - App->map->MapToWorld(position);
+	if (distance.x == 0)
+	{
+		directional_speed.x = 0;
+		if(distance.y > 0)
+			directional_speed.y = speed;
+		else
+			directional_speed.y = -speed;
+	}
+	else if (distance.y == 0)
+	{
+		directional_speed.x = speed;
+		if (distance.x > 0)
+			directional_speed.x = speed;
+		else
+			directional_speed.x = -speed;
+	}
+	else
+	{
+		float angle = atanf((abs((float)distance.y)) / abs((float)distance.x));
+		directional_speed.x = speed * cosf(angle);
+		directional_speed.y = speed * sinf(angle);
 
-	directional_speed.x = speed * cosf(angle);
-	directional_speed.y = speed * sinf(angle);
+		if (distance.x < 0)
+			directional_speed.x *= -1.0f;
+		if (distance.y < 0)
+			directional_speed.y *= -1.0f;
+	}
 }
 
 void Unit::MoveToNextTile()
@@ -864,10 +887,10 @@ void Unit::GoToEnemy()
 	}
 	else
 	{
-		if (destination == GetTile())
-			//GoToTileCenter();
+		/*if (destination == GetTile())
+			GoToTileCenter();
 		else
-			GoTo(destination);
+			GoTo(destination);*/
 	}
 }
 
