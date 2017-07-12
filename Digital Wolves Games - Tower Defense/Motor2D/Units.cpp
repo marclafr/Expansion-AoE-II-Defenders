@@ -572,18 +572,9 @@ const int Unit::GetUnitRadius() const
 	return unit_circle.GetRad();
 }
 
-bool Unit::GetPath(iPoint dest)
+bool Unit::GetPath(const iPoint& destination)
 {
-	iPoint ori = App->map->WorldToMap(GetX(), GetY());
-	iPoint destinat = App->map->WorldToMap(dest.x, dest.y);
-	if(App->pathfinding->CalculatePath(ori, destinat, path_vec) == false)
-		return false;
-	return true;
-}
-
-bool Unit::GetTilePath(iPoint & tile)
-{
-	if (App->pathfinding->CalculatePath(GetPosition(), tile, path_vec) == false)
+	if (App->pathfinding->CalculatePath(GetPosition(), destination, path_vec) == false)
 		return false;
 	return true;
 }
@@ -655,7 +646,7 @@ void Unit::SetAction(const ACTION action)
 	this->action = action;
 }
 
-void Unit::LookAt(iPoint pos)
+void Unit::LookAt(const iPoint& pos)
 {
 	DIRECTION dir = GetDirection(pos);
 	
@@ -667,49 +658,25 @@ void Unit::LookAt(iPoint pos)
 
 }
 
-/*bool Unit::GoTo( iPoint dest)
+bool Unit::GoTo(const iPoint& destination)
 {
-	if (GetPath(dest) != false)
+	if (GetPath(destination) != false)
 	{
 		GetNextTile();
 		action = A_WALK;
 		changed = true;
-		destination = App->map->WorldToMap(dest.x, dest.y);
-		return true;
-	}
-	return false;
-}*/
-
-bool Unit::GoToTile(iPoint & tile)
-{
-	if (GetTilePath(tile) != false)
-	{
-		GetNextTile();
-		action = A_WALK;
-		changed = true;
-		destination = tile;
+		this->destination = destination;
 		return true;
 	}
 	return false;
 }
 
-bool Unit::ChangeDirection(iPoint dest)
+bool Unit::ChangeDirection(const iPoint& destination)
 {
-	if (GetPath(dest) != true)
+	if (GetPath(destination) != true)
 	{
 		GetNextTile();
-		destination = App->map->WorldToMap(dest.x, dest.y);
-		return true;
-	}
-	return false;
-}
-
-bool Unit::ChangeDirectionTile(iPoint & tile)
-{
-	if (GetTilePath(tile) != true)
-	{
-		GetNextTile();
-		destination = tile;
+		this->destination = destination;
 		return true;
 	}
 	return false;
@@ -845,7 +812,7 @@ void Unit::GoToEnemy()
 		if (destination == GetTile())
 			GoToTileCenter();
 		else
-			GoToTile(destination);
+			GoTo(destination);
 	}
 }
 
@@ -856,7 +823,7 @@ void Unit::ChangeDirecctionToEnemy()
 	if (destination_tile.y == -1)
 		target = nullptr;
 	else
-		ChangeDirectionTile(destination_tile);
+		ChangeDirection(destination_tile);
 }
 
 void Unit::GoIdle()
@@ -955,7 +922,7 @@ void Unit::MoveAway()
 	if (new_pos.y == -1)
 		LOG("CAN NOT FIND EMPTY POS");
 	else
-		GoToTile(new_pos);
+		GoTo(new_pos);
 }
 
 void Unit::GetNewDestination()
@@ -965,7 +932,7 @@ void Unit::GetNewDestination()
 	if (new_pos.y == -1)
 		LOG("Can't Find new destination");
 	else
-		GoToTile(destination);
+		GoTo(destination);
 }
 
 /*

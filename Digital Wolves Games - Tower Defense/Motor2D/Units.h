@@ -169,8 +169,7 @@ public:
 	const UNIT_CLASS GetUnitClass() const;
 	const ACTION GetAction() const;
 	const int GetUnitRadius() const;
-	bool GetPath(iPoint dest);
-	bool GetTilePath(iPoint& tile);
+	bool GetPath(const iPoint& destination);
 	const int GetAttack() const;
 	const int GetRange() const;
 	const Elipse GetUnitCircle() const;
@@ -181,11 +180,9 @@ public:
 	const DIRECTION GetDirection(iPoint objective) const;
 	void SetAction(const ACTION action);
 
-	void LookAt(iPoint pos);
-	//bool GoTo(iPoint dest);
-	bool GoToTile(iPoint& tile);
-	bool ChangeDirection(iPoint dest);
-	bool ChangeDirectionTile(iPoint& tile);
+	void LookAt(const iPoint& pos);
+	bool GoTo(const iPoint& destination);
+	bool ChangeDirection(const iPoint& destination);
 	void PlayDeathSound() const;
 	void PlayAttackSound() const;
 
