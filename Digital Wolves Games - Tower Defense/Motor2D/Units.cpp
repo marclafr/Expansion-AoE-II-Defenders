@@ -335,8 +335,8 @@ bool Unit::Move()
 
 		if (position == path_vec[path_position])
 			GetNextPathPosition();
-		else
-			MoveToNextTile();
+		
+		MoveToNextTile();
 	}
 	else
 	{
@@ -695,6 +695,7 @@ bool Unit::GoTo(const iPoint& destination)
 		action = A_MOVE;
 		changed = true;
 		this->destination = destination;
+		path_position = path_vec.size() - 1;
 		return true;
 	}
 	return false;
@@ -705,6 +706,7 @@ bool Unit::ChangeDirection(const iPoint& destination)
 	if (GetPath(destination) != true)
 	{
 		this->destination = destination;
+		path_position = path_vec.size() - 1;
 		return true;
 	}
 	return false;
@@ -759,16 +761,7 @@ void Unit::PlayDeathSound() const
 
 void Unit::GetNextPathPosition()
 {
-	path_position++;
-
-	move_vector.x = (float)path_vec[path_position].x - GetX();
-	move_vector.y = (float)path_vec[path_position].y - GetY();
-
-	float modul = (sqrt(move_vector.x*move_vector.x + move_vector.y * move_vector.y));
-
-	move_vector.x = move_vector.x / modul;
-	move_vector.y = move_vector.y / modul;
-
+	path_position--;
 	LookAt(path_vec[path_position]);
 }
 

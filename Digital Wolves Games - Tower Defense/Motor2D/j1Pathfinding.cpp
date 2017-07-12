@@ -319,11 +319,18 @@ const iPoint& j1PathFinding::FindNearestWalkableToDestination(const Unit* unit) 
 bool j1PathFinding::CalculatePath(const iPoint& start, const iPoint & end, std::vector<iPoint>& vec_to_fill)
 {
 	CleanUpJPS();
+	vec_to_fill.clear();
 
 	float max_destination_cost = App->map->data.height * App->map->data.width;
 	origin = new PathNode(0.0f, 0.0f, start, iPoint(-1,-1));
 	destination = new PathNode(max_destination_cost, 0.0f, end, iPoint(-2, -2));
 	PathNode* check = new PathNode(*origin);
+
+	if (origin->pos == destination->pos)
+	{
+		LOG("NOT MOVING");
+		return false;
+	}
 
 	if (IsWalkable(start))
 	{
@@ -339,12 +346,6 @@ bool j1PathFinding::CalculatePath(const iPoint& start, const iPoint & end, std::
 	if (!IsWalkable(end))
 	{
 		LOG("Non-Walkable Destination");
-		return false;
-	}
-
-	if (origin->pos == destination->pos)
-	{
-		LOG("NOT MOVING");
 		return false;
 	}
 
@@ -812,6 +813,8 @@ void j1PathFinding::FillPathVec(std::vector<iPoint>& vec)
 		it = GetNodeFromVisited(it->parent);
 	}
 
+	vec.push_back(origin->pos);
+
 	last_path = vec;
 }
 
@@ -1055,7 +1058,7 @@ void j1PathFinding::Debug()
 		++item)
 	{
 		pos = App->map->MapToWorld(item->x, item->y);
-		App->render->PushInGameSprite(debug_tex, pos.x - App->map->data.tile_width / 2.0f, pos.y - App->map->data.tile_height / 2.0f);
+		App->render->PushInGameSprite(debug_tex, pos.x - App->map->data.tile_width / 2.0f, pos.y);
 	}
 }
 
