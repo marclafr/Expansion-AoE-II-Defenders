@@ -951,13 +951,6 @@ void j1PathFinding::AddPath(std::vector<iPoint>* path)
 	allied_paths.push_back(path);
 }
 
-/*bool j1PathFinding::IsEmpty(const iPoint tile, const Entity* exeption) const
-{
-	if (IsWalkable(tile) && App->entity_manager->AbleToBuild(tile, exeption))
-		return true;
-	return false;
-}*/
-
 iPoint j1PathFinding::FindNearestEmpty(Unit* unit) const
 {
 	iPoint start_tile = App->map->WorldToMap(unit->GetPosition().x, unit->GetPosition().y);

@@ -95,8 +95,6 @@ public:
 
 	void AddPath(std::vector<iPoint>* path);
 
-	//bool IsEmpty(const iPoint tile, const Entity* exeption = nullptr) const;
-
 	iPoint FindNearestEmpty(Unit* unit) const;
 
 	bool IsInPath(const iPoint& tile, const std::vector<iPoint>& path) const;
