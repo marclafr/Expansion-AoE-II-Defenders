@@ -708,12 +708,17 @@ bool Unit::GoTo(const iPoint& destination)
 
 bool Unit::ChangeDirection(const iPoint& destination)
 {
+	bool ret = false;
+
 	if (GetPath(destination) != true)
 	{
 		this->destination = destination;
-		path_position = path_vec.size() - 1;
-		return true;
+		ret = true;
 	}
+	else
+		this->destination = path_vec[0];
+
+	path_position = path_vec.size() - 1;
 	return false;
 }
 
