@@ -781,7 +781,7 @@ void Unit::MoveToNextTile()
 		position.y--;
 		break;
 	case D_SOUTH_EAST:
-		position.y++;
+		position.x++;
 		break;
 	case D_SOUTH:
 		position.x++;
