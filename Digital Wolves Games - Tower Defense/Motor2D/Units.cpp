@@ -643,32 +643,24 @@ const Unit * Unit::GetCollision() const
 
 const DIRECTION Unit::GetDirection(iPoint objective) const
 {
-	iPoint direction_vec;
-	direction_vec.x = objective.x - GetX();
-	direction_vec.y = GetY() - objective.y;
-	float angle = (float)57.29577951 * atan2(direction_vec.y, direction_vec.x);
+	iPoint direction_vec = objective - position;
 
-	if (angle < 0)
-		angle += 360;
-
-	if ((0 <= angle &&  angle <= 22.5) || (337.5 <= angle&& angle <= 360))
-		return D_EAST;
-	else if (22.5 <= angle &&  angle <= 67.5)
-		return D_NORTH_EAST;
-	else if (67.5 <= angle &&  angle <= 112.5)
+	if (direction_vec.x < 0 && direction_vec.y < 0)
 		return D_NORTH;
-	else if (112.5 <= angle &&  angle <= 157.5)
+	if (direction_vec.x == 0 && direction_vec.y < 0)
 		return D_NORTH_WEST;
-	else if (157.5 <= angle &&  angle <= 202.5)
+	if (direction_vec.x > 0 && direction_vec.y < 0)
 		return D_WEST;
-	else if (202.5 <= angle &&  angle <= 247.5)
+	if (direction_vec.x > 0 && direction_vec.y == 0)
 		return D_SOUTH_WEST;
-	else if (247.5 <= angle &&  angle <= 292.5)
+	if (direction_vec.x > 0 && direction_vec.y > 0)
 		return D_SOUTH;
-	else if (292.5 <= angle &&  angle <= 337.5)
+	if (direction_vec.x == 0 && direction_vec.y > 0)
 		return D_SOUTH_EAST;
-	else
-		return D_NO_DIRECTION;
+	if (direction_vec.x < 0 && direction_vec.y > 0)
+		return D_EAST;
+	if (direction_vec.x < 0 && direction_vec.y == 0)
+		return D_NORTH_EAST;
 }
 
 void Unit::SetAction(const ACTION action)
