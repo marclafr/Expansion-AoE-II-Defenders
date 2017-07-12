@@ -378,6 +378,8 @@ void Unit::AI()
 	//CheckUnitsBuffs();
 	//----------------------
 
+	//TODO maybe update paths once in a wile to prevent old longer paths from happening
+
 	switch (action)
 	{
 	case A_IDLE:
@@ -825,8 +827,9 @@ void Unit::MoveToNextTile()
 
 		position_in_tile.x = pos_later.x - pos_now.x;
 		position_in_tile.y = pos_later.y - pos_now.y;
-
 	}
+	else
+		GoTo(destination);
 }
 
 void Unit::PlayAttackSound() const
