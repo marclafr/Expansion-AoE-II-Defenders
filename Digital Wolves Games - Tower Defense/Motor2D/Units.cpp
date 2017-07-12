@@ -450,11 +450,12 @@ void Unit::AI()
 
 		if (target != nullptr)
 		{
-			if (App->pathfinding->IsEmpty(target->GetTile()))
+			//TODO FindCombat() to find a destination suitable for combat for both entities given their positions and speeds
+			/*if (App->pathfinding->IsEmpty(target->GetTile()))
 			{
 				ChangeDirecctionToEnemy();
 				break;
-			}
+			}*/
 		}
 
 		break;
@@ -937,7 +938,7 @@ void Unit::GoIdle()
 
 bool Unit::DestinationFull() const
 {
-	if (App->pathfinding->IsEmpty(destination, (Entity*) this))
+	if (App->pathfinding->IsWalkable(destination))
 		return false;
 	return true;
 }

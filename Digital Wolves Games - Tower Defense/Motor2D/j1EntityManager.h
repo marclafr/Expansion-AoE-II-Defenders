@@ -61,7 +61,7 @@ public:
 	void DropUnits(float pos_x, float pos_y); //When a siegeram dies
 
 	//void BlitMinimap() const;
-	bool AbleToBuild(iPoint tile,const Entity* exeption = nullptr) const;
+	//bool AbleToBuild(iPoint tile,const Entity* exeption = nullptr) const;
 
 	void GetEntitiesInIsoRect(const IsoRect rect, std::vector<Entity*>& vec) const;
 

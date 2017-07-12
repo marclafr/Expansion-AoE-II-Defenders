@@ -174,7 +174,7 @@ iPoint j1PathFinding::FindClosestEmptyAttackTile(iPoint objective_tile, int tile
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.x = objective_tile.x + i;
-			if (IsEmpty(current_tile, attacker))
+			if (IsWalkable(current_tile))
 				empty_attack_tiles.push_back(current_tile);
 		}
 		current_tile.x++;
@@ -183,7 +183,7 @@ iPoint j1PathFinding::FindClosestEmptyAttackTile(iPoint objective_tile, int tile
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.y = objective_tile.y + i;
-			if (IsEmpty(current_tile, attacker))
+			if (IsWalkable(current_tile))
 				empty_attack_tiles.push_back(current_tile);
 		}
 		current_tile.y++;
@@ -192,7 +192,7 @@ iPoint j1PathFinding::FindClosestEmptyAttackTile(iPoint objective_tile, int tile
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.x = objective_tile.x - i;
-			if (IsEmpty(current_tile, attacker))
+			if (IsWalkable(current_tile))
 				empty_attack_tiles.push_back(current_tile);
 		}
 		current_tile.x--;
@@ -201,7 +201,7 @@ iPoint j1PathFinding::FindClosestEmptyAttackTile(iPoint objective_tile, int tile
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.y = objective_tile.y - i;
-			if (IsEmpty(current_tile, attacker))
+			if (IsWalkable(current_tile))
 				empty_attack_tiles.push_back(current_tile);
 		}
 		current_tile.y--;
@@ -276,7 +276,7 @@ const iPoint& j1PathFinding::FindNearestWalkableToDestination(const Unit* unit) 
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.x = start_tile.x + i;
-			if (IsEmpty(current_tile, unit))
+			if (IsWalkable(current_tile))
 				return current_tile;
 		}
 		current_tile.x++;
@@ -285,7 +285,7 @@ const iPoint& j1PathFinding::FindNearestWalkableToDestination(const Unit* unit) 
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.y = start_tile.y + i;
-			if (IsEmpty(current_tile, unit))
+			if (IsWalkable(current_tile))
 				return current_tile;
 		}
 		current_tile.y++;
@@ -294,7 +294,7 @@ const iPoint& j1PathFinding::FindNearestWalkableToDestination(const Unit* unit) 
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.x = start_tile.x - i;
-			if (IsEmpty(current_tile, unit))
+			if (IsWalkable(current_tile))
 				return current_tile;
 		}
 		current_tile.x--;
@@ -303,7 +303,7 @@ const iPoint& j1PathFinding::FindNearestWalkableToDestination(const Unit* unit) 
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.y = start_tile.y - i;
-			if (IsEmpty(current_tile, unit))
+			if (IsWalkable(current_tile))
 				return current_tile;
 		}
 		current_tile.y--;
@@ -951,12 +951,12 @@ void j1PathFinding::AddPath(std::vector<iPoint>* path)
 	allied_paths.push_back(path);
 }
 
-bool j1PathFinding::IsEmpty(const iPoint tile, const Entity* exeption) const
+/*bool j1PathFinding::IsEmpty(const iPoint tile, const Entity* exeption) const
 {
 	if (IsWalkable(tile) && App->entity_manager->AbleToBuild(tile, exeption))
 		return true;
 	return false;
-}
+}*/
 
 iPoint j1PathFinding::FindNearestEmpty(Unit* unit) const
 {
@@ -971,7 +971,7 @@ iPoint j1PathFinding::FindNearestEmpty(Unit* unit) const
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.x = start_tile.x + i;
-			if (IsEmpty(current_tile, unit))
+			if (IsWalkable(current_tile))
 				return current_tile;
 		}
 		current_tile.x++;
@@ -980,7 +980,7 @@ iPoint j1PathFinding::FindNearestEmpty(Unit* unit) const
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.y = start_tile.y + i;
-			if (IsEmpty(current_tile, unit))
+			if (IsWalkable(current_tile))
 				return current_tile;
 		}
 		current_tile.y++;
@@ -989,7 +989,7 @@ iPoint j1PathFinding::FindNearestEmpty(Unit* unit) const
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.x = start_tile.x - i;
-			if (IsEmpty(current_tile, unit))
+			if (IsWalkable(current_tile))
 				return current_tile;
 		}
 		current_tile.x--;
@@ -998,7 +998,7 @@ iPoint j1PathFinding::FindNearestEmpty(Unit* unit) const
 		for (int i = -tile_range; i < tile_range; i++)
 		{
 			current_tile.y = start_tile.y - i;
-			if (IsEmpty(current_tile, unit))
+			if (IsWalkable(current_tile))
 				return current_tile;
 		}
 		current_tile.y--;
