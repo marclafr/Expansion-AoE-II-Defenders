@@ -368,7 +368,7 @@ void QuadTreeNode::SearchCollisions(iPoint tile, std::vector<Unit*>& vec, Entity
 		for (int i = 0; i < NODE_ENTITIES; i++)
 			if (entities[i] != nullptr)
 			{
-				if (tile == entities[i]->GetPosition() && entities[i] != exeption && entities[i]->GetHp() > 0 && ((Unit*)entities[i])->GetCollision() == nullptr && ((Unit*)entities[i])->GetAction() != A_WALK)
+				if (tile == entities[i]->GetPosition() && entities[i] != exeption && entities[i]->GetHp() > 0 && ((Unit*)entities[i])->GetCollision() == nullptr && ((Unit*)entities[i])->GetAction() != A_MOVE)
 					vec.push_back((Unit*)entities[i]);
 			}
 			else
@@ -389,7 +389,7 @@ Entity * QuadTreeNode::SearchFirstCollision(IsoRect rect, Entity * exeption) con
 		for (int i = 0; i < NODE_ENTITIES; i++)
 			if (entities[i] != nullptr)
 			{
-				if (rect.Inside(entities[i]->GetPosition()) && entities[i] != exeption && entities[i]->GetHp() > 0 && ((Unit*) entities[i])->GetCollision() == nullptr && ((Unit*)entities[i])->GetAction() != A_WALK)
+				if (rect.Inside(entities[i]->GetPosition()) && entities[i] != exeption && entities[i]->GetHp() > 0 && ((Unit*) entities[i])->GetCollision() == nullptr && ((Unit*)entities[i])->GetAction() != A_MOVE)
 					ret = entities[i];
 			}
 			else

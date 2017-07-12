@@ -374,7 +374,7 @@ void Unit::AI()
 		
 		break;
 
-	case A_WALK:
+	case A_MOVE:
 
 		if (OutOfHP())
 		{
@@ -518,7 +518,7 @@ void Unit::Draw()
 	SDL_Rect rect;
 	iPoint pivot;
 
-	if (unit_class == C_SIEGE && (action == A_WALK || action == A_APPROACH || action == A_CENTER))
+	if (unit_class == C_SIEGE && (action == A_MOVE || action == A_APPROACH || action == A_CENTER))
 	{	
 		idle_siege->Update(rect, pivot);
 
@@ -596,7 +596,7 @@ const Elipse Unit::GetUnitCircle() const
 
 const bool Unit::IsMoving() const
 {
-	if (action == A_WALK)
+	if (action == A_MOVE)
 		return true;
 	return false;
 }
@@ -663,7 +663,7 @@ bool Unit::GoTo(const iPoint& destination)
 	if (GetPath(destination) != false)
 	{
 		GetNextTile();
-		action = A_WALK;
+		action = A_MOVE;
 		changed = true;
 		this->destination = destination;
 		return true;
@@ -1026,7 +1026,7 @@ void Unit::ChangeAnimation()
 	if (unit_type == U_GOD)
 	{
 		if (action == A_CENTER || action == A_APPROACH)
-			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, A_WALK, direction));
+			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, A_MOVE, direction));
 		if (action == A_ATTACK)
 			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, action, direction), this->rate_of_fire);
 		else
@@ -1035,7 +1035,7 @@ void Unit::ChangeAnimation()
 	else
 	{
 		if (action == A_CENTER || action == A_APPROACH)
-			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, A_WALK, direction));
+			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, A_MOVE, direction));
 		if (action == A_ATTACK)
 			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, action, direction), this->rate_of_fire);
 		else

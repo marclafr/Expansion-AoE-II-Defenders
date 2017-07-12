@@ -449,7 +449,7 @@ void Animation::SetAction(const pugi::xml_node node)
 		action = A_IDLE;
 
 	else if (strcmp(node.name(), "walk") == 0)
-		action = A_WALK;
+		action = A_MOVE;
 
 	else
 	{
