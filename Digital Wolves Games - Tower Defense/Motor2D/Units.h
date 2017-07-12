@@ -154,7 +154,7 @@ private:
 	//bool GetNextTile();
 	void GetNextPathPosition();
 	void MoveToNextTile();
-	void GetDirFactor(int& x, int& y);
+	void GetDirFactor(int& x, int& y); //for pixel movement not for tile movement
 
 public:
 

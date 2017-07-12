@@ -759,15 +759,43 @@ void Unit::GetNextPathPosition()
 
 void Unit::MoveToNextTile()
 {
-	int dir_factor_x = 0;
-	int dir_factor_y = 0;
-
-	GetDirFactor(dir_factor_x, dir_factor_y);
-
 	iPoint pos_now = App->map->MapToWorld(position);
 
-	position.x += dir_factor_x;
-	position.y += dir_factor_y;
+	switch (direction)
+	{
+	case D_NO_DIRECTION:
+		break;
+	case D_NORTH:
+		position.x--;
+		position.y--;
+		break;
+	case D_NORTH_EAST:
+		position.x--;
+		break;
+	case D_EAST:
+		position.x--;
+		position.y++;
+		break;
+	case D_SOUTH_EAST:
+		position.y++;
+		break;
+	case D_SOUTH:
+		position.x++;
+		position.y++;
+		break;
+	case D_SOUTH_WEST:
+		position.x++;
+		break;
+	case D_WEST:
+		position.x++;
+		position.y--;
+		break;
+	case D_NORTH_WEST:
+		position.y--;
+		break;
+	default:
+		break;
+	}
 
 	iPoint pos_later = App->map->MapToWorld(position);
 
