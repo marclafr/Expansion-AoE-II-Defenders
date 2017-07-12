@@ -139,13 +139,13 @@ private:
 	bool DestinationFull() const;
 	bool EnemyDead();
 	void DoDamage();
-	bool AproachEnemy();
-	void SetAttackPosition();
+	//bool AproachEnemy();
+	//void SetAttackPosition();
 	void StartAttack();
 	void MoveAway();
 	void GetNewDestination();
 	//void CheckUnitsBuffs();
-	void GoToTileCenter();
+	//void GoToTileCenter();
 	void CenterUnit();
 	void ChangeAnimation();
 	int GetFrameAttack();

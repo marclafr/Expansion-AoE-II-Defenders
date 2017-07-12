@@ -429,7 +429,7 @@ void Unit::AI()
 			}
 			else
 			{
-				SetAttackPosition();
+				//SetAttackPosition();
 				break;
 			}
 		}
@@ -470,8 +470,8 @@ void Unit::AI()
 			break;
 		}
 
-		if (AproachEnemy() == true)
-			StartAttack();
+		/*if (AproachEnemy() == true)
+			StartAttack();*/
 
 		break;
 
@@ -865,7 +865,7 @@ void Unit::GoToEnemy()
 	else
 	{
 		if (destination == GetTile())
-			GoToTileCenter();
+			//GoToTileCenter();
 		else
 			GoTo(destination);
 	}
