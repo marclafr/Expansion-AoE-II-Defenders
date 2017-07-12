@@ -343,24 +343,22 @@ bool Unit::Move()
 		int dir_factor_x = 0;
 		int dir_factor_y = 0;
 
-		GetDirFactor(dir_factor_x, dir_factor_y);
-
 		if (position_in_tile.x != 0)
 		{
-			if ((position_in_tile.x > 0 && position_in_tile.x - speed * dir_factor_x < 0)
-				|| (position_in_tile.x < 0 && position_in_tile.x - speed * dir_factor_x > 0))
+			if ((position_in_tile.x > 0 && position_in_tile.x - directional_speed.x < 0)
+				|| (position_in_tile.x < 0 && position_in_tile.x - directional_speed.x > 0))
 				position_in_tile.x = 0;
 			else
-				position_in_tile.x -= directional_speed.x * dir_factor_x;
+				position_in_tile.x -= directional_speed.x;
 		}
 
 		if (position_in_tile.y != 0)
 		{
-			if ((position_in_tile.y > 0 && position_in_tile.y - speed * dir_factor_y < 0)
-				|| (position_in_tile.y < 0 && position_in_tile.y - speed * dir_factor_y > 0))
+			if ((position_in_tile.y > 0 && position_in_tile.y - directional_speed.y < 0)
+				|| (position_in_tile.y < 0 && position_in_tile.y - directional_speed.y > 0))
 				position_in_tile.y = 0;
 			else
-				position_in_tile.y -= directional_speed.y * dir_factor_y;
+				position_in_tile.y -= directional_speed.y;
 		}
 	}
 	return false;
@@ -574,7 +572,7 @@ const iPoint Unit::GetPixelPosition() const
 {
 	iPoint ret = App->map->MapToWorld(GetPosition());
 	ret.y += App->map->data.tile_height / 2.0f;
-	return ret - position_in_tile;
+	return iPoint(ret.x - position_in_tile.x, ret.y - position_in_tile.y);
 }
 
 const DIRECTION Unit::GetDir() const
@@ -728,36 +726,13 @@ void Unit::PlayDeathSound() const
 	}	
 }
 
-/*bool Unit::GetNextTile()
-{
-	bool ret = true;
-
-	if (path_vec.size() <= 0)
-		return false;
-
-	path_objective = App->map->MapToWorld(path_vec.back().x, path_vec.back().y);
-	path_vec.pop_back();
-
-	move_vector.x = (float)path_objective.x - GetX();
-	move_vector.y = (float)path_objective.y - GetY();
-
-	float modul = (sqrt(move_vector.x*move_vector.x + move_vector.y * move_vector.y));
-
-	move_vector.x = move_vector.x / modul;
-	move_vector.y = move_vector.y / modul;
-
-	LookAt(path_objective);
-
-	return ret;
-}*/
-
 void Unit::GetNextPathPosition()
 {
 	path_position--;
 	LookAt(path_vec[path_position]);
 
-	iPoint distance = position - path_vec[path_position];
-	float angle = atanf((float)distance.x / (float)distance.y);
+	iPoint distance = App->map->MapToWorld(position) - App->map->MapToWorld(path_vec[path_position]);
+	float angle = atanf((float)distance.y / (float)distance.x);
 
 	directional_speed.x = speed * cosf(angle);
 	directional_speed.y = speed * sinf(angle);
@@ -805,52 +780,8 @@ void Unit::MoveToNextTile()
 
 	iPoint pos_later = App->map->MapToWorld(position);
 
-	position_in_tile = pos_later - pos_now;
-}
-
-void Unit::GetDirFactor(int & x, int & y)
-{
-	switch (direction)
-	{
-	case D_NO_DIRECTION:
-		x = 0;
-		y = 0;
-		break;
-	case D_NORTH:
-		x = 0;
-		y = -1;
-		break;
-	case D_NORTH_EAST:
-		x = 1;
-		y = -1;
-		break;
-	case D_EAST:
-		x = 1;
-		y = 0;
-		break;
-	case D_SOUTH_EAST:
-		x = 1;
-		y = 1;
-		break;
-	case D_SOUTH:
-		x = 0;
-		y = 1;
-		break;
-	case D_SOUTH_WEST:
-		x = -1;
-		y = 1;
-		break;
-	case D_WEST:
-		x = -1;
-		y = 0;
-		break;
-	case D_NORTH_WEST:
-		x = -1;
-		y = -1;
-		break;
-	default:
-		break;
-	}
+	position_in_tile.x = pos_later.x - pos_now.x;
+	position_in_tile.y = pos_later.y - pos_now.y;
 }
 
 void Unit::PlayAttackSound() const

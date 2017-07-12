@@ -100,17 +100,16 @@ private:
 	enum ACTION action;
 	enum DIRECTION direction;
 	UNIT_CLASS unit_class; //todo understeand and delete
-	iPoint position_in_tile;	
+	fPoint position_in_tile;	
 
 	int attack;
 	int range;
-	float speed;
+	float speed; //pixels per frame
 	fPoint directional_speed;
 	float rate_of_fire; // maybe attackSpeed?
 
 	iPoint destination; //tile
 	uint path_position; //tile
-	fPoint move_vector;
 	Elipse unit_circle;
 
 	int rand_num;
@@ -152,10 +151,8 @@ private:
 	int GetFrameAttack();
 	void Collisions();
 
-	//bool GetNextTile();
 	void GetNextPathPosition();
 	void MoveToNextTile();
-	void GetDirFactor(int& x, int& y); //for pixel movement not for tile movement
 
 public:
 
