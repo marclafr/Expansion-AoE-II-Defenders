@@ -263,50 +263,60 @@ PathNode* j1PathFinding::GetPathNode(int x, int y)
 	return &node_map[(y*width) + x];
 }
 
-const iPoint& j1PathFinding::FindNearestWalkableToDestination(const Unit* unit) const
+const iPoint& j1PathFinding::FindNearestWalkable(const iPoint& position, const iPoint& destination) const
 {
-	iPoint start_tile = unit->GetDestination();
+	std::vector<iPoint> vector;
 	int tile_range = 1;
 
 	while (tile_range < 75)
 	{
-		iPoint current_tile(start_tile.x - tile_range, start_tile.y - tile_range);
+		iPoint current_tile(destination.x - tile_range, destination.y - tile_range);
 
 		//Left
 		for (int i = -tile_range; i < tile_range; i++)
 		{
-			current_tile.x = start_tile.x + i;
+			current_tile.x = destination.x + i;
 			if (IsWalkable(current_tile))
-				return current_tile;
+				vector.push_back(current_tile);
 		}
 		current_tile.x++;
 
 		//Down
 		for (int i = -tile_range; i < tile_range; i++)
 		{
-			current_tile.y = start_tile.y + i;
+			current_tile.y = destination.y + i;
 			if (IsWalkable(current_tile))
-				return current_tile;
+				vector.push_back(current_tile);
 		}
 		current_tile.y++;
 
 		//Right
 		for (int i = -tile_range; i < tile_range; i++)
 		{
-			current_tile.x = start_tile.x - i;
+			current_tile.x = destination.x - i;
 			if (IsWalkable(current_tile))
-				return current_tile;
+				vector.push_back(current_tile);
 		}
 		current_tile.x--;
 
 		//Up
 		for (int i = -tile_range; i < tile_range; i++)
 		{
-			current_tile.y = start_tile.y - i;
+			current_tile.y = destination.y - i;
 			if (IsWalkable(current_tile))
-				return current_tile;
+				vector.push_back(current_tile);
 		}
 		current_tile.y--;
+
+		if (vector.size() != 0)
+		{
+			iPoint lowest = vector.front();
+			for (std::vector<iPoint>::iterator it = vector.begin(); it != vector.end(); ++it)
+				if (it->DistanceTo(position) < lowest.DistanceTo(position))
+					lowest = *it;
+
+			return lowest;
+		}
 
 		tile_range++;
 	}
@@ -346,6 +356,8 @@ bool j1PathFinding::CalculatePath(const iPoint& start, const iPoint & end, std::
 	if (!IsWalkable(end))
 	{
 		LOG("Non-Walkable Destination");
+		iPoint new_destination = FindNearestWalkable(start, end);
+		CalculatePath(start, new_destination, vec_to_fill);
 		return false;
 	}
 

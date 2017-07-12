@@ -99,7 +99,7 @@ public:
 
 	bool IsInPath(const iPoint& tile, const std::vector<iPoint>& path) const;
 
-	const iPoint& FindNearestWalkableToDestination(const Unit* unit) const;
+	const iPoint& FindNearestWalkable(const iPoint& position, const iPoint& destination) const;
 
 	//JPS
 	//Main function of JPS Algorithm

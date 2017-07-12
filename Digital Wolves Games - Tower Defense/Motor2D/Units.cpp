@@ -691,15 +691,19 @@ void Unit::LookAt(const iPoint& pos)
 
 bool Unit::GoTo(const iPoint& destination)
 {
+	bool ret = false;
 	if (GetPath(destination) != false)
 	{
-		action = A_MOVE;
-		changed = true;
 		this->destination = destination;
-		path_position = path_vec.size() - 1;
-		return true;
+		ret = true;
 	}
-	return false;
+	else
+		this->destination = path_vec[0];
+
+	action = A_MOVE;
+	changed = true;
+	path_position = path_vec.size() - 1;
+	return ret;
 }
 
 bool Unit::ChangeDirection(const iPoint& destination)
@@ -1029,16 +1033,6 @@ void Unit::MoveAway()
 		LOG("CAN NOT FIND EMPTY POS");
 	else
 		GoTo(new_pos);
-}
-
-void Unit::GetNewDestination()
-{
-	iPoint new_pos = App->pathfinding->FindNearestWalkableToDestination(this);
-
-	if (new_pos.y == -1)
-		LOG("Can't Find new destination");
-	else
-		GoTo(destination);
 }
 
 /*

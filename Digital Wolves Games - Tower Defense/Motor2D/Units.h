@@ -143,7 +143,6 @@ private:
 	//void SetAttackPosition();
 	void StartAttack();
 	void MoveAway();
-	void GetNewDestination();
 	//void CheckUnitsBuffs();
 	//void GoToTileCenter();
 	void CenterUnit();
