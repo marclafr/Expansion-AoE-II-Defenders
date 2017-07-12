@@ -99,18 +99,19 @@ private:
 	enum UNIT_TYPE unit_type;
 	enum ACTION action;
 	enum DIRECTION direction;
-	iPoint position_in_tile;
+	UNIT_CLASS unit_class; //todo understeand and delete
+	iPoint position_in_tile;	
 
-	int ai_update;
 	int attack;
 	int range;
 	float speed;
-	float rate_of_fire;
+	float rate_of_fire; // maybe attackSpeed?
+
 	iPoint destination; //tile
-	iPoint path_objective; //tile
+	uint path_position; //tile
 	fPoint move_vector;
 	Elipse unit_circle;
-	UNIT_CLASS unit_class;
+
 	int rand_num;
 	AnimationManager* animation;
 	AnimationManager* idle_siege;
@@ -150,7 +151,10 @@ private:
 	int GetFrameAttack();
 	void Collisions();
 
-	bool GetNextTile();
+	//bool GetNextTile();
+	void GetNextPathPosition();
+	void MoveToNextTile();
+	void GetDirFactor(int& x, int& y);
 
 public:
 
@@ -159,7 +163,7 @@ public:
 	
 	void Update( float dt); // defines order
 
-	bool Walk();
+	bool Move();
 	void AI();
 	void Draw();
 

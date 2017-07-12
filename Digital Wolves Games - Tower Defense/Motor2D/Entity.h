@@ -30,7 +30,8 @@ enum ENTITY_STATUS
 
 class Entity
 {
-private:
+protected:
+	//todo see if all are necesary
 	SDL_Rect rect;
 	iPoint pivot;
 	bool to_delete = false;

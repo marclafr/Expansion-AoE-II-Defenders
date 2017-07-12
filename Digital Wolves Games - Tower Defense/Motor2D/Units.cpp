@@ -13,7 +13,7 @@
 #include "j1Score.h"
 #include "j1Scene.h"
 
-Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, pos, side), unit_type(u_type), direction(D_EAST), action(A_IDLE), changed(false), target(nullptr), ai_update(0), unit_circle(GetPosition(), 18)
+Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, pos, side), unit_type(u_type), direction(D_EAST), action(A_IDLE), changed(false), target(nullptr), unit_circle(GetPosition(), 18), path_position(0)
 {
 	//Add paths
 	if (side == S_ENEMY)
@@ -326,19 +326,49 @@ void Unit::Update(float dt)
 	Draw();
 }
 
-bool Unit::Walk()
+bool Unit::Move()
 {
-	if (path_objective.DistanceTo(iPoint(GetX(), GetY())) < 3)
-		if (!GetNextTile())
-			return false;
-	SetPosition(GetX() + move_vector.x*speed, GetY() + move_vector.y*speed);
-	unit_circle.SetPosition({ GetX(), GetY() });
-	return true;
+	if (position_in_tile.x == 0 && position_in_tile.y == 0)
+	{
+		if (position == destination)
+			return true;
+
+		if (position == path_vec[path_position])
+			GetNextPathPosition();
+		else
+			MoveToNextTile();
+	}
+	else
+	{
+		int dir_factor_x = 0;
+		int dir_factor_y = 0;
+
+		GetDirFactor(dir_factor_x, dir_factor_y);
+
+		if (position_in_tile.x != 0)
+		{
+			if ((position_in_tile.x > 0 && position_in_tile.x - speed * dir_factor_x < 0)
+				|| (position_in_tile.x < 0 && position_in_tile.x - speed * dir_factor_x > 0))
+				position_in_tile.x = 0;
+			else
+				position_in_tile.x -= speed * dir_factor_x;
+		}
+
+		if (position_in_tile.y != 0)
+		{
+			if ((position_in_tile.y > 0 && position_in_tile.y - speed * dir_factor_y < 0)
+				|| (position_in_tile.y < 0 && position_in_tile.y - speed * dir_factor_y > 0))
+				position_in_tile.y = 0;
+			else
+				position_in_tile.y -= speed * dir_factor_y;
+		}
+	}
+	return false;
 }
 
 void Unit::AI()
 {
-	ai_update++;
+	//ai_update++;
 
 	if (slowed == true && slow_timer.ReadSec() >= SLOW_TIME)
 	{
@@ -392,7 +422,7 @@ void Unit::AI()
 			break;
 		}
 		
-		if (Walk() == false)
+		if (Move())
 		{
 			if (target == nullptr)
 			{
@@ -662,7 +692,6 @@ bool Unit::GoTo(const iPoint& destination)
 {
 	if (GetPath(destination) != false)
 	{
-		GetNextTile();
 		action = A_MOVE;
 		changed = true;
 		this->destination = destination;
@@ -675,7 +704,6 @@ bool Unit::ChangeDirection(const iPoint& destination)
 {
 	if (GetPath(destination) != true)
 	{
-		GetNextTile();
 		this->destination = destination;
 		return true;
 	}
@@ -706,7 +734,7 @@ void Unit::PlayDeathSound() const
 	}	
 }
 
-bool Unit::GetNextTile()
+/*bool Unit::GetNextTile()
 {
 	bool ret = true;
 
@@ -727,6 +755,83 @@ bool Unit::GetNextTile()
 	LookAt(path_objective);
 
 	return ret;
+}*/
+
+void Unit::GetNextPathPosition()
+{
+	path_position++;
+
+	move_vector.x = (float)path_vec[path_position].x - GetX();
+	move_vector.y = (float)path_vec[path_position].y - GetY();
+
+	float modul = (sqrt(move_vector.x*move_vector.x + move_vector.y * move_vector.y));
+
+	move_vector.x = move_vector.x / modul;
+	move_vector.y = move_vector.y / modul;
+
+	LookAt(path_vec[path_position]);
+}
+
+void Unit::MoveToNextTile()
+{
+	int dir_factor_x = 0;
+	int dir_factor_y = 0;
+
+	GetDirFactor(dir_factor_x, dir_factor_y);
+
+	iPoint pos_now = App->map->MapToWorld(position);
+
+	position.x += dir_factor_x;
+	position.y += dir_factor_y;
+
+	iPoint pos_later = App->map->MapToWorld(position);
+
+	position_in_tile = pos_later - pos_now;
+}
+
+void Unit::GetDirFactor(int & x, int & y)
+{
+	switch (direction)
+	{
+	case D_NO_DIRECTION:
+		x = 0;
+		y = 0;
+		break;
+	case D_NORTH:
+		x = 0;
+		y = -1;
+		break;
+	case D_NORTH_EAST:
+		x = 1;
+		y = -1;
+		break;
+	case D_EAST:
+		x = 1;
+		y = 0;
+		break;
+	case D_SOUTH_EAST:
+		x = 1;
+		y = 1;
+		break;
+	case D_SOUTH:
+		x = 0;
+		y = 1;
+		break;
+	case D_SOUTH_WEST:
+		x = -1;
+		y = 1;
+		break;
+	case D_WEST:
+		x = -1;
+		y = 0;
+		break;
+	case D_NORTH_WEST:
+		x = -1;
+		y = -1;
+		break;
+	default:
+		break;
+	}
 }
 
 void Unit::PlayAttackSound() const
