@@ -109,14 +109,21 @@ private:
 
 	//Look for forced neighbours from one point and in one direction (open a node)
 	bool CheckForTiles(const PathNode* start, X_DIRECTION dx, Y_DIRECTION dy);
+	void CheckForTilesAndStore(const PathNode* start, X_DIRECTION dx, Y_DIRECTION dy, std::vector<PathNode>& vec);
+
+	//GetClosest reachable tile to destination
+	void GetPathToClosestReachable(const iPoint& start, const iPoint& end, std::vector<iPoint>& vec_to_fill);
 
 	//Open 4 diagonals from the origin
 	void OpenOrigin();
 
 	//Check Directions
 	bool CheckX(const PathNode* start, X_DIRECTION dir);
+	void CheckXAndStore(const PathNode* start, X_DIRECTION dir, std::vector<PathNode>& vec);
 	bool CheckY(const PathNode* start, Y_DIRECTION dir);
+	void CheckYAndStore(const PathNode* start, Y_DIRECTION dir, std::vector<PathNode>& vec);
 	void MoveDiagonal(PathNode* diagonal, X_DIRECTION dx, Y_DIRECTION dy, bool& diagonal_end);
+	void MoveDiagonalAndStore(PathNode* diagonal, X_DIRECTION dx, Y_DIRECTION dy, bool& diagonal_end, std::vector<PathNode>& vec);
 
 	//Called When ForcedNeighbour is found
 	bool FoundForcedNeighbour(const PathNode* before, iPoint after_pos,const PathNode* path_to);
