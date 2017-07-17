@@ -32,9 +32,11 @@ public:
 	UI_PanelInfoMultipleEntities(iPoint pos, SDL_Rect panel_background_rect, std::vector<Entity*> selection);
 	~UI_PanelInfoMultipleEntities();
 
+	bool Draw(SDL_Texture* atlas);
+
 private:
 	std::vector<UI_Button*> panel_buttons;
-	std::vector<UI_Label*> panel_labels;
+	std::vector<UI_HPBar*> panel_hpbars;
 };
 
 #endif //__UI_PANNEL_INFO_H__

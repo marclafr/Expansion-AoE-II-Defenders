@@ -39,6 +39,7 @@ enum GUI_DATA_NAME	//except rects in atlas
 	ARMOR_ICON_POS,
 	RANGE_ICON_POS,
 	ATTRIBUTES_TEXT_DISPLACEMENT,
+	HP_SELECTION_BAR_Y_DISPLACEMENT,
 	SPACE_BETWEEN_SELECTED_ICONS,
 	MAX_ICONS_IN_ROW
 };
@@ -72,10 +73,14 @@ struct GUI_Information
 		SDL_Rect attack_icon;
 		SDL_Rect armor_icon;
 		SDL_Rect range_icon;
+		
+		SDL_Rect green_hp_bar_rect;
+		SDL_Rect red_hp_bar_rect;
 		//---------------------
 
 		//Others--------------------
-		uint attributes_displacement = 40; //pixels
+		uint attributes_displacement = 40;			//pixels
+		uint hp_bar_selection_Y_displacement = 26;	//pixels
 		//--------------------------
 	//-----------------------------------------
 };
@@ -166,6 +171,7 @@ public:
 
 	GUI_Information data;
 	SDL_Rect GetUnitIcon(Unit* unit);
+	char* GetUnitName(Unit* unit);
 
 private:
 	SDL_Texture* atlas;

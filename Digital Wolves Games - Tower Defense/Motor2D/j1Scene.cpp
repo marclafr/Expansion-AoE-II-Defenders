@@ -214,6 +214,11 @@ bool j1Scene::PostUpdate()
 {
 	bool ret = true;
 
+	//TESTING HP BARS
+	if (selection.size() > 0 && App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT)
+		selection[0]->SetHp(selection[0]->GetHp() - 1);
+	//-------------
+
 	//TODO: defeat
 	/*if (townhall->GetHp() <= 0)
 	{
