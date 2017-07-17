@@ -916,7 +916,7 @@ void Unit::EnemyInSight()
 	{
 		target = ret;
 		if (action != A_IDLE)
-			GoIdle;
+			GoIdle();
 	}
 }
 
