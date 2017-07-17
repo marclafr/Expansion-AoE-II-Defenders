@@ -164,7 +164,8 @@ UI_PanelInfoMultipleEntities::UI_PanelInfoMultipleEntities(iPoint pos, SDL_Rect 
 			break;
 		}
 
-		//TODO: panel_hpbars.push_back(new UI_HPBar());
+		correct_pos.y += App->gui->data.hp_bar_selection_Y_displacement;
+		panel_hpbars.push_back(new UI_HPBar(correct_pos, App->gui->data.green_hp_bar_rect, App->gui->data.red_hp_bar_rect, selection[i]));
 	}
 }
 

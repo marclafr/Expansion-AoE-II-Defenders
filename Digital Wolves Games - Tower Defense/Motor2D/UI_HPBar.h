@@ -7,12 +7,15 @@
 class UI_HPBar : public UI_Element
 {
 public:
+	UI_HPBar(iPoint pos, SDL_Rect atlas_back_rect, SDL_Rect damaged_atlas_rect, Entity* entity, bool not_in_world = true);
+	~UI_HPBar();
 
 	bool Draw(SDL_Texture* atlas);
 
 private:
-	SDL_Texture* tex;
-	int hp;
+	SDL_Rect damaged_atlas_rect;
+	Entity* entity;
+	int max_hp;
 };
 
 #endif //__UI_HP_BAR_H__

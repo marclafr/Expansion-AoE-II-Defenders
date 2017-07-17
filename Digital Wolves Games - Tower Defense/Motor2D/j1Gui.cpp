@@ -92,6 +92,12 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 		else if (data_string.compare("archer_icon") == 0)
 			data.archer_icon = UPLOAD_XMLDATA_ATLAS_RECTS;
 
+		else if (data_string.compare("green_hp_bar_rect") == 0)
+			data.green_hp_bar_rect = UPLOAD_XMLDATA_ATLAS_RECTS;
+
+		else if (data_string.compare("red_hp_bar_rect") == 0)
+			data.red_hp_bar_rect = UPLOAD_XMLDATA_ATLAS_RECTS;
+
 		gui_atlas_icons_data_node = gui_atlas_icons_data_node.next_sibling();
 	}
 
@@ -142,9 +148,12 @@ bool j1Gui::Awake(pugi::xml_node& conf)
 			break;
 		case SPACE_BETWEEN_SELECTED_ICONS:
 			data.space_between_selected_icons = gui_data_node.attribute("i").as_uint();
-			break;
+			break; 
 		case ATTRIBUTES_TEXT_DISPLACEMENT:
 			data.attributes_displacement = gui_data_node.attribute("i").as_uint();
+			break;
+		case HP_SELECTION_BAR_Y_DISPLACEMENT:
+			data.hp_bar_selection_Y_displacement = gui_data_node.attribute("i").as_uint();
 			break;
 			//--------------
 
@@ -358,6 +367,9 @@ GUI_DATA_NAME j1Gui::DataStr2Enum(const std::string name)
 
 	else if (name == "attributes_displacement")
 		return ATTRIBUTES_TEXT_DISPLACEMENT;
+
+	else if (name == "hp_bar_selection_Y_displacement")
+		return HP_SELECTION_BAR_Y_DISPLACEMENT;
 		
 	return NO_NAME;
 }
