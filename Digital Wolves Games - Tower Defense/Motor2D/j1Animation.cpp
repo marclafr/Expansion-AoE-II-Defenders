@@ -437,7 +437,7 @@ void Animation::SetUnit(const pugi::xml_node node)
 void Animation::SetAction(const pugi::xml_node node)
 {
 	if (strcmp(node.name(), "attack") == 0)
-		action = A_ATTACK;
+		action = A_FIGHT;
 
 	else if (strcmp(node.name(), "die") == 0)
 		action = A_DIE;

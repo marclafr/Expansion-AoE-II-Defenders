@@ -71,7 +71,7 @@ enum UNIT_CLASS
 enum ACTION
 {
 	A_NO_ACTION = 0,
-	A_ATTACK,
+	A_FIGHT,
 	A_DIE,
 	A_DISAPPEAR,
 	A_IDLE,
@@ -141,7 +141,7 @@ private:
 	void DoDamage();
 	//bool AproachEnemy();
 	//void SetAttackPosition();
-	void StartAttack();
+	void Fight();
 	void MoveAway();
 	//void CheckUnitsBuffs();
 	//void GoToTileCenter();
@@ -179,6 +179,7 @@ public:
 	const float FramesToTileCenter() const;
 	const fPoint& PixelsToTileCenter() const;
 	const float GetSpeed() const;
+	bool InRange(const iPoint& tile) const;
 
 	const Unit* GetCollision() const;
 	const DIRECTION GetDirection(iPoint objective) const;

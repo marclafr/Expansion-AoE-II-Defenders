@@ -627,7 +627,7 @@ void QuadTreeNode::CheckUnitCollisions(const Unit * ptr) const
 							if (App->pathfinding->FindNearestEmpty(destination))
 								unit->GoTo(destination);
 						}
-						else if (unit->GetAction() == A_ATTACK)
+						else if (unit->GetAction() == A_FIGHT)
 						{
 							iPoint destination;
 							if (unit->FindEmptyAttackPos(destination))

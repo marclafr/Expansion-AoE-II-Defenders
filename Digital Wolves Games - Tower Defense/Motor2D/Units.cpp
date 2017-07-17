@@ -336,6 +336,9 @@ bool Unit::Move()
 		if (position == path_vec[path_position])
 			GetNextPathPosition();
 		
+		if (target == nullptr)
+			EnemyInSight();
+
 		MoveToNextTile();
 	}
 	else
@@ -390,18 +393,34 @@ void Unit::AI()
 			break;
 		}
 
-		EnemyInSight();
+		if (target != nullptr && InRange(target->GetPosition()))
+			Fight();
 
-		if (GetSide() == S_ENEMY)
+		if (target != nullptr)
 		{
-			target = App->scene->townhall;
-			GoToEnemy();
+			if (target->GetEntityType() == E_UNIT)
+			{
+				if (((Unit*)target)->range == 1 && range == 1 && ((Unit*)target)->target == this)
+				{
+					if (((Unit*)target)->GetAction() == A_IDLE)
+						App->pathfinding->CalculateCloseCombatFightPaths(this, (Unit*)target);
+				}
+				else
+					GoToEnemy();
+			}
 			break;
 		}
 
-		if (collision == nullptr)
-			Collisions();			
-		
+		if(target == nullptr)
+			EnemyInSight();
+
+		if (GetSide() == S_ENEMY)
+		{
+			//target = App->scene->townhall;
+			//GoTo(); //goto Townhall pos
+			break;
+		}
+
 		break;
 
 	case A_MOVE:
@@ -412,55 +431,24 @@ void Unit::AI()
 			break;
 		}
 
-		if (collision != nullptr)
-			if (collision->GetTile() != GetTile())
-				collision = nullptr;
-
 		if (target != nullptr && EnemyDead())
 		{
 			GoIdle();
 			break;
-		}
-		
+		}		
+
 		if (Move())
 		{
-			if (target == nullptr)
-			{
-				GoIdle();
-				break;
-			}
+			if (target != nullptr && InRange(target->GetPosition()))
+				Fight();
 			else
-			{
-				//SetAttackPosition();
-				break;
-			}
+				GoIdle(); 
 		}
-
-		//TODO Probablly erase
-		/*if (DestinationFull())
-		{
-			if (target != nullptr)
-				GoToEnemy();
-			else
-				GetNewDestination();
-			break;
-		}*/
-
-		EnemyInSight();
-
-		if (target != nullptr)
-		{
-			//TODO FindCombat() to find a destination suitable for combat for both entities given their positions and speeds
-			/*if (App->pathfinding->IsEmpty(target->GetTile()))
-			{
-				ChangeDirecctionToEnemy();
-				break;
-			}*/
-		}
+			
 
 		break;
 
-	case A_APPROACH:
+	/*case A_APPROACH:
 
 		if (OutOfHP())
 		{
@@ -474,8 +462,8 @@ void Unit::AI()
 			break;
 		}
 
-		/*if (AproachEnemy() == true)
-			StartAttack();*/
+		if (AproachEnemy() == true)
+			StartAttack();
 
 		break;
 
@@ -496,9 +484,9 @@ void Unit::AI()
 		//if (CenterUnit() == true)
 			//StartAttack();
 
-		break;
+		break;*/
 
-	case A_ATTACK:
+	case A_FIGHT:
 
 		if (OutOfHP())
 		{
@@ -658,6 +646,11 @@ const fPoint & Unit::PixelsToTileCenter() const
 const float Unit::GetSpeed() const
 {
 	return speed;
+}
+
+bool Unit::InRange(const iPoint & tile) const
+{
+	return position.DistanceTo(tile) <= range;
 }
 
 const Unit * Unit::GetCollision() const
@@ -919,17 +912,17 @@ void Unit::EnemyInSight()
 	if (ret == nullptr)
 		ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this);
 
-	if (ret != nullptr && ret != target)
+	if (ret != nullptr)
 	{
 		target = ret;
-		GoToEnemy();
+		if (action != A_IDLE)
+			GoIdle;
 	}
-		
 }
 
 void Unit::GoToEnemy()
 {
-	destination = App->pathfinding->FindClosestEmptyAttackTile(target->GetPixelPosition(), range, this);
+	destination = App->pathfinding->FindClosestEmptyAttackTile(target->GetPosition(), range, this);
 	if (destination.y == -1)
 	{
 		target = nullptr;
@@ -937,10 +930,7 @@ void Unit::GoToEnemy()
 	}
 	else
 	{
-		/*if (destination == GetTile())
-			GoToTileCenter();
-		else
-			GoTo(destination);*/
+		GoTo(destination);
 	}
 }
 
@@ -1039,9 +1029,9 @@ void Unit::SetAttackPosition()
 	}
 }*/
 
-void Unit::StartAttack()
+void Unit::Fight()
 {
-	action = A_ATTACK;
+	action = A_FIGHT;
 	LookAt(target->GetPosition());
 	changed = true;
 }
@@ -1149,7 +1139,7 @@ void Unit::ChangeAnimation()
 	{
 		if (action == A_CENTER || action == A_APPROACH)
 			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, A_MOVE, direction));
-		if (action == A_ATTACK)
+		if (action == A_FIGHT)
 			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, action, direction), this->rate_of_fire);
 		else
 			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, action, direction));
@@ -1158,7 +1148,7 @@ void Unit::ChangeAnimation()
 	{
 		if (action == A_CENTER || action == A_APPROACH)
 			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, A_MOVE, direction));
-		if (action == A_ATTACK)
+		if (action == A_FIGHT)
 			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, action, direction), this->rate_of_fire);
 		else
 			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, action, direction));
