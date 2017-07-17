@@ -29,6 +29,7 @@ struct ForcedNeighbour;
 class Entity;
 class Elipse;
 class Unit;
+struct PointPair;
 
 enum X_DIRECTION
 {
@@ -103,9 +104,12 @@ public:
 
 	//JPS
 	//Main function of JPS Algorithm
-	bool CalculatePath(const iPoint& start,const iPoint& end, std::vector<iPoint>& vec_to_fill);
+	bool CalculatePath(const iPoint& start,const iPoint& end, std::vector<iPoint>& vec_to_fill);	
+	void CalculateCloseCombatFightPaths(Unit* first, Unit* second);
 
 private:
+	//calculate path without paths to closest walkable or reachable
+	bool CalculateAttackPath(const iPoint& start, const iPoint& end, std::vector<iPoint>& vec_to_fill); 
 
 	//Look for forced neighbours from one point and in one direction (open a node)
 	bool CheckForTiles(const PathNode* start, X_DIRECTION dx, Y_DIRECTION dy);
@@ -154,6 +158,11 @@ private:
 	//Getters
 	const bool FrontierFinished() const;
 	const PathNode* GetNodeFromVisited(const iPoint& pos);
+
+	//from a point, get the closest two empty adjacent tiles to fight in //TODO range
+	void GetClosestCloseCombatFightPosition(const fPoint& pixel_pos, iPoint& first_fight_pos, iPoint& second_fight_pos);
+
+	bool AdjacentWalkable(const iPoint& start,iPoint& pair) const;
 	
 	//Chech if pointers are in the list & delete them if not	
 	void DeleteIfNotPushed(PathNode*& ptr);

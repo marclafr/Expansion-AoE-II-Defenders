@@ -176,6 +176,9 @@ public:
 	const Elipse GetUnitCircle() const;
 	const bool IsMoving() const;
 	const iPoint& GetDestination() const;
+	const float FramesToTileCenter() const;
+	const fPoint& PixelsToTileCenter() const;
+	const float GetSpeed() const;
 
 	const Unit* GetCollision() const;
 	const DIRECTION GetDirection(iPoint objective) const;

@@ -407,6 +407,105 @@ bool j1PathFinding::CalculatePath(const iPoint& start, const iPoint & end, std::
 	return false;
 }
 
+void j1PathFinding::CalculateCloseCombatFightPaths(Unit* first, Unit* second)
+{
+	fPoint vector(second->GetPixelPosition().x - first->GetPixelPosition().x, second->GetPixelPosition().y - first->GetPixelPosition().y);
+	float speed_ratio = (first->GetSpeed() / (first->GetSpeed() + second->GetSpeed()));
+	float x_collision_point = first->GetPixelPosition().x + vector.x * speed_ratio;
+	float y_collision_point = first->GetPixelPosition().y + vector.y * speed_ratio;
+
+	iPoint first_pos;
+	iPoint second_pos;
+
+	GetClosestCloseCombatFightPosition(fPoint(x_collision_point, y_collision_point), first_pos, second_pos);
+
+	if (first_pos.DistanceTo(first->GetPosition()) <= second_pos.DistanceTo(first->GetPosition()))
+	{
+		first->GoTo(first_pos);
+		second->GoTo(second_pos);
+	}
+	else
+	{
+		first->GoTo(second_pos);
+		second->GoTo(first_pos);
+	}
+}
+
+bool j1PathFinding::CalculateAttackPath(const iPoint & start, const iPoint & end, std::vector<iPoint>& vec_to_fill)
+{
+	CleanUpJPS();
+	vec_to_fill.clear();
+
+	float max_destination_cost = App->map->data.height * App->map->data.width;
+	origin = new PathNode(0.0f, 0.0f, start, iPoint(-1, -1));
+	destination = new PathNode(max_destination_cost, 0.0f, end, iPoint(-2, -2));
+	PathNode* check = new PathNode(*origin);
+
+	if (origin->pos == destination->pos)
+	{
+		LOG("NOT MOVING");
+		return false;
+	}
+
+	if (IsWalkable(start))
+	{
+		visited.push_back(origin);
+		visited.push_back(destination);
+	}
+	else
+	{
+		LOG("Non-Walkable origin");
+		return false;
+	}
+
+	if (!IsWalkable(end))
+	{
+		LOG("Non-Walkable Destination");
+		return false;
+	}
+
+	X_DIRECTION dx = X_NO_DIR;
+	Y_DIRECTION dy = Y_NO_DIR;
+
+	OpenOrigin();
+
+	//open all forced neighbours
+	ForcedNeighbour forced_neighbour;
+
+	while (GetLowestFN(forced_neighbour))
+	{
+		if (GetNodeFromVisited(forced_neighbour.after)->cost_so_far >= destination->cost_so_far && destination_reached == true)
+			break;
+
+		check = (PathNode*)GetNodeFromVisited(forced_neighbour.after);
+
+		if (forced_neighbour.after.x - forced_neighbour.before.x > 0)
+			dx = X_RIGHT;
+		else if (forced_neighbour.after.x - forced_neighbour.before.x < 0)
+			dx = X_LEFT;
+
+		if (forced_neighbour.after.y - forced_neighbour.before.y > 0)
+			dy = Y_DOWN;
+		else if (forced_neighbour.after.y - forced_neighbour.before.y < 0)
+			dy = Y_UP;
+
+		if (CheckForTiles(check, dx, dy))
+			destination_reached = true;
+	}
+
+	if (destination_reached)
+		FillPathVec(vec_to_fill);
+
+	CleanUpJPS();
+
+	if (destination_reached)
+	{
+		destination_reached = false;
+		return true;
+	}
+	return false;
+}
+
 bool j1PathFinding::CheckForTiles(const PathNode* start, X_DIRECTION dx, Y_DIRECTION dy) //true when destination reached
 {
 	bool diagonal_end = false;
@@ -1157,6 +1256,116 @@ const PathNode * j1PathFinding::GetNodeFromVisited(const iPoint & pos)
 			return *it;
 	}
 	return nullptr;
+}
+
+void j1PathFinding::GetClosestCloseCombatFightPosition(const fPoint & pixel_pos, iPoint & first_fight_pos, iPoint & second_fight_pos)
+{
+	iPoint start = App->map->WorldToMap(pixel_pos.x, pixel_pos.y);
+	iPoint pair;
+
+	if (IsWalkable(start))
+	{
+		if (AdjacentWalkable(start, pair))
+		{
+			first_fight_pos = start;
+			second_fight_pos = pair;
+			return;
+		}
+	}
+	else
+	{
+		int range = 0;
+
+		while (true)
+		{
+			start.x--;
+			start.y--;
+			range++;
+
+			for (int i = 0; i < range* 2 + 1; i++)
+			{
+				start.x++;
+				if (AdjacentWalkable(start, pair))
+				{
+					first_fight_pos = start;
+					second_fight_pos = pair;
+					return;
+				}
+			}
+
+			for (int i = 0; i < range * 2 + 1; i++)
+			{
+				start.y++;
+				if (AdjacentWalkable(start, pair))
+				{
+					first_fight_pos = start;
+					second_fight_pos = pair;
+					return;
+				}
+			}
+
+			for (int i = 0; i < range * 2 + 1; i++)
+			{
+				start.x--;
+				if (AdjacentWalkable(start, pair))
+				{
+					first_fight_pos = start;
+					second_fight_pos = pair;
+					return;
+				}
+			}
+
+			for (int i = 0; i < range * 2; i++)
+			{
+				start.y--;
+				if (AdjacentWalkable(start, pair))
+				{
+					first_fight_pos = start;
+					second_fight_pos = pair;
+					return;
+				}
+			}
+			start.y--;
+		}
+	}
+}
+
+bool j1PathFinding::AdjacentWalkable(const iPoint & start, iPoint & pair) const
+{
+	pair = start;
+	pair.x--;
+	pair.y--;
+
+	for (int i = 0; i < 3; i++)
+	{
+		pair.x++;
+		if (IsWalkable(pair))
+			return true;
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		pair.y++;
+		if (IsWalkable(pair))
+			return true;
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		pair.x--;
+		if (IsWalkable(pair))
+			return true;
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		pair.y--;
+		if (IsWalkable(pair))
+			return true;
+	}
+
+	pair = iPoint(-1, -1);
+	return false;
 }
 
 void j1PathFinding::DestinationReached(const PathNode* destination,const PathNode* path_to)

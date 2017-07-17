@@ -645,6 +645,21 @@ const iPoint & Unit::GetDestination() const
 	return destination;
 }
 
+const float Unit::FramesToTileCenter() const
+{
+	return MAX(position_in_tile.x / directional_speed.x, position_in_tile.y / directional_speed.y);
+}
+
+const fPoint & Unit::PixelsToTileCenter() const
+{
+	return position_in_tile;
+}
+
+const float Unit::GetSpeed() const
+{
+	return speed;
+}
+
 const Unit * Unit::GetCollision() const
 {
 	return collision;
