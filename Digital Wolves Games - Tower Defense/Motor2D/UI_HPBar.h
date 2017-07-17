@@ -6,6 +6,10 @@
 
 class UI_HPBar : public UI_Element
 {
+public:
+
+	bool Draw(SDL_Texture* atlas);
+
 private:
 	SDL_Texture* tex;
 	int hp;

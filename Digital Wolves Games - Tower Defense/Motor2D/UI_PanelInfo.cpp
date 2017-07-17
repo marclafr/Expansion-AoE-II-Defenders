@@ -1,6 +1,7 @@
 #include "j1App.h"
 #include "UI_Button.h"
 #include "UI_Label.h"
+#include "UI_HPBar.h"
 #include "Entity.h"
 #include "Buildings.h"
 #include "Towers.h"
@@ -20,7 +21,7 @@ UI_PanelInfoSingleEntity::UI_PanelInfoSingleEntity(iPoint pos, SDL_Rect panel_ba
 	case E_BUILDING:
 		building = (Building*)entity;
 		//Icon
-		//TODO: entity_icon = App->gui->CreateImage(App->gui->data.selection_start_pos, App->gui->GetBuildingIcon(unit));
+		//TODO: entity_icon = new UI_Image(App->gui->data.selection_start_pos, App->gui->GetBuildingIcon(unit));
 		if (building->IsTower())
 		{
 			tower = (Tower*) building;
@@ -102,10 +103,93 @@ bool UI_PanelInfoSingleEntity::Draw(SDL_Texture * atlas)
 
 UI_PanelInfoMultipleEntities::UI_PanelInfoMultipleEntities(iPoint pos, SDL_Rect panel_background_rect, std::vector<Entity*> selection) : UI_Element(UI_E_PANEL_INFO_MULTIPLE, pos, panel_background_rect)
 {
-	//TODO
+	Building* building;
+	Unit* unit;
+	iPoint correct_pos;
+	int row_num = 0;
+	int row_num_element = 0;
+	for (int i = 0; i < selection.size(); i++)
+	{
+		correct_pos = App->gui->data.selection_start_pos;
+		if (i >= row_num * App->gui->data.max_icons_in_row)
+		{
+			row_num++;
+			row_num_element = 0;
+		}
+		correct_pos.x += App->gui->data.space_between_selected_icons * row_num_element;
+		row_num_element++;
+		correct_pos.y += App->gui->data.space_between_selected_icons * (row_num - 1);
+
+		switch (selection[i]->GetEntityType())
+		{
+		case E_NO_ENTITY:
+			break;
+		case E_BUILDING:
+			building = (Building*)selection[i];
+			switch (building->GetBuildingType())
+			{
+				//TODO: Create its respective ICON
+			case B_NO_BUILDING:
+				break;
+			case B_TURRET:
+			case B_CANNON:
+			case B_TURRET_UPGRADED_FIRE:
+			case B_TURRET_UPGRADED_ICE:
+			case B_TURRET_UPGRADED_AIR:
+			case B_CANNON_UPGRADED_FIRE:
+			case B_CANNON_UPGRADED_ICE:
+			case B_CANNON_UPGRADED_AIR:
+				break;
+			case B_WOOD_WALL:
+			case B_STONE_WALL:
+			case B_BRICK_WALL:
+				break;
+			case B_TOWNHALL:
+				break;
+			case B_UNIVERSITY:
+				break;
+
+			default:
+				break;
+			}
+			break;
+		case E_UNIT:
+			unit = (Unit*)selection[i];
+			panel_buttons.push_back(new UI_Button(correct_pos, App->gui->GetUnitIcon(unit), App->gui->GetUnitIcon(unit), App->gui->GetUnitIcon(unit), App->gui->GetUnitName(unit)));
+			break;
+		case E_RESOURCE:
+			break;
+
+		default:
+			break;
+		}
+
+		//TODO: panel_hpbars.push_back(new UI_HPBar());
+	}
 }
 
 UI_PanelInfoMultipleEntities::~UI_PanelInfoMultipleEntities()
 {
-	//TODO
+	for (int i = 0; i < panel_buttons.size(); i++)
+		DELETE_PTR(panel_buttons[i]);
+
+	for (int i = 0; i < panel_hpbars.size(); i++)
+		DELETE_PTR(panel_hpbars[i]);
+}
+
+bool UI_PanelInfoMultipleEntities::Draw(SDL_Texture * atlas)
+{
+	//Draw the panel background
+	if (not_in_world == true)
+		App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect);
+	else
+		App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect);
+
+	for (int i = 0; i < panel_buttons.size(); i++)
+		panel_buttons[i]->Draw(atlas);
+
+	for (int i = 0; i < panel_hpbars.size(); i++)
+		panel_hpbars[i]->Draw(atlas);
+
+	return true;
 }

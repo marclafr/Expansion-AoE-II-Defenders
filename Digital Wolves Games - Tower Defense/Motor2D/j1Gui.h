@@ -166,6 +166,7 @@ public:
 
 	GUI_Information data;
 	SDL_Rect GetUnitIcon(Unit* unit);
+	char* GetUnitName(Unit* unit);
 
 private:
 	SDL_Texture* atlas;
