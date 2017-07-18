@@ -336,8 +336,8 @@ void QuadTreeNode::SearchForEnemies(int pixel_range, iPoint from, std::vector<En
 		for (int i = 0; i < NODE_ENTITIES; i++)
 			if (entities[i] != nullptr)
 			{
-				float distance_x = entities[i]->GetX() - from.x;
-				float distance_y = entities[i]->GetY() - from.y;
+				float distance_x = entities[i]->GetPixelPosition().x - from.x;
+				float distance_y = entities[i]->GetPixelPosition().y - from.y;
 				float distance = sqrt(distance_x * distance_x + distance_y * distance_y);
 
 				if (distance <= pixel_range && (entity_type == E_NO_ENTITY || entity_type == entities[i]->GetEntityType()))

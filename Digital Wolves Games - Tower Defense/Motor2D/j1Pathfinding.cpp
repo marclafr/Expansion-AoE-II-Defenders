@@ -414,20 +414,71 @@ void j1PathFinding::CalculateCloseCombatFightPaths(Unit* first, Unit* second)
 	float x_collision_point = first->GetPixelPosition().x + vector.x * speed_ratio;
 	float y_collision_point = first->GetPixelPosition().y + vector.y * speed_ratio;
 
-	iPoint first_pos;
-	iPoint second_pos;
+	std::vector<PointPair> pairs;
 
-	GetClosestCloseCombatFightPosition(fPoint(x_collision_point, y_collision_point), first_pos, second_pos);
+	App->pathfinding->MakeWalkable(first->GetPosition());
+	App->pathfinding->MakeWalkable(second->GetPosition());
 
-	if (first_pos.DistanceTo(first->GetPosition()) <= second_pos.DistanceTo(first->GetPosition()))
+	GetClosestCloseCombatFightPosition(fPoint(x_collision_point, y_collision_point), pairs);
+
+	App->pathfinding->MakeNoWalkable(first->GetPosition());
+	App->pathfinding->MakeNoWalkable(second->GetPosition());
+
+	PointPair best_pair(pairs.front());
+
+	for (std::vector<PointPair>::iterator it = pairs.begin(); it != pairs.end(); ++it)
 	{
-		first->GoTo(first_pos);
-		second->GoTo(second_pos);
+		if (*it != best_pair)
+		{
+			fPoint first_vec(it->first.x - first->GetPosition().x, it->first.y - first->GetPosition().y);
+			fPoint second_vec(it->second.x - second->GetPosition().x, it->second.y - second->GetPosition().y);
+
+			float distanse_to_first = sqrt(first_vec.x * first_vec.x + first_vec.y * first_vec.y);
+			float distanse_to_second = sqrt(second_vec.x * second_vec.x + second_vec.y * second_vec.y);
+
+			fPoint best_first_vec(best_pair.first.x - first->GetPosition().x, best_pair.first.y - first->GetPosition().y);
+			fPoint best_second_vec(best_pair.second.x - second->GetPosition().x, best_pair.second.y - second->GetPosition().y);
+
+			float best_distanse_to_first = sqrt(best_first_vec.x * best_first_vec.x + best_first_vec.y * best_first_vec.y);
+			float best_distanse_to_second = sqrt(best_second_vec.x * best_second_vec.x + best_second_vec.y * best_second_vec.y);
+
+			if(distanse_to_first < best_distanse_to_first && distanse_to_second <= best_distanse_to_second)
+				best_pair = *it;
+			if (distanse_to_first <= best_distanse_to_first && distanse_to_second < best_distanse_to_second)
+				best_pair = *it;
+
+			first_vec.x = it->second.x - first->GetPosition().x;
+			first_vec.y = it->second.y - first->GetPosition().y;
+			second_vec.x = it->first.x - second->GetPosition().x;
+			second_vec.y = it->first.y - second->GetPosition().y;
+
+			distanse_to_first = sqrt(first_vec.x * first_vec.x + first_vec.y * first_vec.y);
+			distanse_to_second = sqrt(second_vec.x * second_vec.x + second_vec.y * second_vec.y);
+
+			best_first_vec.x = best_pair.second.x - first->GetPosition().x;
+			best_first_vec.y = best_pair.second.y - first->GetPosition().y;
+			best_second_vec.x = best_pair.first.x - second->GetPosition().x;
+			best_second_vec.y = best_pair.first.y - second->GetPosition().y;
+
+			best_distanse_to_first = sqrt(best_first_vec.x * best_first_vec.x + best_first_vec.y * best_first_vec.y);
+			best_distanse_to_second = sqrt(best_second_vec.x * best_second_vec.x + best_second_vec.y * best_second_vec.y);
+
+			if (distanse_to_first < best_distanse_to_first && distanse_to_second <= best_distanse_to_second)
+				best_pair = *it;
+			if (distanse_to_first <= best_distanse_to_first && distanse_to_second < best_distanse_to_second)
+				best_pair = *it;
+		}
+	}
+
+	if (best_pair.first.DistanceTo(first->GetPosition()) <= best_pair.second.DistanceTo(first->GetPosition()))
+	{
+		first->GoTo(best_pair.first);
+		second->GoTo(best_pair.second);
 	}
 	else
 	{
-		first->GoTo(second_pos);
-		second->GoTo(first_pos);
+		first->GoTo(best_pair.second);
+		second->GoTo(best_pair.first);
 	}
 }
 
@@ -1258,114 +1309,82 @@ const PathNode * j1PathFinding::GetNodeFromVisited(const iPoint & pos)
 	return nullptr;
 }
 
-void j1PathFinding::GetClosestCloseCombatFightPosition(const fPoint & pixel_pos, iPoint & first_fight_pos, iPoint & second_fight_pos)
+void j1PathFinding::GetClosestCloseCombatFightPosition(const fPoint & pixel_pos, std::vector<PointPair>& pairs)
 {
 	iPoint start = App->map->WorldToMap(pixel_pos.x, pixel_pos.y);
-	iPoint pair;
 
 	if (IsWalkable(start))
-	{
-		if (AdjacentWalkable(start, pair))
-		{
-			first_fight_pos = start;
-			second_fight_pos = pair;
-			return;
-		}
-	}
+		AdjacentWalkable(start, pairs);
 	else
 	{
 		int range = 0;
 
-		while (true)
+		while (pairs.size() == 0)
 		{
 			start.x--;
 			start.y--;
 			range++;
 
-			for (int i = 0; i < range* 2 + 1; i++)
+			for (int i = 0; i < range* 2; i++)
 			{
 				start.x++;
-				if (AdjacentWalkable(start, pair))
-				{
-					first_fight_pos = start;
-					second_fight_pos = pair;
-					return;
-				}
+				AdjacentWalkable(start, pairs);
 			}
 
-			for (int i = 0; i < range * 2 + 1; i++)
+			for (int i = 0; i < range * 2; i++)
 			{
 				start.y++;
-				if (AdjacentWalkable(start, pair))
-				{
-					first_fight_pos = start;
-					second_fight_pos = pair;
-					return;
-				}
+				AdjacentWalkable(start, pairs);
 			}
 
-			for (int i = 0; i < range * 2 + 1; i++)
+			for (int i = 0; i < range * 2; i++)
 			{
 				start.x--;
-				if (AdjacentWalkable(start, pair))
-				{
-					first_fight_pos = start;
-					second_fight_pos = pair;
-					return;
-				}
+				AdjacentWalkable(start, pairs);
 			}
 
 			for (int i = 0; i < range * 2; i++)
 			{
 				start.y--;
-				if (AdjacentWalkable(start, pair))
-				{
-					first_fight_pos = start;
-					second_fight_pos = pair;
-					return;
-				}
+				AdjacentWalkable(start, pairs);
 			}
-			start.y--;
 		}
 	}
 }
 
-bool j1PathFinding::AdjacentWalkable(const iPoint & start, iPoint & pair) const
+void j1PathFinding::AdjacentWalkable(const iPoint & start, std::vector<PointPair>& pairs) const
 {
-	pair = start;
+	iPoint pair = start;
 	pair.x--;
 	pair.y--;
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		pair.x++;
 		if (IsWalkable(pair))
-			return true;
+			pairs.push_back(PointPair(start,pair));
 	}
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		pair.y++;
 		if (IsWalkable(pair))
-			return true;
+			pairs.push_back(PointPair(start, pair));
 	}
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		pair.x--;
 		if (IsWalkable(pair))
-			return true;
+			pairs.push_back(PointPair(start, pair));
 	}
 
 	for (int i = 0; i < 2; i++)
 	{
 		pair.y--;
 		if (IsWalkable(pair))
-			return true;
+			pairs.push_back(PointPair(start, pair));
 	}
-
-	pair = iPoint(-1, -1);
-	return false;
 }
 
 void j1PathFinding::DestinationReached(const PathNode* destination,const PathNode* path_to)
@@ -1647,5 +1666,31 @@ const ForcedNeighbour & ForcedNeighbour::operator=(const ForcedNeighbour & rhs)
 	opened = rhs.opened;
 	priority = rhs.priority;
 
+	return *this;
+}
+
+PointPair::PointPair(): first(iPoint(-1,-1)), second(iPoint(-1, -1))
+{}
+
+PointPair::PointPair(const iPoint & first, const iPoint & second): first(first), second(second)
+{}
+
+PointPair::PointPair(const PointPair & p): first(p.first), second(p.second)
+{}
+
+bool PointPair::operator==(const PointPair & p) const
+{
+	return ((first == p.first || first == p.second) && (second == p.first || second == p.second));
+}
+
+bool PointPair::operator!=(const PointPair & p) const
+{
+	return ((first != p.first && first != p.second) || (second != p.first && second != p.second));
+}
+
+const PointPair & PointPair::operator=(const PointPair & p)
+{
+	first = p.first;
+	second = p.second;
 	return *this;
 }

@@ -160,9 +160,9 @@ private:
 	const PathNode* GetNodeFromVisited(const iPoint& pos);
 
 	//from a point, get the closest two empty adjacent tiles to fight in //TODO range
-	void GetClosestCloseCombatFightPosition(const fPoint& pixel_pos, iPoint& first_fight_pos, iPoint& second_fight_pos);
+	void GetClosestCloseCombatFightPosition(const fPoint& pixel_pos, std::vector<PointPair>& pairs);
 
-	bool AdjacentWalkable(const iPoint& start,iPoint& pair) const;
+	void AdjacentWalkable(const iPoint& start,std::vector<PointPair>& pairs) const;
 	
 	//Chech if pointers are in the list & delete them if not	
 	void DeleteIfNotPushed(PathNode*& ptr);
@@ -243,6 +243,18 @@ struct ForcedNeighbour
 	const ForcedNeighbour& operator = (const ForcedNeighbour& rhs);
 };
 
+struct PointPair
+{
+	iPoint first;
+	iPoint second;
 
+	PointPair();
+	PointPair(const iPoint& first, const iPoint& second);
+	PointPair(const PointPair& p);
+
+	bool operator == (const PointPair& p) const;
+	bool operator != (const PointPair& p) const;
+	const PointPair& operator = (const PointPair& p);
+};
 
 #endif // __j1PATHFINDING_H__

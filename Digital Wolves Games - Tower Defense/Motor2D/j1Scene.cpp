@@ -734,6 +734,12 @@ void j1Scene::HandleInput( SDL_Event event)
 			App->entity_manager->CreateUnit(U_TWOHANDEDSWORDMAN, tile, S_ALLY);
 		}
 
+		if (event.button.button == SDL_SCANCODE_I)
+		{
+			iPoint tile = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);
+			App->entity_manager->CreateUnit(U_TWOHANDEDSWORDMAN, tile, S_ENEMY);
+		}
+
 		if (event.button.button == SDL_SCANCODE_O)
 		{
 			iPoint tile = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);

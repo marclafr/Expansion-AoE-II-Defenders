@@ -197,7 +197,7 @@ Entity * j1EntityManager::LookForEnemies(int pixel_range, iPoint pos, Side side,
 
 	for (std::vector<Entity*>::iterator it = enemies_in_range.begin(); it != enemies_in_range.end(); ++it)
 	{
-		current_distance = pos.DistanceTo((*it)->GetPosition());
+		current_distance = pos.DistanceTo((*it)->GetPixelPosition());
 		if (current_distance < shortest_distance)
 		{
 			if (attacker->GetEntityType() == E_UNIT)
