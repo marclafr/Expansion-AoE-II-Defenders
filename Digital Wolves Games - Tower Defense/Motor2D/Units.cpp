@@ -394,7 +394,10 @@ void Unit::AI()
 		}
 
 		if (target != nullptr && InRange(target->GetPosition()))
+		{
 			Fight();
+			break;
+		}
 
 		if (target != nullptr)
 		{
@@ -402,7 +405,7 @@ void Unit::AI()
 			{
 				if (((Unit*)target)->range == 1 && range == 1 && ((Unit*)target)->target == this)
 				{
-					if (((Unit*)target)->GetAction() == A_IDLE)
+					if (((Unit*)target)->GetAction() == A_IDLE || ((Unit*)target)->GetAction() == A_FIGHT)
 						App->pathfinding->CalculateCloseCombatFightPaths(this, (Unit*)target);
 				}
 				else
@@ -502,6 +505,15 @@ void Unit::AI()
 			break;
 		}
 
+		if (!InRange(target->GetPosition()))
+		{
+			GoIdle();
+			break;
+		}
+
+		if (animation->Finished())
+			DoDamage();
+		/*
 		if (unit_class == C_SIEGE)
 		{
 			if (animation->GetCurrentFrame() >= GetFrameAttack() && siege_attacked == false)
@@ -512,7 +524,7 @@ void Unit::AI()
 		}
 		else
 			if (animation->Finished())
-				DoDamage();
+				DoDamage();*/
 		break;
 
 	case A_DIE:
@@ -650,7 +662,8 @@ const float Unit::GetSpeed() const
 
 bool Unit::InRange(const iPoint & tile) const
 {
-	return position.DistanceTo(tile) <= range;
+	fPoint vector(tile.x - position.x, tile.y - position.y);
+	return abs(vector.x) <= range && abs(vector.y) <= range;
 }
 
 const Unit * Unit::GetCollision() const
@@ -908,9 +921,12 @@ bool Unit::OutOfHP() const
 
 void Unit::EnemyInSight()
 {
+	App->pathfinding->MakeWalkable(position);
 	Entity* ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this, E_UNIT);
 	if (ret == nullptr)
 		ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this);
+
+	App->pathfinding->MakeNoWalkable(position);
 
 	if (ret != nullptr)
 	{
@@ -923,15 +939,20 @@ void Unit::EnemyInSight()
 void Unit::GoToEnemy()
 {
 	destination = App->pathfinding->FindClosestEmptyAttackTile(target->GetPosition(), range, this);
+
+	if (destination == position)
+	{
+		GoIdle();
+		return;
+	}
+
 	if (destination.y == -1)
 	{
 		target = nullptr;
 		GoIdle();
 	}
 	else
-	{
 		GoTo(destination);
-	}
 }
 
 void Unit::ChangeDirecctionToEnemy()
@@ -1031,9 +1052,30 @@ void Unit::SetAttackPosition()
 
 void Unit::Fight()
 {
-	action = A_FIGHT;
-	LookAt(target->GetPosition());
-	changed = true;
+	if (target->GetEntityType() == E_UNIT)
+	{
+		if (((Unit*)target)->range == 1 && range == 1 && ((Unit*)target)->target == this)
+		{
+			if (((Unit*)target)->GetAction() == A_IDLE || ((Unit*)target)->GetAction() == A_FIGHT)
+			{
+				action = A_FIGHT;
+				LookAt(target->GetPosition());
+				changed = true;
+			}
+		}
+		else
+		{
+			action = A_FIGHT;
+			LookAt(target->GetPosition());
+			changed = true;
+		}
+	}
+	else
+	{
+		action = A_FIGHT;
+		LookAt(target->GetPosition());
+		changed = true;
+	}
 }
 
 void Unit::MoveAway()

@@ -442,7 +442,7 @@ void j1PathFinding::CalculateCloseCombatFightPaths(Unit* first, Unit* second)
 			float best_distanse_to_first = sqrt(best_first_vec.x * best_first_vec.x + best_first_vec.y * best_first_vec.y);
 			float best_distanse_to_second = sqrt(best_second_vec.x * best_second_vec.x + best_second_vec.y * best_second_vec.y);
 
-			if(distanse_to_first < best_distanse_to_first && distanse_to_second <= best_distanse_to_second)
+			if (distanse_to_first < best_distanse_to_first && distanse_to_second <= best_distanse_to_second)
 				best_pair = *it;
 			if (distanse_to_first <= best_distanse_to_first && distanse_to_second < best_distanse_to_second)
 				best_pair = *it;
