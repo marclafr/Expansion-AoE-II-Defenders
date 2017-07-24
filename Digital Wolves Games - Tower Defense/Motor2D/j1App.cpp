@@ -261,7 +261,7 @@ void j1App::FinishUpdate()
 	int x, y;
 	App->input->GetMousePosition(x, y);
 	iPoint map_coordinates = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y); // = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);
-
+	/*
 	static char mouse_pos[256];
 	sprintf_s(mouse_pos, 256, "Mouse Pos: %d,%d", x, y);
 	App->console->PushText(mouse_pos);
@@ -289,7 +289,7 @@ void j1App::FinishUpdate()
 	static char scince_startup[256];
 	sprintf_s(scince_startup, 256, "Time since startup: %.3f Frame Count: %lu ", seconds_since_startup, frame_count);
 	App->console->PushText(scince_startup);
-
+	*/
 	if (capped_ms > 0 && last_frame_ms < capped_ms)
 	{
 		j1PerfTimer t;

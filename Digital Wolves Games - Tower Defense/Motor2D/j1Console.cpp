@@ -123,6 +123,11 @@ bool j1Console::PostUpdate()
 
 bool j1Console::CleanUp()
 {
+	for (int i = 0; i < text_textures.size(); i++)
+		SDL_DestroyTexture(text_textures[i]);
+	
+	text_textures.clear();
+
 	return true;
 }
 
@@ -131,6 +136,16 @@ bool j1Console::PushText(char * text)
 	if (on)
 	{
 		text_textures.push_back(App->font->Print(text));
+		return true;
+	}
+	return false;
+}
+
+bool j1Console::DeleteTopText()
+{
+	if (text_textures.size() > 0)
+	{
+		text_textures.erase(text_textures.begin());
 		return true;
 	}
 	return false;
@@ -157,11 +172,7 @@ void j1Console::BlitText()
 		SDL_QueryTexture(text_textures[i], format, acces, &width, &height);
 		App->render->Blit(text_textures[i], x, y);
 		y += height;
-		
-		SDL_DestroyTexture(text_textures[i]);
 	}
-
-	text_textures.clear();
 }
 
 void j1Console::TurnOnOff()

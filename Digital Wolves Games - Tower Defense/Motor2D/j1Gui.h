@@ -91,9 +91,9 @@ enum UI_ELEMENT_TYPE
 	UI_E_IMAGE,
 	UI_E_BUTTON,
 	UI_E_LABEL,
+	UI_E_APPEARING_LABEL,
 	UI_E_TEXT_INPUT,
 	UI_E_HP_BAR,
-	UI_E_APPEARING_LABEL,
 	UI_E_PANEL_INFO_SINGLE,
 	UI_E_PANEL_INFO_MULTIPLE,
 };
@@ -114,6 +114,7 @@ public:
 	virtual bool Draw(SDL_Texture* atlas);
 	//bool HandleInput()
 
+	UI_ELEMENT_TYPE GetElementType();
 	const int GetX();
 	const int GetY();
 	const SDL_Rect GetAtlasRect();
@@ -150,6 +151,7 @@ public:
 	UI_Image* CreateImage(iPoint pos, SDL_Rect atlas_rect, bool not_in_world = true);
 	UI_Button* CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description = nullptr, bool not_in_world = true, SDL_Rect description_background_rect = BACKGROUND_RECT_DEFAULT_TEXT);
 	UI_Label* CreateLabel(iPoint pos, SDL_Rect atlas_rect, char* txt, bool has_background = true, bool not_in_world = true);
+	UI_AppearingLabel* CreateAppearingLabel(iPoint pos, SDL_Rect atlas_rect, float seconds_on_screen, char* txt = nullptr, bool has_background = true, bool not_in_world = true);
 	UI_TextInput* CreateTextInput(iPoint pos, char* txt, FONT_NAME font_name = OPENSANS_REGULAR, SDL_Color color = { (0), (0), (0), (255) }, bool not_in_world = true);
 	UI_PanelInfoSingleEntity* CreatePanel(Entity* selection);
 	UI_PanelInfoMultipleEntities* CreatePanel(std::vector<Entity*> selection);
@@ -158,6 +160,7 @@ public:
 	void DeleteImage(UI_Image* img);
 	void DeleteButton(UI_Button* button);
 	void DeleteLabel(UI_Label* label);
+	void DeleteAppearingLabel(UI_AppearingLabel* appearing_label);
 	void DeleteTextInput(UI_TextInput* txt_input);
 	void DeletePanelInfo(UI_PanelInfoSingleEntity* panel_info);
 	void DeletePanelInfo(UI_PanelInfoMultipleEntities* panel_info);

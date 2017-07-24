@@ -65,6 +65,7 @@ public:
 	virtual bool CleanUp();
 
 	bool PushText(char* text);
+	bool DeleteTopText();
 	void BlitText();
 
 	void TurnOnOff();

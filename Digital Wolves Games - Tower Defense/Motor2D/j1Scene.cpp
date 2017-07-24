@@ -208,7 +208,6 @@ bool j1Scene::Update(float dt)
 	return true;
 }
 
-
 // Called each loop iteration
 bool j1Scene::PostUpdate()
 {
@@ -216,7 +215,15 @@ bool j1Scene::PostUpdate()
 
 	//TESTING HP BARS
 	if (selection.size() > 0 && App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT)
-		selection[0]->SetHp(selection[0]->GetHp() - 1);
+		if (selection[0]->GetHp() > 0)
+			selection[0]->SetHp(selection[0]->GetHp() - 1);
+	
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		App->gui->CreateAppearingLabel({ 800,300 }, { 400,1750,25,25 }, 5.0f, "TESTING");
+
+	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
+		App->gui->CreateAppearingLabel({ 650,300 }, { 400,1750,25,25 }, 5.0f, "TESTING");
+		
 	//-------------
 
 	//TODO: defeat

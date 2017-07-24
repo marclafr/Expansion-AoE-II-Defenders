@@ -193,8 +193,20 @@ bool j1Gui::Update(float dt)
 bool j1Gui::PostUpdate()
 {
 	for (int i = 0; i < ui_elements.size(); i++)
-		ui_elements[i]->Draw(atlas);
+	{
+		if (!ui_elements[i]->Draw(atlas))
+		{
+			switch (ui_elements[i]->GetElementType())
+			{
+			case UI_E_APPEARING_LABEL:
+				App->gui->DeleteAppearingLabel((UI_AppearingLabel*)ui_elements[i]);
+				break;
 
+			default:
+				break;
+			}
+		}
+	}
 	return true;
 }
 
@@ -225,6 +237,14 @@ UI_Label * j1Gui::CreateLabel(iPoint pos, SDL_Rect atlas_rect, char * txt, bool 
 {
 	UI_Label* ret = nullptr;
 	ret = new UI_Label(pos, atlas_rect, txt, has_background, not_in_world);
+	ui_elements.push_back(ret);
+	return ret;
+}
+
+UI_AppearingLabel * j1Gui::CreateAppearingLabel(iPoint pos, SDL_Rect atlas_rect, float seconds_on_screen, char * txt, bool has_background, bool not_in_world)
+{
+	UI_AppearingLabel* ret = nullptr;
+	ret = new UI_AppearingLabel(pos, atlas_rect, seconds_on_screen, txt, has_background, not_in_world);
 	ui_elements.push_back(ret);
 	return ret;
 }
@@ -288,6 +308,18 @@ void j1Gui::DeleteLabel(UI_Label * label)
 		}
 
 	DELETE_PTR(label);
+}
+
+void j1Gui::DeleteAppearingLabel(UI_AppearingLabel * appearing_label)
+{
+	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
+		if (*it == appearing_label)
+		{
+			ui_elements.erase(it);
+			break;
+		}
+
+	DELETE_PTR(appearing_label);
 }
 
 void j1Gui::DeleteTextInput(UI_TextInput * txt_input)
@@ -440,6 +472,11 @@ bool UI_Element::Update()
 bool UI_Element::Draw(SDL_Texture* atlas)
 {
 	return true;
+}
+
+UI_ELEMENT_TYPE UI_Element::GetElementType()
+{
+	return element_type;
 }
 
 const int UI_Element::GetX()
