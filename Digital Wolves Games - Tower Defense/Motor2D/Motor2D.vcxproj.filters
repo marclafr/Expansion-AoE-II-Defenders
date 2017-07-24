@@ -130,9 +130,6 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Useful</Filter>
     </ClCompile>
-    <ClCompile Include="UI_AppearingLabel.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="UI_Button.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
@@ -152,6 +149,9 @@
       <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="UI_PanelInfo.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_AppearingElement.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -295,9 +295,6 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>Useful</Filter>
     </ClInclude>
-    <ClInclude Include="UI_AppearingLabel.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
     <ClInclude Include="UI_Button.h">
       <Filter>GUI</Filter>
     </ClInclude>
@@ -317,6 +314,9 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="UI_PanelInfo.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_AppearingElement.h">
       <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>

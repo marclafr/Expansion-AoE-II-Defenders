@@ -219,10 +219,10 @@ bool j1Scene::PostUpdate()
 			selection[0]->SetHp(selection[0]->GetHp() - 1);
 	
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-		App->gui->CreateAppearingLabel({ 800,300 }, { 400,1750,25,25 }, 5.0f, "TESTING");
+		App->gui->CreateAppearingImage({ 800,300 }, { 400,1750,25,25 }, 10.0f);
 
 	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
-		App->gui->CreateAppearingLabel({ 650,300 }, { 400,1750,25,25 }, 5.0f, "TESTING");
+		App->gui->CreateAppearingLabel({ 650,300 }, { 400,1750,25,25 }, 10.0f, "TESTING");
 		
 	//-------------
 

@@ -12,7 +12,7 @@
 #include "j1FileSystem.h"
 
 //UI_ELEMENTS
-#include "UI_AppearingLabel.h"
+#include "UI_AppearingElement.h"
 #include "UI_Button.h"
 #include "UI_HPBar.h"
 #include "UI_Image.h"
@@ -198,7 +198,7 @@ bool j1Gui::PostUpdate()
 		{
 			switch (ui_elements[i]->GetElementType())
 			{
-			case UI_E_APPEARING_LABEL:
+			case UI_E_APPEARING_ELEMENT:
 				App->gui->DeleteAppearingLabel((UI_AppearingLabel*)ui_elements[i]);
 				break;
 
@@ -245,6 +245,14 @@ UI_AppearingLabel * j1Gui::CreateAppearingLabel(iPoint pos, SDL_Rect atlas_rect,
 {
 	UI_AppearingLabel* ret = nullptr;
 	ret = new UI_AppearingLabel(pos, atlas_rect, seconds_on_screen, txt, has_background, not_in_world);
+	ui_elements.push_back(ret);
+	return ret;
+}
+
+UI_AppearingImage * j1Gui::CreateAppearingImage(iPoint pos, SDL_Rect atlas_rect, float seconds_on_screen, bool not_in_world)
+{
+	UI_AppearingImage* ret = nullptr;
+	ret = new UI_AppearingImage(pos, atlas_rect, seconds_on_screen, not_in_world);
 	ui_elements.push_back(ret);
 	return ret;
 }
@@ -320,6 +328,18 @@ void j1Gui::DeleteAppearingLabel(UI_AppearingLabel * appearing_label)
 		}
 
 	DELETE_PTR(appearing_label);
+}
+
+void j1Gui::DeleteAppearingImage(UI_AppearingImage * appearing_image)
+{
+	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
+		if (*it == appearing_image)
+		{
+			ui_elements.erase(it);
+			break;
+		}
+
+	DELETE_PTR(appearing_image);
 }
 
 void j1Gui::DeleteTextInput(UI_TextInput * txt_input)

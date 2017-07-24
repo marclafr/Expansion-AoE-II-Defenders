@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "UI_Image.h"
 
-UI_Image::UI_Image(iPoint pos, SDL_Rect atlas_rect, bool not_in_world) : UI_Element(UI_E_IMAGE, pos, atlas_rect, not_in_world)
+UI_Image::UI_Image(iPoint pos, SDL_Rect atlas_rect, bool not_in_world, UI_ELEMENT_TYPE ui_element_type) : UI_Element(ui_element_type, pos, atlas_rect, not_in_world)
 {
 }
 

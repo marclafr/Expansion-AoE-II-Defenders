@@ -153,7 +153,7 @@ void j1EntityManager::SelectInQuad(const SDL_Rect& select_rect, std::vector<Enti
 
 	if (App->scene->selection.size() == 1)
 		App->scene->panel_info = (UI_Element*)App->gui->CreatePanel(App->scene->selection[0]);
-	else
+	else if(App->scene->selection.size() > 1)
 		App->scene->panel_info = (UI_Element*)App->gui->CreatePanel(App->scene->selection);
 }
 

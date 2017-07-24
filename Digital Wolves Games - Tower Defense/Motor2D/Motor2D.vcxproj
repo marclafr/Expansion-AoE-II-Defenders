@@ -121,7 +121,7 @@
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="theoraplay.c" />
     <ClCompile Include="Towers.cpp" />
-    <ClCompile Include="UI_AppearingLabel.cpp" />
+    <ClCompile Include="UI_AppearingElement.cpp" />
     <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_HPBar.cpp" />
     <ClCompile Include="UI_Image.cpp" />
@@ -178,7 +178,7 @@
     <ClInclude Include="Task.h" />
     <ClInclude Include="theoraplay.h" />
     <ClInclude Include="Towers.h" />
-    <ClInclude Include="UI_AppearingLabel.h" />
+    <ClInclude Include="UI_AppearingElement.h" />
     <ClInclude Include="UI_Button.h" />
     <ClInclude Include="UI_HPBar.h" />
     <ClInclude Include="UI_Image.h" />
