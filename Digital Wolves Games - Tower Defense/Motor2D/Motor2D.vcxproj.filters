@@ -154,6 +154,9 @@
     <ClCompile Include="UI_AppearingElement.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="UI_MultiLabel.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buildings.h">
@@ -317,6 +320,9 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="UI_AppearingElement.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_MultiLabel.h">
       <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,6 +10,7 @@
 #define RECT_HEIGHT 130
 
 class UI_TextInput;
+class UI_MultiLabel;
 
 enum COMMAND
 {
@@ -42,6 +43,10 @@ private:
 	UI_TextInput* console_input_text;
 	std::vector<Command> commands;
 
+	bool UnderstandCommand(const char* command);
+
+	UI_MultiLabel* console_multilabel;
+
 public:
 
 	j1Console();
@@ -65,7 +70,6 @@ public:
 	virtual bool CleanUp();
 
 	bool PushText(char* text);
-	bool DeleteTopText();
 	void BlitText();
 
 	void TurnOnOff();

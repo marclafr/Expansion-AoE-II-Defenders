@@ -39,6 +39,16 @@ bool UI_Label::Draw(SDL_Texture* atlas)
 	return true;
 }
 
+bool UI_Label::HasBackground()
+{
+	return has_background;
+}
+
+int UI_Label::GetTextHeight()
+{
+	return text->text_rect.h;
+}
+
 Text::Text(char* txt) : text(txt)
 {
 }

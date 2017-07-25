@@ -3,8 +3,6 @@
 
 #include "j1Gui.h"
 
-class UI_Image;
-
 class Text
 {
 public:
@@ -23,6 +21,9 @@ public:
 	~UI_Label();
 
 	bool Draw(SDL_Texture* atlas);
+
+	bool HasBackground();
+	int GetTextHeight();
 
 private:
 	Text* text;

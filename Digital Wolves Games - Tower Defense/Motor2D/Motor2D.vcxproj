@@ -126,6 +126,7 @@
     <ClCompile Include="UI_HPBar.cpp" />
     <ClCompile Include="UI_Image.cpp" />
     <ClCompile Include="UI_Label.cpp" />
+    <ClCompile Include="UI_MultiLabel.cpp" />
     <ClCompile Include="UI_PanelInfo.cpp" />
     <ClCompile Include="UI_Text_Input.cpp" />
     <ClCompile Include="Units.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="UI_HPBar.h" />
     <ClInclude Include="UI_Image.h" />
     <ClInclude Include="UI_Label.h" />
+    <ClInclude Include="UI_MultiLabel.h" />
     <ClInclude Include="UI_PanelInfo.h" />
     <ClInclude Include="UI_Text_Input.h" />
     <ClInclude Include="Units.h" />

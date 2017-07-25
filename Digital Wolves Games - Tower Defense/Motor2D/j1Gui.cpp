@@ -17,6 +17,7 @@
 #include "UI_HPBar.h"
 #include "UI_Image.h"
 #include "UI_Label.h"
+#include "UI_MultiLabel.h"
 #include "UI_Text_Input.h"
 #include "UI_PanelInfo.h"
 //----------
@@ -241,6 +242,14 @@ UI_Label * j1Gui::CreateLabel(iPoint pos, SDL_Rect atlas_rect, char * txt, bool 
 	return ret;
 }
 
+UI_MultiLabel * j1Gui::CreateMultiLabel(iPoint pos, SDL_Rect atlas_rect, char * txt, int max_labels, int label_to_remove, bool has_max_labels, bool has_background, bool not_in_world)
+{
+	UI_MultiLabel* ret = nullptr;
+	ret = new UI_MultiLabel(pos, atlas_rect, txt, max_labels, label_to_remove, has_max_labels, has_background, not_in_world);
+	ui_elements.push_back(ret);
+	return ret;
+}
+
 UI_AppearingLabel * j1Gui::CreateAppearingLabel(iPoint pos, SDL_Rect atlas_rect, float seconds_on_screen, char * txt, bool has_background, bool not_in_world)
 {
 	UI_AppearingLabel* ret = nullptr;
@@ -316,6 +325,18 @@ void j1Gui::DeleteLabel(UI_Label * label)
 		}
 
 	DELETE_PTR(label);
+}
+
+void j1Gui::DeleteMultiLabel(UI_MultiLabel * multilabel)
+{
+	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
+		if (*it == multilabel)
+		{
+			ui_elements.erase(it);
+			break;
+		}
+
+	DELETE_PTR(multilabel);
 }
 
 void j1Gui::DeleteAppearingLabel(UI_AppearingLabel * appearing_label)
@@ -507,6 +528,16 @@ const int UI_Element::GetX()
 const int UI_Element::GetY()
 {
 	return pos.y;
+}
+
+void UI_Element::SetX(int x)
+{
+	pos.x = x;
+}
+
+void UI_Element::SetY(int y)
+{
+	pos.y = y;
 }
 
 const SDL_Rect UI_Element::GetAtlasRect()
