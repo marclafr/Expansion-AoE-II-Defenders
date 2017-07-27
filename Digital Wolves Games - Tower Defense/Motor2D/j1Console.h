@@ -20,7 +20,11 @@ enum COMMAND
 	ADD_WOOD = 3,
 	ADD_GOLD = 4,
 	ADD_STONE = 5,
-	ADD_RESOURCES = 6
+	ADD_RESOURCES = 6,
+
+	SHOW_FPS = 7,
+	SHOW_MOUSE_POS_ = 8,
+	SHOW_MAP_INFO = 9
 };
 
 struct Command
@@ -44,6 +48,14 @@ private:
 	std::vector<Command> commands;
 
 	bool UnderstandCommand(const char* command);
+
+	bool show_fps_data = false;
+	void ShowCheckFPS();
+	bool show_mouse_pos_data = false;
+	void ShowMousePosition();
+	bool show_map_data = false;
+	void ShowMapData();
+
 
 	UI_MultiLabel* console_multilabel;
 

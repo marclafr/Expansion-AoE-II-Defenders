@@ -611,6 +611,25 @@ void j1App::GetSaveGames(std::list<std::string>& list_to_fill) const
 	// need to add functionality to file_system module for this to work
 }
 
+char * j1App::FPSCalculations()
+{
+	if (last_sec_frame_time.Read() > 1000)
+	{
+		last_sec_frame_time.Start();
+		prev_last_sec_frame_count = last_sec_frame_count;
+		last_sec_frame_count = 0;
+	}
+
+	float avg_fps = float(frame_count) / (startup_time.ReadMs() / 1000);
+	float seconds_since_startup = startup_time.ReadMs();
+	uint32 last_frame_ms = frame_time.Read();
+	uint32 frames_on_last_update = prev_last_sec_frame_count;
+
+	static char current_frame[256];
+	sprintf_s(current_frame, 256, "Av.FPS: %.2f Last Frame Ms: %u Last sec frames: %i Last dt: %.3f", avg_fps, last_frame_ms, frames_on_last_update, dt);
+	return current_frame;
+}
+
 bool j1App::LoadGameNow()
 {
 	bool ret = false;

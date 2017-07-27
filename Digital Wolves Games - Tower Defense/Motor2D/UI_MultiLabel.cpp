@@ -39,19 +39,19 @@ void UI_MultiLabel::AddLabel(char * txt)
 	{
 		int all_displacement_y = labels[label_to_remove]->GetTextHeight();
 		
-		for (int i = label_to_remove; i < labels.size(); i++)
+		for (int i = labels.size() - 2; i >= label_to_remove; i--)
 		{
 			//TODO:
-			labels[i - 1]->SetY(labels[i - 1]->GetY() - all_displacement_y);
-			//int y_pos = labels[i - 1]->GetY();
-			//labels[i - 1] = labels[i];
-			//labels[i - 1]->SetY(y_pos);
+			//labels[i - 1]->SetY(labels[i - 1]->GetY() - all_displacement_y);
+			int y_pos = labels[i]->GetY();
+			labels[i] = labels[i + 1];
+			labels[i]->SetY(y_pos);
 		}
-
- 		//EraseLastLabel();
+ 		EraseLastLabel();
 	}
 
 	y_displacement = CalculateYDisplacement(labels.size());
+
 	correct_pos.y += y_displacement + (TEXT_HEIGHT_DISPLACEMENT * labels.size());
 	labels.push_back(new UI_Label(correct_pos, atlas_rect, txt, labels[0]->HasBackground(), not_in_world));
 }

@@ -7,6 +7,7 @@
 #include "UI_Text_Input.h"
 #include "UI_MultiLabel.h"
 #include "j1Input.h"
+#include "j1Map.h"
 #include "j1FileSystem.h"
 #include "p2Log.h"
 #include "j1Console.h"
@@ -63,6 +64,15 @@ bool j1Console::PreUpdate()
 
 bool j1Console::Update(float dt)
 {
+	if (show_fps_data)
+		ShowCheckFPS();
+
+	if (show_mouse_pos_data)
+		ShowMapData();
+
+	if (show_mouse_pos_data)
+		ShowMousePosition();
+	
 	return true;
 }
 
@@ -164,6 +174,8 @@ bool j1Console::UnderstandCommand(const char * command)
 
 			switch (commands[i].action)
 			{
+
+				//Cheats
 			case CREATE_GOD:
 				//TODO
 				LOG("God Created");
@@ -197,6 +209,21 @@ bool j1Console::UnderstandCommand(const char * command)
 				LOG("1000 of every resource added");
 				break;
 
+
+				//General Information
+			case SHOW_FPS:
+				show_fps_data = !show_fps_data;
+				break;
+
+			case SHOW_MOUSE_POS_:
+				show_mouse_pos_data = !show_mouse_pos_data;
+				break;
+
+			case SHOW_MAP_INFO:
+				show_map_data = !show_map_data;
+				break;
+
+
 			case NO_COMMAND:
 			default:
 				return false;
@@ -206,37 +233,29 @@ bool j1Console::UnderstandCommand(const char * command)
 	}
 	if (command_understood == false)
 		return false;
+}
 
-	/*
-	static char mouse_pos[256];
-	sprintf_s(mouse_pos, 256, "Mouse Pos: %d,%d", x, y);
-	App->console->PushText(mouse_pos);
+void j1Console::ShowCheckFPS()
+{
+	PushText(App->FPSCalculations());
+}
 
-	static char map[256];
-	sprintf_s(map, 256, "Map:%dx%d", App->map->data.width, App->map->data.height);
-	App->console->PushText(map);
+void j1Console::ShowMousePosition()
+{
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint map_coordinates = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);
 
-	static char tiles[256];
-	sprintf_s(tiles, 256, "Tiles:%dx%d", App->map->data.tile_width, App->map->data.tile_height);
-	App->console->PushText(tiles);
+	static char mouse_tile_pos[256];
+	sprintf_s(mouse_tile_pos, 256, "Mouse Pos: %d,%d, Tile:%d,%d", x, y, map_coordinates.x, map_coordinates.y);
+	PushText(mouse_tile_pos);
+}
 
-	static char tilesets[256];
-	sprintf_s(tilesets, 256, "Tilesets:%d", App->map->data.tilesets.size());
-	App->console->PushText(tilesets);
-
-	static char tile[256];
-	sprintf_s(tile, 256, "Tile:%d,%d", map_coordinates.x, map_coordinates.y);
-	App->console->PushText(tile);
-
-	static char current_frame[256];
-	sprintf_s(current_frame, 256, "Av.FPS: %.2f Last Frame Ms: %u Last sec frames: %i Last dt: %.3f", avg_fps, last_frame_ms, frames_on_last_update, dt);
-	App->console->PushText(current_frame);
-
-	static char scince_startup[256];
-	sprintf_s(scince_startup, 256, "Time since startup: %.3f Frame Count: %lu ", seconds_since_startup, frame_count);
-	App->console->PushText(scince_startup);
-	*/
-
+void j1Console::ShowMapData()
+{
+	static char map_data[256];
+	sprintf_s(map_data, 256, "Map:%dx%d, Tiles:%dx%d, Tilesets:%d", App->map->data.width, App->map->data.height, App->map->data.tile_width, App->map->data.tile_height, App->map->data.tilesets.size());
+	PushText(map_data);
 }
 
 Command::Command(const char* command_name, int action_num) : name(command_name), action((COMMAND)action_num)

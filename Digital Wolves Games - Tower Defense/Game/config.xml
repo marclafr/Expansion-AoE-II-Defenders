@@ -29,6 +29,10 @@
 	ADD_GOLD ------	= 4, -----	Adds 1000 gold
 	ADD_STONE -----	= 5, -----	Adds 1000 stone
 	ADD_RESOURCES -	= 6, -----	Adds 1000 of every resource
+	
+	SHOW_FPS ------ = 7,-----	Shows FPS information
+	SHOW_MOUSE_POS_ = 8,-----	Shows Mouse Position information
+	SHOW_MAP_INFO - = 9-----	Shows Map information
   -->
 	<command text="god" action="1"/>
 	<command text="pepperoni pizza" action="2"/>
@@ -36,6 +40,10 @@
 	<command text="coinage" action="4"/>
 	<command text="quarry" action="5"/>
 	<command text="ayy lmao" action="6"/>
+	
+	<command text="fps" action="7"/>
+	<command text="mouse pos" action="8"/>
+	<command text="map info" action="9"/>
   </console>
     
   <window>

@@ -107,6 +107,8 @@ public:
 	void SaveGame(const char* file) const;
 	void GetSaveGames(std::list<std::string>& list_to_fill) const;
 
+	char* FPSCalculations();
+
 private:
 
 	// Load config file
