@@ -24,17 +24,20 @@ UI_Label::~UI_Label()
 
 bool UI_Label::Draw(SDL_Texture* atlas)
 {
-	if (not_in_world == true)
+	if (showing)
 	{
-		if (has_background == true)
-			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &text->text_rect);
-		App->render->PushUISprite(text->text_texture, pos.x + TEXT_RIGHT_DISPLACEMENT - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y);
-	}
-	else
-	{
-		if (has_background == true)
-			App->render->PushUISprite(atlas, pos.x, pos.y, &text->text_rect);
-		App->render->PushUISprite(text->text_texture, pos.x + TEXT_RIGHT_DISPLACEMENT, pos.y);
+		if (not_in_world == true)
+		{
+			if (has_background == true)
+				App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &text->text_rect);
+			App->render->PushUISprite(text->text_texture, pos.x + TEXT_RIGHT_DISPLACEMENT - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y);
+		}
+		else
+		{
+			if (has_background == true)
+				App->render->PushUISprite(atlas, pos.x, pos.y, &text->text_rect);
+			App->render->PushUISprite(text->text_texture, pos.x + TEXT_RIGHT_DISPLACEMENT, pos.y);
+		}
 	}
 	return true;
 }
@@ -47,6 +50,16 @@ bool UI_Label::HasBackground()
 int UI_Label::GetTextHeight()
 {
 	return text->text_rect.h;
+}
+
+void UI_Label::SetText(char * new_txt)
+{
+	text->text = new_txt;
+	if (text->text_texture != nullptr)
+		SDL_DestroyTexture(text->text_texture);
+	text->text_texture = App->font->Print(text->text, TEXTS_COLOR);
+	App->font->CalcSize(text->text, text->text_rect.w, text->text_rect.h);
+	text->text_rect.w += (2 * TEXT_RIGHT_DISPLACEMENT);
 }
 
 Text::Text(char* txt) : text(txt)

@@ -15,30 +15,32 @@ UI_AppearingLabel::~UI_AppearingLabel()
 
 bool UI_AppearingLabel::Draw(SDL_Texture * atlas)
 {
-	//TODO function that does this MODIFYALPHA()??
-	float appearing_time = seconds_on_screen / 3.0f;
-	float disappearing_time = (seconds_on_screen * 2.0f) / 3.0f;
-	
-	if (time_on_screen.ReadSec() <= appearing_time)
+	if (showing)
 	{
-		if (alpha < 255)
-			alpha++;
+		//TODO function that does this MODIFYALPHA()??
+		float appearing_time = seconds_on_screen / 3.0f;
+		float disappearing_time = (seconds_on_screen * 2.0f) / 3.0f;
+
+		if (time_on_screen.ReadSec() <= appearing_time)
+		{
+			if (alpha < 255)
+				alpha++;
+		}
+		else if (time_on_screen.ReadSec() >= disappearing_time)
+		{
+			if (alpha > 0)
+				alpha--;
+		}
+		else
+			alpha = 255;
+
+		SDL_SetTextureAlphaMod(atlas, alpha);
+
+		if (time_on_screen.ReadSec() <= seconds_on_screen)
+			UI_Label::Draw(atlas);
+		else
+			return false;
 	}
-	else if (time_on_screen.ReadSec() >= disappearing_time)
-	{
-		if (alpha > 0)
-			alpha--;
-	}
-	else
-		alpha = 255;
-
-	SDL_SetTextureAlphaMod(atlas, alpha);
-
-	if (time_on_screen.ReadSec() <= seconds_on_screen)
-		UI_Label::Draw(atlas);
-	else
-		return false;
-
 	return true;
 }
 

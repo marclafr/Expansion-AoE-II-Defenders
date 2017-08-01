@@ -620,13 +620,14 @@ char * j1App::FPSCalculations()
 		last_sec_frame_count = 0;
 	}
 
-	float avg_fps = float(frame_count) / (startup_time.ReadMs() / 1000);
-	float seconds_since_startup = startup_time.ReadMs();
-	uint32 last_frame_ms = frame_time.Read();
+//	float avg_fps = float(frame_count) / (startup_time.ReadMs() / 1000);
+//	float seconds_since_startup = startup_time.ReadMs();
+//	uint32 last_frame_ms = frame_time.Read();
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
 	static char current_frame[256];
-	sprintf_s(current_frame, 256, "Av.FPS: %.2f Last Frame Ms: %u Last sec frames: %i Last dt: %.3f", avg_fps, last_frame_ms, frames_on_last_update, dt);
+	//sprintf_s(current_frame, 256, "Av.FPS: %.2f Last Frame Ms: %u Last sec frames: %i Last dt: %.3f", avg_fps, last_frame_ms, frames_on_last_update, dt);
+	sprintf_s(current_frame, 256, "FPS: %i", frames_on_last_update);
 	return current_frame;
 }
 

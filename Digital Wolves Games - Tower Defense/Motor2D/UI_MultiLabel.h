@@ -13,12 +13,9 @@ public:
 	bool Draw(SDL_Texture* atlas);
 
 	void AddLabel(char* txt);
-	void TurnOn();
-	void TurnOff();
 
 private:
 	std::vector<UI_Label*> labels;
-	bool on = true;
 	bool has_max_labels = false;
 	int max_labels = 1;
 	int label_to_remove = 1;

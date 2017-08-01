@@ -148,13 +148,16 @@ bool UI_TextInput::Update()
 
 bool UI_TextInput::Draw(SDL_Texture * atlas)
 {
-	if (this == App->console->GetConsoleInputText())
+	if (showing)
 	{
-		if (App->console->IsOn() == true)
+		if (this == App->console->GetConsoleInputText())
+		{
+			if (App->console->IsOn() == true)
+				DrawTextInput(atlas);
+		}
+		else
 			DrawTextInput(atlas);
 	}
-	else
-		DrawTextInput(atlas);
 	return true;
 }
 

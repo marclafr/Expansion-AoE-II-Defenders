@@ -540,6 +540,21 @@ void UI_Element::SetY(int y)
 	pos.y = y;
 }
 
+void UI_Element::TurnOn()
+{
+	showing = true;
+}
+
+void UI_Element::TurnOff()
+{
+	showing = false;
+}
+
+bool UI_Element::IsOn()
+{
+	return showing;
+}
+
 const SDL_Rect UI_Element::GetAtlasRect()
 {
 	return atlas_rect;

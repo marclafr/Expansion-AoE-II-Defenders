@@ -24,6 +24,7 @@ public:
 
 	bool HasBackground();
 	int GetTextHeight();
+	void SetText(char* new_txt);
 
 private:
 	Text* text;

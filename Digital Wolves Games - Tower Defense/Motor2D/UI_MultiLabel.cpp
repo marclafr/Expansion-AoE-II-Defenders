@@ -23,7 +23,7 @@ bool UI_MultiLabel::Update()
 
 bool UI_MultiLabel::Draw(SDL_Texture * atlas)
 {
-	if (on)
+	if (showing)
 		for (int i = 0; i < labels.size(); i++)
 			labels[i]->Draw(atlas);
 	
@@ -54,16 +54,6 @@ void UI_MultiLabel::AddLabel(char * txt)
 
 	correct_pos.y += y_displacement + (TEXT_HEIGHT_DISPLACEMENT * labels.size());
 	labels.push_back(new UI_Label(correct_pos, atlas_rect, txt, labels[0]->HasBackground(), not_in_world));
-}
-
-void UI_MultiLabel::TurnOn()
-{
-	on = true;
-}
-
-void UI_MultiLabel::TurnOff()
-{
-	on = false;
 }
 
 int UI_MultiLabel::CalculateYDisplacement(int num_lines)

@@ -82,22 +82,24 @@ UI_PanelInfoSingleEntity::~UI_PanelInfoSingleEntity()
 
 bool UI_PanelInfoSingleEntity::Draw(SDL_Texture * atlas)
 {
-	//Draw the panel background
-	if (not_in_world == true)
-		App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect);
-	else
-		App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect);	
-	
-	entity_icon->Draw(atlas);
-	attack_icon->Draw(atlas);
-	armor_icon->Draw(atlas);
-	if (range_icon != nullptr)
-		range_icon->Draw(atlas);
-	attack_label->Draw(atlas);
-	armor_label->Draw(atlas);
-	if(range_label != nullptr)
-		range_label->Draw(atlas);
+	if (showing)
+	{
+		//Draw the panel background
+		if (not_in_world == true)
+			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect);
+		else
+			App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect);
 
+		entity_icon->Draw(atlas);
+		attack_icon->Draw(atlas);
+		armor_icon->Draw(atlas);
+		if (range_icon != nullptr)
+			range_icon->Draw(atlas);
+		attack_label->Draw(atlas);
+		armor_label->Draw(atlas);
+		if (range_label != nullptr)
+			range_label->Draw(atlas);
+	}
 	return true;
 }
 

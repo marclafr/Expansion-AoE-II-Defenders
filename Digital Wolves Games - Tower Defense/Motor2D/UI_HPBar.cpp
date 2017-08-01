@@ -14,19 +14,22 @@ UI_HPBar::~UI_HPBar()
 
 bool UI_HPBar::Draw(SDL_Texture * atlas)
 {
-	//Calculate the hp/max_hp relation with the bar
-	int green_pixels_num = ceil(entity->GetHp() * App->gui->data.green_hp_bar_rect.w / max_hp);
-	atlas_rect.w = green_pixels_num;
+	if (showing)
+	{
+		//Calculate the hp/max_hp relation with the bar
+		int green_pixels_num = ceil(entity->GetHp() * App->gui->data.green_hp_bar_rect.w / max_hp);
+		atlas_rect.w = green_pixels_num;
 
-	if (not_in_world == true)
-	{
-		App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &damaged_atlas_rect);
-		App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect);
-	}
-	else
-	{
-		App->render->PushUISprite(atlas, pos.x, pos.y, &damaged_atlas_rect);
-		App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect);
+		if (not_in_world == true)
+		{
+			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &damaged_atlas_rect);
+			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect);
+		}
+		else
+		{
+			App->render->PushUISprite(atlas, pos.x, pos.y, &damaged_atlas_rect);
+			App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect);
+		}
 	}
 	return true;
 }

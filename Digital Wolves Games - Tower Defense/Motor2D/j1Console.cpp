@@ -6,6 +6,7 @@
 #include "j1Gui.h"
 #include "UI_Text_Input.h"
 #include "UI_MultiLabel.h"
+#include "UI_Label.h"
 #include "j1Input.h"
 #include "j1Map.h"
 #include "j1FileSystem.h"
@@ -17,6 +18,8 @@
 #define CONSOLE_BACKGROUND_IMAGE_RECT { 0, 0, 200, 200 }
 #define NUM_LINES_ON_SCREEN 5
 #define CONSOLE_LINE_REMOVED 2
+
+#define FPS_LABEL_POS { 1000, 75 }
 
 j1Console::j1Console() : j1Module()
 {
@@ -46,6 +49,8 @@ bool j1Console::Start()
 	console_input_text = App->gui->CreateTextInput(CONSOLE_INPUT_POS, "Console input text", OPENSANS_BOLD);
 	console_multilabel = App->gui->CreateMultiLabel(CONSOLE_POS, CONSOLE_BACKGROUND_IMAGE_RECT, "Console Output:", NUM_LINES_ON_SCREEN, CONSOLE_LINE_REMOVED, true, true);
 	console_multilabel->TurnOff();
+	fps_label = App->gui->CreateLabel(FPS_LABEL_POS, CONSOLE_BACKGROUND_IMAGE_RECT, "FPS: ");
+	fps_label->TurnOff();
 	return true;
 }
 
@@ -141,6 +146,7 @@ void j1Console::TurnOnOff()
 		SDL_StopTextInput();
 		on = false;
 		console_multilabel->TurnOff();
+		fps_label->TurnOff();
 		App->gui->SetFocusedText(nullptr);
 	}
 
@@ -212,7 +218,13 @@ bool j1Console::UnderstandCommand(const char * command)
 
 				//General Information
 			case SHOW_FPS:
+				LOG("Showing FPS info");
 				show_fps_data = !show_fps_data;
+				if (!fps_label->IsOn())
+					fps_label->TurnOn();
+				else
+					fps_label->TurnOff();
+
 				break;
 
 			case SHOW_MOUSE_POS_:
@@ -237,7 +249,7 @@ bool j1Console::UnderstandCommand(const char * command)
 
 void j1Console::ShowCheckFPS()
 {
-	PushText(App->FPSCalculations());
+	fps_label->SetText(App->FPSCalculations());
 }
 
 void j1Console::ShowMousePosition()

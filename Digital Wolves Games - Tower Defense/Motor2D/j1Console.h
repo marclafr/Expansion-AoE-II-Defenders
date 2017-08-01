@@ -11,6 +11,7 @@
 
 class UI_TextInput;
 class UI_MultiLabel;
+class UI_Label;
 
 enum COMMAND
 {
@@ -58,6 +59,7 @@ private:
 
 
 	UI_MultiLabel* console_multilabel;
+	UI_Label* fps_label;
 
 public:
 

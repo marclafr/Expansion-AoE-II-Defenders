@@ -111,6 +111,9 @@ protected:
 	SDL_Rect atlas_rect;
 	UI_ELEMENT_TYPE element_type = UI_E_UNKNOWN;
 	bool not_in_world = true;
+	bool showing = true;
+
+
 
 public:
 	virtual bool Update();
@@ -122,6 +125,9 @@ public:
 	const int GetY();
 	void SetX(int x);
 	void SetY(int y);
+	void TurnOn();
+	void TurnOff();
+	bool IsOn();
 	const SDL_Rect GetAtlasRect();
 };
 

@@ -52,26 +52,28 @@ UI_Button::~UI_Button()
 
 bool UI_Button::Draw(SDL_Texture * atlas)
 {
-	switch (button_state)
+	if (showing)
 	{
-	case UI_B_IDLE:
-		img_idle->Draw(atlas);
-		break;
+		switch (button_state)
+		{
+		case UI_B_IDLE:
+			img_idle->Draw(atlas);
+			break;
 
-	case UI_B_MOUSE_ON_TOP:
-		img_mouse_on_top->Draw(atlas);
-		description->Draw(atlas);
-		break;
+		case UI_B_MOUSE_ON_TOP:
+			img_mouse_on_top->Draw(atlas);
+			description->Draw(atlas);
+			break;
 
-	case UI_B_CLICKING:
-		img_clicking->Draw(atlas);
-		description->Draw(atlas);
-		break;
+		case UI_B_CLICKING:
+			img_clicking->Draw(atlas);
+			description->Draw(atlas);
+			break;
 
-	default:
-		break;
+		default:
+			break;
+		}
 	}
-
 	return true;
 }
 
