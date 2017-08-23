@@ -19,7 +19,7 @@
 #define NUM_LINES_ON_SCREEN 10
 #define CONSOLE_LINE_REMOVED 1
 
-#define FPS_LABEL_POS { 1000, 75 }
+#define FPS_LABEL_POS { 1300, 25 }
 
 j1Console::j1Console() : j1Module()
 {
@@ -72,12 +72,18 @@ bool j1Console::Update(float dt)
 	if (show_fps_data)
 		ShowCheckFPS();
 
-	if (show_mouse_pos_data)
+	if (show_map_data)
+	{
 		ShowMapData();
+		show_map_data = false;
+	}
 
-	if (show_mouse_pos_data)
+	if (show_mouse_pos_data && data_showing_timer.ReadSec() >= 1)
+	{
 		ShowMousePosition();
-	
+		data_showing_timer.Start();
+	}
+
 	return true;
 }
 
@@ -88,7 +94,6 @@ bool j1Console::PostUpdate()
 		SDL_RenderDrawRect(App->render->renderer, &rect);
 		SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, 70);
 		SDL_RenderFillRect(App->render->renderer, &rect);
-		BlitText();
 	}
 
 	return true;
@@ -108,35 +113,10 @@ bool j1Console::PushText(char * text)
 {
 	if (on)
 	{
-		//text_textures.push_back(App->font->Print(text));
 		console_multilabel->AddLabel(text);
 		return true;
 	}
 	return false;
-}
-
-void j1Console::BlitText()
-{
-	/*int x = -App->render->camera->GetPosition().x + 5;;
-	int y;
-
-	if (App->scene_manager->GetCurrentScene() == SC_GAME)
-		y = -App->render->camera->GetPosition().y + 20;
-	else
-		y = -App->render->camera->GetPosition().y + 3;
-
-
-	int height = 0;
-	int width = 0;
-	Uint32* format = 0;
-	int* acces = 0;
-
-	for (int i = 0; i < text_textures.size(); i++)
-	{
-		SDL_QueryTexture(text_textures[i], format, acces, &width, &height);
-		App->render->Blit(text_textures[i], x, y);
-		y += height;
-	}*/
 }
 
 void j1Console::TurnOnOff()
@@ -146,7 +126,6 @@ void j1Console::TurnOnOff()
 		SDL_StopTextInput();
 		on = false;
 		console_multilabel->TurnOff();
-		fps_label->TurnOff();
 		App->gui->SetFocusedText(nullptr);
 	}
 
@@ -218,20 +197,26 @@ bool j1Console::UnderstandCommand(const char * command)
 
 				//General Information
 			case SHOW_FPS:
-				LOG("Showing FPS info");
 				show_fps_data = !show_fps_data;
 				if (!fps_label->IsOn())
+				{
+					LOG("Showing FPS info");
 					fps_label->TurnOn();
+				}
 				else
+				{
+					LOG("Not showing FPS info");
 					fps_label->TurnOff();
-
+				}
 				break;
 
 			case SHOW_MOUSE_POS_:
+				LOG("Showing mouse position info each second");
 				show_mouse_pos_data = !show_mouse_pos_data;
 				break;
 
 			case SHOW_MAP_INFO:
+				LOG("Map info:");
 				show_map_data = !show_map_data;
 				break;
 

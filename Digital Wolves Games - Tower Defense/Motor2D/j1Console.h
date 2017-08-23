@@ -56,7 +56,7 @@ private:
 	void ShowMousePosition();
 	bool show_map_data = false;
 	void ShowMapData();
-
+	j1Timer data_showing_timer;
 
 	UI_MultiLabel* console_multilabel;
 	UI_Label* fps_label;
@@ -84,7 +84,6 @@ public:
 	virtual bool CleanUp();
 
 	bool PushText(char* text);
-	void BlitText();
 
 	void TurnOnOff();
 	bool IsOn();
