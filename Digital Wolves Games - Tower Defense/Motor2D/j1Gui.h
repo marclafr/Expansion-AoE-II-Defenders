@@ -8,7 +8,7 @@
 #include "j1Fonts.h"
 
 #define CURSOR_WIDTH 2
-#define BACKGROUND_RECT_DEFAULT_TEXT { 400, 1750, 0, 0 }
+#define BACKGROUND_RECT_DEFAULT_TEXT { 359, 1579, 200, 200 }
 #define NO_RECT { 0, 0, 0, 0 }
 #define TEXT_RIGHT_DISPLACEMENT 5 //pixels
 

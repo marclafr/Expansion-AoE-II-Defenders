@@ -7,7 +7,7 @@
 #include "p2Point.h"
 
 #define RECT_WIDHT 375
-#define RECT_HEIGHT 130
+#define RECT_HEIGHT 255
 
 class UI_TextInput;
 class UI_MultiLabel;

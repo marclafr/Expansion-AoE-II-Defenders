@@ -15,9 +15,9 @@
 
 #define CONSOLE_POS { 5, 25 }
 #define CONSOLE_INPUT_POS { 333, 333 }
-#define CONSOLE_BACKGROUND_IMAGE_RECT { 0, 0, 200, 200 }
-#define NUM_LINES_ON_SCREEN 5
-#define CONSOLE_LINE_REMOVED 2
+#define CONSOLE_BACKGROUND_IMAGE_RECT { 359, 1579, 200, 200 }
+#define NUM_LINES_ON_SCREEN 10
+#define CONSOLE_LINE_REMOVED 1
 
 #define FPS_LABEL_POS { 1000, 75 }
 
@@ -86,7 +86,7 @@ bool j1Console::PostUpdate()
 	if (on == true)
 	{
 		SDL_RenderDrawRect(App->render->renderer, &rect);
-		SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, 100);
+		SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, 70);
 		SDL_RenderFillRect(App->render->renderer, &rect);
 		BlitText();
 	}

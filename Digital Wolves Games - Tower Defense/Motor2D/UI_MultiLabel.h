@@ -21,7 +21,7 @@ private:
 	int label_to_remove = 1;
 
 	int CalculateYDisplacement(int num_lines);
-	bool EraseLastLabel();
+	bool EraseLabel(UI_Label* label);
 };
 
 #endif //__UI_MULTILABEL_H__

@@ -39,15 +39,18 @@ void UI_MultiLabel::AddLabel(char * txt)
 	{
 		int all_displacement_y = labels[label_to_remove]->GetTextHeight();
 		
-		for (int i = labels.size() - 2; i >= label_to_remove; i--)
-		{
-			//TODO:
-			//labels[i - 1]->SetY(labels[i - 1]->GetY() - all_displacement_y);
-			int y_pos = labels[i]->GetY();
-			labels[i] = labels[i + 1];
-			labels[i]->SetY(y_pos);
+		int new_pos_y = labels[label_to_remove]->GetY();	//Saves top position of removed label.
+		
+		//Delete the label we are going to remove
+		EraseLabel(labels[label_to_remove]);
+
+		//Change positions of the others
+		for (int i = label_to_remove + 1; i < labels.size(); i++)
+		{			
+			int temp = labels[i]->GetY();
+			labels[i]->SetY(new_pos_y);
+			new_pos_y = temp;
 		}
- 		EraseLastLabel();
 	}
 
 	y_displacement = CalculateYDisplacement(labels.size());
@@ -65,13 +68,15 @@ int UI_MultiLabel::CalculateYDisplacement(int num_lines)
 	return y_displacement;
 }
 
-bool UI_MultiLabel::EraseLastLabel()
+bool UI_MultiLabel::EraseLabel(UI_Label* label)
 {
 	if (labels.size() > 0)
 	{
-		std::vector<UI_Label*>::iterator it = labels.end();
-		DELETE_PTR(labels[labels.size() - 1]);
-		labels.erase(--it);
+		std::vector<UI_Label*>::iterator it = labels.begin();
+		while (it._Ptr != &labels[label_to_remove])
+			it++;
+		DELETE_PTR(labels[label_to_remove]);
+		labels.erase(it);
 		return true;
 	}
 	return false;
