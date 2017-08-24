@@ -30,17 +30,27 @@ enum BUILDING_TYPE
 	B_UNIVERSITY
 };
 
+enum BUILDING_STATE
+{
+	BS_NO_STATE,
+	BS_IN_CONSTRUCTION,
+	BS_BUILT,
+	BS_DESTROIED
+};
+
 class Building : public Entity
 {
 private:
+	iPoint center_position; //tile
+	std::vector<iPoint> positions; //tiles
+	BUILDING_STATE state = BS_IN_CONSTRUCTION;
+	bool state_changed = false;
 	BUILDING_TYPE building_type;
 	j1Timer buildtimer;
 	j1Timer DieTimer;
 	bool alive = true;
-	bool totally_built = false;
 	IsoRect build_rect;
 	int max_hp = 0;
-	SDL_Rect Alpha_rect;
 public:
 	iPoint arrowpos;
 	AnimationManager* building_fire;
@@ -51,6 +61,13 @@ public:
 	virtual void Update(float dt); // defines order
 	virtual void AI();
 	virtual void Draw();
+
+	void SetPositions();
+	void ChangeTexture();
+	void Destroied();
+
+	const iPoint& GetPosition() const;
+
 	const BUILDING_TYPE GetBuildingType() const;
 	IsoRect GetBuildRectangle();
 	void SetBuildingType(BUILDING_TYPE type);

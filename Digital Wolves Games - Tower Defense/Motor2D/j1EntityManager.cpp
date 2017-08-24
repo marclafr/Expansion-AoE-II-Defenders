@@ -264,12 +264,6 @@ Entity* j1EntityManager::CheckForObjective(iPoint position, int vision_range, Si
 	return entity_quadtree->SearchFirstEnemy(vision_range, position, side);
 }
 
-void j1EntityManager::TileCollisions(Entity* ptr, std::vector<Unit*>& vec) const
-{
-	iPoint tile = App->map->WorldToMap(ptr->GetX(), ptr->GetY());
-	entity_quadtree->SearchCollisionsInTile(tile, vec, ptr);
-}
-
 bool j1EntityManager::IsUnitInTile(const Unit* unit, const iPoint tile)const
 {
 	if (tile == App->map->WorldToMap(unit->GetX(), unit->GetY()))

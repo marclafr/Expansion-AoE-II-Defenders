@@ -35,7 +35,6 @@ protected:
 	SDL_Rect rect;
 	iPoint pivot;
 	bool to_delete = false;
-	iPoint position; //tile
 	int hp = 1;
 	int armor = 0;
 	int attack = 0;
@@ -47,7 +46,7 @@ protected:
 	float ai_dt = 0;
 
 public:
-	Entity(ENTITY_TYPE entity_type, iPoint pos, Side side);
+	Entity(ENTITY_TYPE entity_type, Side side);
 
 	~Entity();
 
@@ -69,20 +68,17 @@ public:
 	const int GetHp() const;
 	const int GetArmor() const;
 	void IncreaseArmor(int extra_defense);
-	const float GetX() const;
-	const float GetY() const;
-	const iPoint GetPosition() const;
+	virtual const iPoint& GetPosition() const = 0;
 	virtual const int GetAttack() const;
 	const iPoint GetPivot() const;
 	const SDL_Rect GetRect() const;
 	const TextureID GetTextureID() const;
 	const Side GetSide() const;
 	const float GetAIDT() const;
-	const iPoint GetTile()const;
-
+	//virtual void GetTiles(std::vector<iPoint>& vec) const = 0;
+	const SDL_Rect GetInWorldTextureRect() const;
 
 	void SetEntityStatus(ENTITY_STATUS status);
-	void SetPosition(float x, float y);
 	float GetArrowPos() const;
 	void ResetArrowPos();
 	void UpdateArrow(int start_height, iPoint target_pos, int curve_height, float time_secs);

@@ -108,6 +108,7 @@ private:
 	fPoint directional_speed;
 	float rate_of_fire; // maybe attackSpeed?
 
+	iPoint position; //tile
 	iPoint destination; //tile
 	uint path_position; //tile
 	Elipse unit_circle;
@@ -148,7 +149,6 @@ private:
 	void CenterUnit();
 	void ChangeAnimation();
 	int GetFrameAttack();
-	void Collisions();
 
 	void GetNextPathPosition();
 	void MoveToNextTile();
@@ -164,6 +164,9 @@ public:
 	void AI();
 	void Draw();
 
+	const iPoint& GetPosition() const;
+	const float GetX() const;
+	const float GetY() const;
 	const iPoint GetPixelPosition() const;
 	const DIRECTION GetDir() const;
 	const UNIT_TYPE GetUnitType() const;

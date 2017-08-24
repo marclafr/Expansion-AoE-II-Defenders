@@ -1,5 +1,6 @@
 #include <math.h>
 #include "Projectile.h"
+#include "j1Map.h"
 #include "j1Animation.h"
 #include "IsoPrimitives.h"
 #include "Camera.h"
@@ -81,6 +82,9 @@ void Projectile::Update()
 
 	if (target != nullptr && projectile_pos == 1 && dest_reached == false)
 	{
+		iPoint center = App->map->MapToWorld(target->GetPosition());
+		center.y += App->map->data.tile_height / 2.0f;
+
 		switch (projectile_type)
 		{
 		case P_BASIC_ARROW:
@@ -94,7 +98,7 @@ void Projectile::Update()
 		case P_FIRE_CANNONBALL:
 		case P_AIR_CANNONBALL:
 			target->Damaged(damage);
-			AreaDamage(damage, { (int)target->GetX(), (int)target->GetY() }, AREA_DMG_RADIUS);
+			AreaDamage(damage, { center.x, center.y }, AREA_DMG_RADIUS);
 			element_terrain_pos = target->GetPosition();
 			delete projectile_anim;
 			projectile_anim = new AnimationManager(App->anim->GetAnimationType(ANIM_FIRE_EXPLOSION));
@@ -103,7 +107,7 @@ void Projectile::Update()
 			break;
 		case P_ICE_CANNONBALL:
 			target->Damaged(damage);
-			AreaDamage(damage, { (int)target->GetX(), (int)target->GetY() }, AREA_DMG_RADIUS);
+			AreaDamage(damage, { center.x, center.y }, AREA_DMG_RADIUS);
 			element_terrain_pos = target->GetPosition();
 			delete projectile_anim;
 			projectile_anim = new AnimationManager(App->anim->GetAnimationType(ANIM_ICE_EXPLOSION));

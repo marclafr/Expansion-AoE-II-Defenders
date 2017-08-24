@@ -1,5 +1,6 @@
 #include <math.h>
 #include "p2Log.h"
+#include "p2Math.h"
 #include "j1App.h"
 #include "j1Map.h"
 #include "IsoPrimitives.h"
@@ -130,15 +131,17 @@ Entity * QuadTreeNode::SearchFirst(const SDL_Rect rect) const
 	{
 		for (int i = 0; i < NODE_ENTITIES; i++)
 		{
-			iPoint entity_pos(entities[i]->GetX(), entities[i]->GetY());
 			if (entities[i] != nullptr)
 			{
-				if (rect.x < entity_pos.x && rect.x + rect.w > entity_pos.x
-					&& rect.y < entity_pos.y && rect.y + rect.h > entity_pos.y)
+				SDL_Rect entity_rect = entities[i]->GetInWorldTextureRect();
+				if (Overlaps(entity_rect, rect))
+				{
 					ret = entities[i];
+					break;
+				}
 			}
 			else
-				break;
+				break;	
 		}
 	}
 	else
@@ -162,15 +165,17 @@ Entity * QuadTreeNode::SearchFirstUnit(const SDL_Rect & rect) const
 		{
 			if (entities[i] != nullptr)
 			{
-				iPoint entity_pos(entities[i]->GetX(), entities[i]->GetY());
-				if (rect.x < entity_pos.x && rect.x + rect.w > entity_pos.x
-					&& rect.y < entity_pos.y && rect.y + rect.h > entity_pos.y)
+				SDL_Rect entity_rect = entities[i]->GetInWorldTextureRect();
+				if (Overlaps(entity_rect, rect))
 					if (entities[i]->GetEntityType() == E_UNIT)
+					{
 						ret = entities[i];
+						break;
+					}
 			}
 			else
 				break;
-		}
+		}			
 	}
 	else
 		for (int i = 0; i < 4; i++)
@@ -192,8 +197,9 @@ Entity * QuadTreeNode::SearchFirstEnemy(int pixel_range, const iPoint from, cons
 		for (int i = 0; i < NODE_ENTITIES; i++)
 			if (entities[i] != nullptr)
 			{
-				float distance_x = entities[i]->GetX() - from.x;
-				float distance_y = entities[i]->GetY() - from.y;
+				SDL_Rect entity_rect = entities[i]->GetInWorldTextureRect();
+				float distance_x = MIN(abs(entity_rect.x - from.x), abs(entity_rect.x + entity_rect.w - from.x));
+				float distance_y = MIN(abs(entity_rect.y - from.y), abs(entity_rect.y + entity_rect.h - from.y));
 				float distance = sqrt(distance_x * distance_x + distance_y * distance_y);
 
 				if (distance <= pixel_range && (entity_type == E_NO_ENTITY || entity_type == entities[i]->GetEntityType()))
@@ -247,8 +253,9 @@ void QuadTreeNode::Search(int pixel_range, const iPoint from, std::vector<Entity
 		for (int i = 0; i < NODE_ENTITIES; i++)
 			if (entities[i] != nullptr)
 			{
-				float distance_x = entities[i]->GetX() - from.x;
-				float distance_y = entities[i]->GetY() - from.y;
+				SDL_Rect entity_rect = entities[i]->GetInWorldTextureRect();
+				float distance_x = MIN(abs(entity_rect.x - from.x), abs(entity_rect.x + entity_rect.w - from.x));
+				float distance_y = MIN(abs(entity_rect.y - from.y), abs(entity_rect.y + entity_rect.h - from.y));
 				float distance = sqrt(distance_x * distance_x + distance_y * distance_y);
 
 				if (distance < pixel_range)

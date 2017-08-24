@@ -13,7 +13,7 @@
 #include "j1Score.h"
 #include "j1Scene.h"
 
-Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, pos, side), unit_type(u_type), direction(D_EAST), action(A_IDLE), changed(false), target(nullptr), unit_circle(GetPosition(), 18), path_position(0)
+Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), position(pos), unit_type(u_type), direction(D_EAST), action(A_IDLE), changed(false), target(nullptr), unit_circle(GetPosition(), 18), path_position(0)
 {
 	//Add paths
 	if (side == S_ENEMY)
@@ -570,6 +570,21 @@ void Unit::Draw()
 
 	App->render->PushInGameSprite(this);
 
+}
+
+const float Unit::GetX() const
+{
+	return position.x;
+}
+
+const float Unit::GetY() const
+{
+	return position.y;
+}
+
+const iPoint& Unit::GetPosition() const
+{
+	return position;
 }
 
 const iPoint Unit::GetPixelPosition() const
@@ -1213,29 +1228,6 @@ int Unit::GetFrameAttack()
 	default:
 		return 0;
 		break;
-	}
-}
-
-void Unit::Collisions()
-{
-	std::vector<Unit *> collisions;
-	App->entity_manager->TileCollisions(this, collisions);
-
-	if (collisions.empty() == false)
-	{
-		for (std::vector<Unit*>::iterator it = collisions.begin(); it != collisions.end(); ++it)
-		{
-			if ((*it)->GetAction() == A_IDLE)
-			{
-				(*it)->collision = this;
-				(*it)->MoveAway();
-			}
-			else
-			{
-				collision = (*it);
-				MoveAway();
-			}
-		}
 	}
 }
 

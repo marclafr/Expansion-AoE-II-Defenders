@@ -325,6 +325,9 @@
     <ClInclude Include="UI_MultiLabel.h">
       <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="p2Math.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Modules">

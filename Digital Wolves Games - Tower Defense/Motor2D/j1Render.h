@@ -20,9 +20,10 @@ struct Sprite
 	int pivot_x;
 	int pivot_y;
 	float speed;
+	int alpha;
 	double angle;
 
-	Sprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0);
+	Sprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, const int alpha = 255, float speed = 1.0f, double angle = 0);
 	~Sprite();
 };
 
@@ -68,7 +69,7 @@ public:
 	bool DrawElipse(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, float angle, Uint8 a = 255, bool use_camera = true) const;
 
 	void PushMapSprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0, bool not_in_world = false);
-	void PushInGameSprite(const Entity* entity);
+	void PushInGameSprite(const Entity* entity, const int alpha = 255);
 	void PushInGameSprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0, bool not_in_world = false);
 	void PushInGameSprite(SDL_Texture* texture, iPoint pos, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, iPoint pivot = {0,0}, float speed = 1.0f, double angle = 0, bool not_in_world = false);
 	void PushInGameSprite(Sprite* sprite);

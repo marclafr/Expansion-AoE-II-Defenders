@@ -164,6 +164,7 @@
     <ClInclude Include="j1App.h" />
     <ClInclude Include="p2Defs.h" />
     <ClInclude Include="j1Module.h" />
+    <ClInclude Include="p2Math.h" />
     <ClInclude Include="p2Point.h" />
     <ClInclude Include="j1Render.h" />
     <ClInclude Include="j1Textures.h" />

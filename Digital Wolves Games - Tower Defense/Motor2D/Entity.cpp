@@ -8,7 +8,7 @@
 #include "Entity.h"
 
 
-Entity::Entity(ENTITY_TYPE entity_type, iPoint pos, Side side): to_delete (false), entity_type(entity_type), position(pos), side(side)
+Entity::Entity(ENTITY_TYPE entity_type, Side side): to_delete (false), entity_type(entity_type), side(side)
 {}
 
 Entity::~Entity()
@@ -93,12 +93,6 @@ void Entity::SetEntityStatus(ENTITY_STATUS status)
 	entity_status = status;
 }
 
-void Entity::SetPosition(float x, float y)
-{
-	position.x = x;
-	position.y = y;
-}
-
 float Entity::GetArrowPos() const
 {
 	return Arrow_pos;
@@ -126,21 +120,6 @@ void Entity::UpdateArrow(int start_height, iPoint target_pos, int curve_height, 
 
 	Arrow_pos += diferential;
 	if (Arrow_pos > 1) Arrow_pos = 1;
-}
-
-const float Entity::GetX() const
-{
-	return position.x;
-}
-
-const float Entity::GetY() const
-{
-	return position.y;
-}
-
-const iPoint Entity::GetPosition() const
-{
-	return position;
 }
 
 const int Entity::GetHp() const
@@ -183,9 +162,24 @@ const float Entity::GetAIDT() const
 	return ai_dt;
 }
 
-const iPoint Entity::GetTile() const
+const SDL_Rect Entity::GetInWorldTextureRect() const
 {
-	return App->map->WorldToMap(GetX(), GetY());
+	SDL_Rect ret;
+	iPoint pixel_pos = App->map->MapToWorld(GetPosition());
+	SDL_Rect rect = GetRect();
+	iPoint pivot = GetPivot();
+
+	ret.x = pixel_pos.x;
+	ret.x -= pivot.x;
+
+	ret.y = pixel_pos.y;
+	ret.y += App->map->data.tile_height / 2.0f;
+	ret.y -= pivot.y;
+
+	ret.h = rect.h;
+	ret.w = rect.w;
+
+	return rect;
 }
 
 void Entity::SetArmor(int new_armor)
