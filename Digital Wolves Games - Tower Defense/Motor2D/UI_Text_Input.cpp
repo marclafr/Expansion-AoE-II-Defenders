@@ -10,7 +10,7 @@
 #define ATLAS_START_POS_WRITING_RECT { 375, 1245, 2, 0 }
 #define REPEATING_KEY_TIME 700 //miliseconds
 
-UI_TextInput::UI_TextInput(iPoint pos, std::string text, FONT_NAME font_name, SDL_Color color, bool not_in_world) : UI_Element(UI_E_TEXT_INPUT, pos, BACKGROUND_RECT_DEFAULT_TEXT, not_in_world), text(text), color(color), text_atlas_rect(BACKGROUND_RECT_DEFAULT_TEXT)
+UI_TextInput::UI_TextInput(iPoint pos, std::string text, FONT_NAME font_name, SDL_Color color, bool not_in_world) : UI_Element(UI_E_TEXT_INPUT, pos, DEFAULT_BACKGROUND_RECT_TEXT, not_in_world), text(text), color(color), text_atlas_rect(DEFAULT_BACKGROUND_RECT_TEXT)
 {
 	for (std::list<Font*>::iterator it = App->font->fonts.begin(); it != App->font->fonts.end(); it++)
 	{

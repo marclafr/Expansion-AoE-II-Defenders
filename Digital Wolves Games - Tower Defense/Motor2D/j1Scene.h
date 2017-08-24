@@ -114,7 +114,7 @@ public:
 	TOWER_TYPE placing_tower = T_NO_TYPE;
 	bool placing_wall = false;
 
-	//ResourceManager* resources = nullptr;
+	ResourceManager* gold = nullptr;
 
 	std::vector<Entity*> selection;
 	UI_Element* panel_info;

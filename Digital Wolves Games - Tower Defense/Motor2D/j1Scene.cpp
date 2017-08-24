@@ -60,6 +60,8 @@ bool j1Scene::Start()
 	App->gui->CreateLabel({ 250,250 }, { 400,1750,25,25 }, "This is a test.");
 	App->gui->CreateImage({ 0,0 }, { 0,1011,1367,23 });
 	//---
+
+	gold = new ResourceManager();
 	
 	App->pathfinding->Enable();
 	App->map->Enable();
@@ -78,7 +80,6 @@ bool j1Scene::Start()
 
 	//ENTITIES
 	/*townhall = (Building*)App->entity_manager->CreateBuilding(B_TOWNHALL, fPoint(0, 272), S_ALLY);
-	resources = new ResourceManager();
 
 	iPoint tower_ipos = App->map->MapToWorld(TOWER_POS_1_X, TOWER_POS_1_Y);
 	fPoint tower_pos(tower_ipos.x, tower_ipos.y);
@@ -252,7 +253,7 @@ bool j1Scene::PostUpdate()
 // Called before quitting
 bool j1Scene::CleanUp()
 {
-	//delete resources;
+	delete gold;
 
 	//App->score->active = false;
 

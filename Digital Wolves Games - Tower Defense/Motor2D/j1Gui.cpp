@@ -492,7 +492,7 @@ void j1Gui::ShowBuildingArmor(Building * building)
 	attribute_value_armor = std::to_string(building->GetArmor());
 	iPoint attribute_pos = data.armor_icon_pos;
 	attribute_pos.x += data.attributes_displacement;
-	CreateLabel(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_armor.c_str());
+	CreateLabel(attribute_pos, DEFAULT_BACKGROUND_RECT_TEXT, (char*)attribute_value_armor.c_str());
 }
 */
 // class Gui ---------------------------------------------------
