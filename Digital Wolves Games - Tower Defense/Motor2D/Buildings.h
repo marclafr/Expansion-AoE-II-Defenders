@@ -81,7 +81,7 @@ public:
 	void DestroyBuilding();
 	const int GetMaxHp() const;
 	void SetMaxHP(int maxhp);
-	virtual void Save(pugi::xml_node&);
+	//virtual void Save(pugi::xml_node&);
 	bool IsTower();
 };
 

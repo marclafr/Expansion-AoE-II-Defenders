@@ -426,13 +426,13 @@ void j1Render::PushUISprite(SDL_Texture * texture, int x, int y, const SDL_Rect 
 void j1Render::BlitMap() const
 {
 	for (std::vector<Sprite*>::const_iterator it = map_sprite_vec.begin(); it != map_sprite_vec.end(); ++it)
-		Blit((*it)->texture, (*it)->x, (*it)->y, (*it)->section, (*it)->flip, (*it)->pivot_x, (*it)->pivot_y, (*it)->speed, (*it)->angle, false, (it*)->alpha);
+		Blit((*it)->texture, (*it)->x, (*it)->y, (*it)->section, (*it)->flip, (*it)->pivot_x, (*it)->pivot_y, (*it)->speed, (*it)->angle, false, (*it)->alpha);
 }
 
 void j1Render::BlitInGame() const
 {
 	for (std::deque<Sprite*>::const_iterator it = in_game_sprite_queue.begin(); it != in_game_sprite_queue.end(); ++it)
-		Blit((*it)->texture, (*it)->x, (*it)->y, (*it)->section, (*it)->flip, (*it)->pivot_x, (*it)->pivot_y, (*it)->speed, (*it)->angle, false, (it*)->alpha);
+		Blit((*it)->texture, (*it)->x, (*it)->y, (*it)->section, (*it)->flip, (*it)->pivot_x, (*it)->pivot_y, (*it)->speed, (*it)->angle, false, (*it)->alpha);
 }
 
 void j1Render::BlitSelection() const
@@ -452,11 +452,11 @@ void j1Render::BlitSelection() const
 			Building* building = (Building*)*it;
 			building->GetBuildRectangle().Draw();
 
-			if (building->GetBuildingType() == B_TURRET || building->GetBuildingType() == B_CANNON || building->GetBuildingType() == B_TURRET_UPGRADED_FIRE  || building->GetBuildingType() == B_TURRET_UPGRADED_ICE || building->GetBuildingType() == B_TURRET_UPGRADED_AIR || building->GetBuildingType() == B_CANNON_UPGRADED_FIRE || building->GetBuildingType() == B_CANNON_UPGRADED_ICE || building->GetBuildingType() == B_CANNON_UPGRADED_AIR)
+			/*if (building->GetBuildingType() == B_TURRET || building->GetBuildingType() == B_CANNON || building->GetBuildingType() == B_TURRET_UPGRADED_FIRE  || building->GetBuildingType() == B_TURRET_UPGRADED_ICE || building->GetBuildingType() == B_TURRET_UPGRADED_AIR || building->GetBuildingType() == B_CANNON_UPGRADED_FIRE || building->GetBuildingType() == B_CANNON_UPGRADED_ICE || building->GetBuildingType() == B_CANNON_UPGRADED_AIR)
 			{
 				int range = ((Tower*)building)->GetRange();
 				DrawCircle(blit_pos.x + camera->GetPosition().x, blit_pos.y + camera->GetPosition().y, range, 255, 255, 255, 255);
-			}
+			}*/
 		}
 	}
 }

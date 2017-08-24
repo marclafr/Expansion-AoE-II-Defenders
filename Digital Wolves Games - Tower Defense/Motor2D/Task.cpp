@@ -229,7 +229,8 @@ void DeleteWallTask::SetWall(Building * wall)
 
 bool DeleteWallTask::Execute()
 {
-	if (wall->IsAlive())	wall->ConvertToRubble();
+	if (wall->IsAlive())
+		wall->SetHp(0);
 	App->entity_manager->UnselectEverything();
 	return true;
 }

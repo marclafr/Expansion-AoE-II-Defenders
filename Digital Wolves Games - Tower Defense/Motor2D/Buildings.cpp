@@ -78,12 +78,6 @@ void Building::Update(float dt)
 {
 	AI();
 	Draw();
-
-	if (this->GetHp() <= 0 && alive == true)
-		ConvertToRubble();
-
-	if (alive == false && DieTimer.ReadSec() >= 2)
-		DestroyBuilding();
 }
 
 void Building::AI()

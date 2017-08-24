@@ -22,7 +22,6 @@ struct Sprite
 	float speed;
 	int alpha;
 	double angle;
-	int alpha;
 
 	Sprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, const int alpha = 255, float speed = 1.0f, double angle = 0);
 	~Sprite();

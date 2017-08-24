@@ -26,7 +26,7 @@ UI_PanelInfoSingleEntity::UI_PanelInfoSingleEntity(iPoint pos, SDL_Rect panel_ba
 		{
 			tower = (Tower*) building;
 			range_icon = new UI_Image(App->gui->data.range_icon_pos, App->gui->data.range_icon);
-			attribute_value_range = std::to_string(tower->GetRange());
+			//attribute_value_range = std::to_string(tower->GetRange());
 			attribute_pos = App->gui->data.range_icon_pos;
 			attribute_pos.x += App->gui->data.attributes_displacement;
 			range_label = new UI_Label(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
