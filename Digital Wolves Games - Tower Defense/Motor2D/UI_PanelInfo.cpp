@@ -80,25 +80,25 @@ UI_PanelInfoSingleEntity::~UI_PanelInfoSingleEntity()
 	DELETE_PTR(range_label);
 }
 
-bool UI_PanelInfoSingleEntity::Draw(SDL_Texture * atlas)
+bool UI_PanelInfoSingleEntity::Draw(SDL_Texture * atlas, int alpha)
 {
 	if (showing)
 	{
 		//Draw the panel background
 		if (not_in_world == true)
-			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect);
+			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 		else
-			App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect);
+			App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 
-		entity_icon->Draw(atlas);
-		attack_icon->Draw(atlas);
-		armor_icon->Draw(atlas);
+		entity_icon->Draw(atlas, alpha);
+		attack_icon->Draw(atlas, alpha);
+		armor_icon->Draw(atlas, alpha);
 		if (range_icon != nullptr)
-			range_icon->Draw(atlas);
-		attack_label->Draw(atlas);
-		armor_label->Draw(atlas);
+			range_icon->Draw(atlas, alpha);
+		attack_label->Draw(atlas, alpha);
+		armor_label->Draw(atlas, alpha);
 		if (range_label != nullptr)
-			range_label->Draw(atlas);
+			range_label->Draw(atlas, alpha);
 	}
 	return true;
 }
@@ -180,19 +180,19 @@ UI_PanelInfoMultipleEntities::~UI_PanelInfoMultipleEntities()
 		DELETE_PTR(panel_hpbars[i]);
 }
 
-bool UI_PanelInfoMultipleEntities::Draw(SDL_Texture * atlas)
+bool UI_PanelInfoMultipleEntities::Draw(SDL_Texture * atlas, int alpha)
 {
 	//Draw the panel background
 	if (not_in_world == true)
-		App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect);
+		App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 	else
-		App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect);
+		App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 
 	for (int i = 0; i < panel_buttons.size(); i++)
-		panel_buttons[i]->Draw(atlas);
+		panel_buttons[i]->Draw(atlas, alpha);
 
 	for (int i = 0; i < panel_hpbars.size(); i++)
-		panel_hpbars[i]->Draw(atlas);
+		panel_hpbars[i]->Draw(atlas, alpha);
 
 	return true;
 }

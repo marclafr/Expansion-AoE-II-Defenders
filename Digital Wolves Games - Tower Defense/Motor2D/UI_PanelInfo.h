@@ -9,7 +9,7 @@ public:
 	UI_PanelInfoSingleEntity(iPoint pos, SDL_Rect panel_background_rect, Entity* entity);
 	~UI_PanelInfoSingleEntity();
 
-	bool Draw(SDL_Texture* atlas);
+	bool Draw(SDL_Texture* atlas, int alpha = 255);
 
 private:
 	UI_Image* entity_icon;
@@ -32,7 +32,7 @@ public:
 	UI_PanelInfoMultipleEntities(iPoint pos, SDL_Rect panel_background_rect, std::vector<Entity*> selection);
 	~UI_PanelInfoMultipleEntities();
 
-	bool Draw(SDL_Texture* atlas);
+	bool Draw(SDL_Texture* atlas, int alpha = 255);
 
 private:
 	std::vector<UI_Button*> panel_buttons;

@@ -50,24 +50,24 @@ UI_Button::~UI_Button()
 	DELETE_PTR(img_clicking);
 }
 
-bool UI_Button::Draw(SDL_Texture * atlas)
+bool UI_Button::Draw(SDL_Texture * atlas, int alpha)
 {
 	if (showing)
 	{
 		switch (button_state)
 		{
 		case UI_B_IDLE:
-			img_idle->Draw(atlas);
+			img_idle->Draw(atlas, alpha);
 			break;
 
 		case UI_B_MOUSE_ON_TOP:
-			img_mouse_on_top->Draw(atlas);
-			description->Draw(atlas);
+			img_mouse_on_top->Draw(atlas, alpha);
+			description->Draw(atlas, alpha);
 			break;
 
 		case UI_B_CLICKING:
-			img_clicking->Draw(atlas);
-			description->Draw(atlas);
+			img_clicking->Draw(atlas, alpha);
+			description->Draw(atlas, alpha);
 			break;
 
 		default:

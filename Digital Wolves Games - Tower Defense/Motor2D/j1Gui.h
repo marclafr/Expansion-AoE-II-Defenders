@@ -114,10 +114,9 @@ protected:
 	bool showing = true;
 
 
-
 public:
 	virtual bool Update();
-	virtual bool Draw(SDL_Texture* atlas);
+	virtual bool Draw(SDL_Texture* atlas, int alpha = 255);
 	//bool HandleInput()
 
 	UI_ELEMENT_TYPE GetElementType();

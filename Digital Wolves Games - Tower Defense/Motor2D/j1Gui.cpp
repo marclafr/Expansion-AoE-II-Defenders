@@ -510,7 +510,7 @@ bool UI_Element::Update()
 	return true;
 }
 
-bool UI_Element::Draw(SDL_Texture* atlas)
+bool UI_Element::Draw(SDL_Texture* atlas, int alpha)
 {
 	return true;
 }

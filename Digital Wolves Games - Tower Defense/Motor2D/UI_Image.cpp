@@ -34,14 +34,14 @@ SDL_Rect UI_Image::GetImageRect()
 	return{ pos.x,pos.y,atlas_rect.w,atlas_rect.h };
 }
 
-bool UI_Image::Draw(SDL_Texture* atlas)
+bool UI_Image::Draw(SDL_Texture* atlas, int alpha)
 {
 	if (showing)
 	{
 		if (not_in_world == true)
-			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect);
+			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 		else
-			App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect);
+			App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 	}
 	return true;
 }

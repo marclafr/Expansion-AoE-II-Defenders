@@ -21,11 +21,11 @@ bool UI_MultiLabel::Update()
 	return true;
 }
 
-bool UI_MultiLabel::Draw(SDL_Texture * atlas)
+bool UI_MultiLabel::Draw(SDL_Texture * atlas, int alpha)
 {
 	if (showing)
 		for (int i = 0; i < labels.size(); i++)
-			labels[i]->Draw(atlas);
+			labels[i]->Draw(atlas, alpha);
 	
 	return true;
 }

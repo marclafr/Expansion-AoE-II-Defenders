@@ -10,7 +10,7 @@ public:
 	UI_HPBar(iPoint pos, SDL_Rect atlas_back_rect, SDL_Rect damaged_atlas_rect, Entity* entity, bool not_in_world = true);
 	~UI_HPBar();
 
-	bool Draw(SDL_Texture* atlas);
+	bool Draw(SDL_Texture* atlas, int alpha = 255);
 
 private:
 	SDL_Rect damaged_atlas_rect;

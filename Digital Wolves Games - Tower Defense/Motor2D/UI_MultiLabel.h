@@ -10,7 +10,7 @@ public:
 	~UI_MultiLabel();
 
 	bool Update();
-	bool Draw(SDL_Texture* atlas);
+	bool Draw(SDL_Texture* atlas, int alpha = 255);
 
 	void AddLabel(char* txt);
 

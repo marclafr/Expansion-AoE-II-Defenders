@@ -163,7 +163,7 @@ iPoint j1Render::WorldToScreen(int x, int y) const
 }
 
 // Blit to screen
-bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, int pivot_x, int pivot_y, float speed, double angle, bool not_in_world) const
+bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, int pivot_x, int pivot_y, float speed, double angle, bool not_in_world, const int alpha) const
 {
 	bool ret = true;
 
@@ -207,7 +207,10 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 		pivot.y = pivot_y;
 	}
 	
-	//SDL_SetTextureAlphaMod(texture, App->render->camera->GetOpacity());
+	int current_alpha = 0;
+	SDL_GetTextureAlphaMod(texture, (Uint8*)&current_alpha);
+	if (current_alpha != alpha)
+		SDL_SetTextureAlphaMod(texture, alpha);
 
 	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, &pivot, flip) != 0)
 	{
@@ -407,7 +410,7 @@ void j1Render::PushInGameSprite(Sprite * sprite)
 	}
 }
 
-void j1Render::PushUISprite(SDL_Texture * texture, int x, int y, const SDL_Rect * section, SDL_RendererFlip flip, int pivot_x, int pivot_y, float speed, double angle)
+void j1Render::PushUISprite(SDL_Texture * texture, int x, int y, const SDL_Rect * section, SDL_RendererFlip flip, int pivot_x, int pivot_y, float speed, double angle, const int alpha)
 {
 	iPoint in_camera_pos;
 	in_camera_pos.x = (int)(camera->GetPosition().x * speed) + x;
@@ -415,7 +418,7 @@ void j1Render::PushUISprite(SDL_Texture * texture, int x, int y, const SDL_Rect 
 
 	if (camera->InsideRenderTarget(in_camera_pos.x, in_camera_pos.y))
 	{
-		Sprite* ui_text = new Sprite(texture, x, y, section, flip, pivot_x, pivot_y, speed, angle);
+		Sprite* ui_text = new Sprite(texture, x, y, section, flip, pivot_x, pivot_y, speed, angle, alpha);
 		ui_sprite_vec.push_back(ui_text);
 	}
 }
@@ -461,7 +464,7 @@ void j1Render::BlitSelection() const
 void j1Render::BlitUI() const
 {
 	for (std::vector<Sprite*>::const_iterator it = ui_sprite_vec.begin(); it != ui_sprite_vec.end(); ++it)
-		Blit((*it)->texture, (*it)->x, (*it)->y, (*it)->section, (*it)->flip, (*it)->pivot_x, (*it)->pivot_y, (*it)->speed, (*it)->angle, true);
+		Blit((*it)->texture, (*it)->x, (*it)->y, (*it)->section, (*it)->flip, (*it)->pivot_x, (*it)->pivot_y, (*it)->speed, (*it)->angle, true, (*it)->alpha);
 }
 
 void j1Render::BlitMouse() const
@@ -544,7 +547,7 @@ void j1Render::CleanUpUISpriteVec()
 	ui_sprite_vec.clear();
 }
 
-Sprite::Sprite(SDL_Texture * texture, int x, int y, const SDL_Rect * section, SDL_RendererFlip flip, int pivot_x, int pivot_y, float speed, double angle): texture(texture), x(x), y(y), flip(flip), pivot_x(pivot_x), pivot_y(pivot_y), speed(speed), angle(angle)
+Sprite::Sprite(SDL_Texture * texture, int x, int y, const SDL_Rect * section, SDL_RendererFlip flip, int pivot_x, int pivot_y, float speed, double angle, const int alpha): texture(texture), x(x), y(y), flip(flip), pivot_x(pivot_x), pivot_y(pivot_y), speed(speed), angle(angle), alpha(alpha)
 {
 	if (section != nullptr)
 	{
