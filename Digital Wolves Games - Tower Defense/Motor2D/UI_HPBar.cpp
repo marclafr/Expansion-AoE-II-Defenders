@@ -12,7 +12,7 @@ UI_HPBar::~UI_HPBar()
 {
 }
 
-bool UI_HPBar::Draw(SDL_Texture * atlas)
+bool UI_HPBar::Draw(SDL_Texture * atlas, int alpha)
 {
 	if (showing)
 	{
@@ -22,13 +22,13 @@ bool UI_HPBar::Draw(SDL_Texture * atlas)
 
 		if (not_in_world == true)
 		{
-			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &damaged_atlas_rect);
-			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect);
+			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &damaged_atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
+			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 		}
 		else
 		{
-			App->render->PushUISprite(atlas, pos.x, pos.y, &damaged_atlas_rect);
-			App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect);
+			App->render->PushUISprite(atlas, pos.x, pos.y, &damaged_atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
+			App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 		}
 	}
 	return true;

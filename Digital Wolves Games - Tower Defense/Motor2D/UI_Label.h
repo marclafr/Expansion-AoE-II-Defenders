@@ -20,7 +20,7 @@ public:
 	UI_Label(iPoint pos, SDL_Rect atlas_rect, char* txt, bool has_background = true, bool not_in_world = true, UI_ELEMENT_TYPE ui_element_type = UI_E_LABEL);
 	~UI_Label();
 
-	bool Draw(SDL_Texture* atlas);
+	bool Draw(SDL_Texture* atlas, int alpha = 255);
 
 	bool HasBackground();
 	int GetTextHeight();

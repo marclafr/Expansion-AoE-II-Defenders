@@ -22,6 +22,7 @@ struct Sprite
 	float speed;
 	int alpha;
 	double angle;
+	int alpha;
 
 	Sprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, const int alpha = 255, float speed = 1.0f, double angle = 0);
 	~Sprite();
@@ -62,7 +63,7 @@ public:
 	iPoint WorldToScreen(int x, int y) const;
 
 	// Draw & Blit
-	bool Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0, bool not_in_world = false) const;
+	bool Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0, bool not_in_world = false, const int alpha = 255) const;
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool use_camera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
@@ -73,7 +74,7 @@ public:
 	void PushInGameSprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0, bool not_in_world = false);
 	void PushInGameSprite(SDL_Texture* texture, iPoint pos, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, iPoint pivot = {0,0}, float speed = 1.0f, double angle = 0, bool not_in_world = false);
 	void PushInGameSprite(Sprite* sprite);
-	void PushUISprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0);
+	void PushUISprite(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE, int pivot_x = 0, int pivot_y = 0, float speed = 1.0f, double angle = 0, const int alpha = 255);
 	
 	void BlitMap() const;
 	void BlitInGame() const;

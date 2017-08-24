@@ -146,29 +146,29 @@ bool UI_TextInput::Update()
 	return true;
 }
 
-bool UI_TextInput::Draw(SDL_Texture * atlas)
+bool UI_TextInput::Draw(SDL_Texture * atlas, int alpha)
 {
 	if (showing)
 	{
 		if (this == App->console->GetConsoleInputText())
 		{
 			if (App->console->IsOn() == true)
-				DrawTextInput(atlas);
+				DrawTextInput(atlas, alpha);
 		}
 		else
-			DrawTextInput(atlas);
+			DrawTextInput(atlas, alpha);
 	}
 	return true;
 }
 
-void UI_TextInput::DrawTextInput(SDL_Texture* atlas)
+void UI_TextInput::DrawTextInput(SDL_Texture* atlas, int alpha)
 {
 	if (text.length() > 0)
 	{
 		if (not_in_world == true)
 		{
-			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &text_atlas_rect);
-			App->render->PushUISprite(tex, pos.x - App->render->camera->GetPosition().x + TEXT_RIGHT_DISPLACEMENT, pos.y - App->render->camera->GetPosition().y);
+			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &text_atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
+			App->render->PushUISprite(tex, pos.x - App->render->camera->GetPosition().x + TEXT_RIGHT_DISPLACEMENT, pos.y - App->render->camera->GetPosition().y, nullptr, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 			if (this == App->gui->GetFocusedText() && writing_pos_appear_timer.Read() > 500)	//every half second it appear && disappear
 			{
 				SDL_Rect rect = ATLAS_START_POS_WRITING_RECT;
@@ -176,7 +176,7 @@ void UI_TextInput::DrawTextInput(SDL_Texture* atlas)
 				int w, h;
 				std::string temp = text.substr(0, writing_pos);
 				App->font->CalcSize(temp.c_str(), w, h, font);
-				App->render->PushUISprite(atlas, pos.x + w + TEXT_RIGHT_DISPLACEMENT - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &rect);
+				App->render->PushUISprite(atlas, pos.x + w + TEXT_RIGHT_DISPLACEMENT - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 				if (writing_pos_appear_timer.Read() > 1000) //every half second it appear && disappear
 					writing_pos_appear_timer.Start();
 			}
@@ -184,8 +184,9 @@ void UI_TextInput::DrawTextInput(SDL_Texture* atlas)
 
 		else
 		{
-			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &text_atlas_rect);
-			App->render->PushUISprite(tex, pos.x + TEXT_RIGHT_DISPLACEMENT, pos.y);
+			App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &text_atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
+			App->render->PushUISprite(tex, pos.x + TEXT_RIGHT_DISPLACEMENT, pos.y, nullptr, SDL_FLIP_NONE, 0, 0, 1, 0, alpha)
+				;
 			if (this == App->gui->GetFocusedText() && writing_pos_appear_timer.Read() > 500)	//every half second it appear && disappear
 			{
 				SDL_Rect rect = ATLAS_START_POS_WRITING_RECT;
@@ -193,7 +194,7 @@ void UI_TextInput::DrawTextInput(SDL_Texture* atlas)
 				int w, h;
 				std::string temp = text.substr(0, writing_pos);
 				App->font->CalcSize(temp.c_str(), w, h, font);
-				App->render->PushUISprite(atlas, pos.x + w + TEXT_RIGHT_DISPLACEMENT, pos.y, &rect);
+				App->render->PushUISprite(atlas, pos.x + w + TEXT_RIGHT_DISPLACEMENT, pos.y, &rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 				if (writing_pos_appear_timer.Read() > 1000)	//every half second it appear && disappear
 					writing_pos_appear_timer.Start();
 			}

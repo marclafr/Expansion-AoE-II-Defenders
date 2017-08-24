@@ -17,7 +17,7 @@ public:
 	const char* GetText();
 	void DeleteText();
 
-	bool Draw(SDL_Texture* atlas);
+	bool Draw(SDL_Texture* atlas, int alpha = 255);
 	bool Update();
 
 private:
@@ -31,7 +31,7 @@ private:
 	j1Timer writing_pos_appear_timer;
 	j1Timer repeat_timer;
 
-	void DrawTextInput(SDL_Texture* atlas);
+	void DrawTextInput(SDL_Texture* atlas, int alpha = 255);
 	bool MouseInsideText();
 	void DeleteChar();
 };
