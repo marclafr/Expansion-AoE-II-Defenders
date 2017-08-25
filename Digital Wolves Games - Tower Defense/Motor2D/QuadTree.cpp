@@ -298,7 +298,7 @@ Entity * QuadTreeNode::ClickSelect(const iPoint & mouse_pos) const
 		for (int i = 0; i < NODE_ENTITIES; i++)
 			if (entities[i] != nullptr)
 			{
-				SDL_Rect rect = entities[i]->GetTextureRectWorldPos();
+				SDL_Rect rect = entities[i]->GetInWorldTextureRect();
 				if (rect.x < mouse_pos.x
 					&& rect.x + rect.w > mouse_pos.x
 					&& rect.y < mouse_pos.y
@@ -702,7 +702,7 @@ void QuadTreeNode::DrawTiles() const
 	area->DrawTiles();
 }
 
-void QuadTreeNode::SaveAll(pugi::xml_node & node)
+/*void QuadTreeNode::SaveAll(pugi::xml_node & node)
 {
 	if (childs[0] == nullptr)
 	{
@@ -713,7 +713,7 @@ void QuadTreeNode::SaveAll(pugi::xml_node & node)
 	else
 		for (int i = 0; i < 4; i++)
 			childs[i]->SaveAll(node);
-}
+}*/
 
 /*void QuadTreeNode::BlitMinimap()
 {
@@ -828,11 +828,10 @@ void QuadTree::Draw() const
 		origin->DrawTiles();
 }
 
-
-void QuadTree::SaveAll(pugi::xml_node & node)
+/*void QuadTree::SaveAll(pugi::xml_node & node)
 {
 	origin->SaveAll(node);
-}
+}*/
 
 /*void QuadTree::BlitMinimap() const
 {

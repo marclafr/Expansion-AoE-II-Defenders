@@ -32,6 +32,7 @@ public:
 	virtual bool	Draw();
 	//Set Methods
 	void			SetPosition(const fPoint& pos);
+	void			SetPosition(const iPoint& pos);
 	void			SetDisplacement(const iPoint& desp);
 	void			SetXAngle(float angle);
 	void			SetColor(const SDL_Color& rgba);

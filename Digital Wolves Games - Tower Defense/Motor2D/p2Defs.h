@@ -4,13 +4,22 @@
 #include <stdio.h>
 #include <algorithm>
 
-//  NULL just in case ----------------------
+//Class function organisation:
 
+//Constructors & Destructors
+//Main Functions
+//Usefull
+//Getters
+//Setters
+//Extras
+
+//  NULL just in case ----------------------
 #ifdef NULL
 #undef NULL
 #endif
 #define NULL  0
 #define PI 3.14159265f
+
 // Deletes a buffer
 #define RELEASE( x )	\
     {                   \

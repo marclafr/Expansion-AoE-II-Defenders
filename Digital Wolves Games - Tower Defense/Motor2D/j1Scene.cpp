@@ -216,7 +216,7 @@ bool j1Scene::PostUpdate()
 	//TESTING GUI
 	if (selection.size() > 0 && App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT)
 		if (selection[0]->GetHp() > 0)
-			selection[0]->SetHp(selection[0]->GetHp() - 1);
+			selection[0]->Damaged(1);
 	
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		App->gui->CreateAppearingImage({ 800,300 }, { 400,1750,25,25 }, 10.0f);		

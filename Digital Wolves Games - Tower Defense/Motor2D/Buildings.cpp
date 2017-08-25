@@ -11,7 +11,7 @@
 #include "Camera.h"
 #include "j1Scene.h"
 
-Building::Building(BUILDING_TYPE b_type, iPoint pos, bool builded) : Entity(E_BUILDING, S_ALLY), building_type(b_type), center_position(pos), build_rect(GetPosition(), 375, 170)
+Building::Building(BUILDING_TYPE b_type, iPoint pos, bool builded) : Entity(E_BUILDING, S_ALLY), building_type(b_type), left_tile(pos)
 {
 	SDL_Rect rect;
 	building_fire = new AnimationManager(App->anim->GetAnimationType(ANIM_BUILDINGS_FIRE));
@@ -29,29 +29,36 @@ Building::Building(BUILDING_TYPE b_type, iPoint pos, bool builded) : Entity(E_BU
 	//not done yet
 	SetPositions();
 
+	//build rect
+	iPoint pixel_pos = App->map->MapToWorld(GetPosition());
+	pixel_pos.y += App->map->data.tile_height / 2.0f;
+	build_rect.SetPosition(pixel_pos);
+	build_rect.SetWidth(375);
+	build_rect.SetHeight(170); // dont know why this is standard for all
+
 	switch (b_type)
 	{
 	case B_TURRET:
 		SetTextureID(T_TURRET);
 		break;
 
-	case B_WOOD_WALL:
+	case B_WALL:
 		SetTextureID(T_TURRET);
 		SetHp(250);
-		SetMaxHP(250);
+		SetLife(250);
 		SetArmor(4);
 		break;
 
 	case B_TOWNHALL:
 		SetHp(1500);
-		SetMaxHP(1500);
+		SetLife(1500);
 		SetArmor(6);
 		SetTextureID(T_TOWNHALL);
 		break;
 
 	case B_UNIVERSITY:
 		SetHp(1500);
-		SetMaxHP(1500);
+		SetLife(1500);
 		SetArmor(8);
 		SetTextureID(T_TOWNHALL);
 		break;
@@ -85,7 +92,7 @@ void Building::AI()
 	switch (state)
 	{
 	case BS_IN_CONSTRUCTION:
-		if (!IsAlive())
+		if (GetHp() <= 0)
 			Destroied();
 
 		if (buildtimer.ReadSec() >= 6.0f)
@@ -97,7 +104,7 @@ void Building::AI()
 		break;
 
 	case BS_BUILT:
-		if (!IsAlive())
+		if (GetHp() <= 0)
 			Destroied();
 
 		if (App->entity_manager->AreUnitsInRect(GetInWorldTextureRect()))
@@ -114,7 +121,7 @@ void Building::AI()
 		break;
 
 	case BS_DESTROIED:
-		if (alive == false && DieTimer.ReadSec() >= 2.0f)
+		if (GetHp() <= 0 && DieTimer.ReadSec() >= 2.0f)
 			DestroyBuilding();
 		break;
 
@@ -132,21 +139,6 @@ void Building::AI()
 	//SetPivot(0.49 * 100, 106 * 0.754717);
 }
 
-void Building::Draw()
-{
-	App->render->PushInGameSprite(this);
-}
-
-void Building::SetPositions()
-{
-	switch (building_type)
-	{
-	case B_TURRET:
-		break;
-
-	}
-}
-
 void Building::ChangeTexture()
 {
 	switch (state)
@@ -161,7 +153,7 @@ void Building::ChangeTexture()
 		{
 		case B_TURRET:
 			break;
-		case B_WOOD_WALL:
+		case B_WALL:
 			SetRect({ 610,289,100,106 });
 			SetPivot(0.49 * 100, 106 * 0.754717);
 			break;
@@ -193,6 +185,11 @@ void Building::ChangeTexture()
 	}
 }
 
+void Building::Draw()
+{
+	App->render->PushInGameSprite(this);
+}
+
 void Building::Destroied()
 {
 	state = BS_DESTROIED;
@@ -201,9 +198,27 @@ void Building::Destroied()
 	DieTimer.Start();
 }
 
+void Building::DestroyBuilding()
+{
+	for (std::vector<iPoint>::iterator it = tiles.begin(); it != tiles.end(); ++it)
+		App->pathfinding->MakeWalkable(*it);
+
+	this->Die();
+}
+
+void Building::SetPositions()
+{
+	switch (building_type)
+	{
+	case B_TURRET:
+		break;
+
+	}
+}
+
 const iPoint & Building::GetPosition() const
 {
-	return center_position;
+	return left_tile;
 }
 
 const BUILDING_TYPE Building::GetBuildingType() const
@@ -211,84 +226,14 @@ const BUILDING_TYPE Building::GetBuildingType() const
 	return building_type;
 }
 
-void Building::SetBuildingType(BUILDING_TYPE type)
-{
-	building_type = type;
-}
-
-/*
-void Building::UpgradeWall(BUILDING_TYPE type)
-{
-	if (this->IsBuilt())
-	{
-		switch (type)
-		{
-		case B_WOOD_WALL:
-			if (App->scene->resources->CanUpgradeWall(type) == true)
-			{
-				App->scene->resources->UpgradeWall(type);
-				SetRect({ 1020,12,99,178 });
-				SetPivot(0.494949 * 99, 178 * 0.865169);
-				building_type = B_STONE_WALL;
-				SetHp(500);
-				SetMaxHP(500);
-				Alpha_rect = { (int)GetX() - (GetRect().w / 2),(int)GetY() - GetRect().h, GetRect().w, GetRect().h };
-			}
-			break;
-		case B_STONE_WALL:
-			if (App->scene->resources->CanUpgradeWall(type) == true)
-			{
-				App->scene->resources->UpgradeWall(type);
-				SetRect({ 0,66,95,169 });
-				SetPivot(0.454211 * 96, 169 * 0.899822);
-				building_type = B_BRICK_WALL;
-				SetHp(750);
-				SetMaxHP(750);
-				Alpha_rect = { (int)GetX() - (GetRect().w / 2),(int)GetY() - GetRect().h, GetRect().w, GetRect().h };
-			}
-			break;
-		default:
-			break;
-		}
-	}
-}*/
-
 IsoRect Building::GetBuildRectangle()
 {
 	return build_rect;
 }
 
-const double Building::GetBuildTime() const
-{
-	return buildtimer.ReadSec();
-}
-
-const double Building::GetDieTime() const
-{
-	return DieTimer.ReadSec();
-}
-
-bool Building::IsAlive() const
-{
-	return alive;
-}
-
-void Building::DestroyBuilding()
-{
-	for (std::vector<iPoint>::iterator it = positions.begin(); it != positions.end(); ++it)
-		App->pathfinding->MakeWalkable(*it);
-
-	this->Die();
-}
-
 const int Building::GetMaxHp() const
 {
 	return max_hp;
-}
-
-void Building::SetMaxHP(int maxhp)
-{
-	max_hp = maxhp;
 }
 
 /*void Building::Save(pugi::xml_node &data)
@@ -301,9 +246,39 @@ void Building::SetMaxHP(int maxhp)
 		ActualBuilding.append_attribute("hp") = GetHp();
 }*/
 
-bool Building::IsTower()
+/*
+void Building::UpgradeWall(BUILDING_TYPE type)
 {
-	if (building_type == B_TURRET || building_type == B_CANNON || building_type == B_TURRET_UPGRADED_FIRE || building_type == B_TURRET_UPGRADED_ICE	|| 
-		building_type == B_TURRET_UPGRADED_AIR || building_type == B_CANNON_UPGRADED_FIRE || building_type == B_CANNON_UPGRADED_ICE || building_type == B_CANNON_UPGRADED_AIR)
-		return true;
+if (this->IsBuilt())
+{
+switch (type)
+{
+case B_WOOD_WALL:
+if (App->scene->resources->CanUpgradeWall(type) == true)
+{
+App->scene->resources->UpgradeWall(type);
+SetRect({ 1020,12,99,178 });
+SetPivot(0.494949 * 99, 178 * 0.865169);
+building_type = B_STONE_WALL;
+SetHp(500);
+SetMaxHP(500);
+Alpha_rect = { (int)GetX() - (GetRect().w / 2),(int)GetY() - GetRect().h, GetRect().w, GetRect().h };
 }
+break;
+case B_STONE_WALL:
+if (App->scene->resources->CanUpgradeWall(type) == true)
+{
+App->scene->resources->UpgradeWall(type);
+SetRect({ 0,66,95,169 });
+SetPivot(0.454211 * 96, 169 * 0.899822);
+building_type = B_BRICK_WALL;
+SetHp(750);
+SetMaxHP(750);
+Alpha_rect = { (int)GetX() - (GetRect().w / 2),(int)GetY() - GetRect().h, GetRect().w, GetRect().h };
+}
+break;
+default:
+break;
+}
+}
+}*/

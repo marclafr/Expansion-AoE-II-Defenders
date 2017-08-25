@@ -215,7 +215,8 @@ void DeleteTowerTask::SetTower(Tower * tower)
 
 bool DeleteTowerTask::Execute()
 {
-	if (tower->IsAlive())	tower->SetHp(0);
+	if (tower->GetHp() >= 0)
+		tower->Kill();
 	App->entity_manager->UnselectEverything();
 	return true;
 }
@@ -229,8 +230,8 @@ void DeleteWallTask::SetWall(Building * wall)
 
 bool DeleteWallTask::Execute()
 {
-	if (wall->IsAlive())
-		wall->SetHp(0);
+	if (wall->GetHp() >= 0)
+		wall->Kill();
 	App->entity_manager->UnselectEverything();
 	return true;
 }

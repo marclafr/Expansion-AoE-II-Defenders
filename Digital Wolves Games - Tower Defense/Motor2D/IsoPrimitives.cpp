@@ -33,6 +33,12 @@ void Primitive::SetPosition(const fPoint & pos)
 	position = pos;
 }
 
+void Primitive::SetPosition(const iPoint & pos)
+{
+	position.x = pos.x;
+	position.y = pos.y;
+}
+
 void Primitive::SetDisplacement(const iPoint & desp)
 {
 	displacement = desp;

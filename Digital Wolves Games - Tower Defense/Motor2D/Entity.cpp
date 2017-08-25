@@ -14,23 +14,50 @@ Entity::Entity(ENTITY_TYPE entity_type, Side side): to_delete (false), entity_ty
 Entity::~Entity()
 {}
 
+//Usefull
+void Entity::Kill()
+{
+	current_hp = 0;
+}
+
 void Entity::Die()
 {
 	to_delete = true;
 }
 
-void Entity::DT(float dt)
+bool Entity::ToDelete() const
 {
-	ai_dt += dt;
+	return to_delete;
 }
 
-void Entity::ResetDT()
+void Entity::IncreaseArmor(int extra_defense)
 {
-	ai_dt = 0.0f;
+	armor += extra_defense;
 }
 
-void Entity::Save(pugi::xml_node & node)
+void Entity::Attack(Entity* entity)
 {
+	entity->SetHp(entity->current_hp - this->attack);
+}
+
+void Entity::Damaged(int dmg)
+{
+	if (armor >= dmg)
+		current_hp--;
+	else
+		current_hp -= (dmg - armor);
+}
+
+void Entity::UpgradeUnit(int plushealth) {
+
+	this->SetHp(GetHp() + plushealth);
+
+}
+
+//Getters
+const iPoint Entity::GetPixelPosition() const
+{
+	return App->map->MapToWorld(GetPosition());
 }
 
 bool Entity::Inside(SDL_Rect rect) const
@@ -68,16 +95,6 @@ bool Entity::Inside(SDL_Rect rect) const
 	return false;
 }
 
-const iPoint Entity::GetPixelPosition() const
-{
-	return App->map->MapToWorld(GetPosition());
-}
-
-bool Entity::ToDelete() const
-{
-	return to_delete;
-}
-
 ENTITY_TYPE Entity::GetEntityType() const
 {
 	return entity_type;
@@ -88,43 +105,9 @@ ENTITY_STATUS Entity::GetEntityStatus() {
 	return entity_status;
 }
 
-void Entity::SetEntityStatus(ENTITY_STATUS status)
-{
-	entity_status = status;
-}
-
-float Entity::GetArrowPos() const
-{
-	return Arrow_pos;
-}
-
-void Entity::ResetArrowPos()
-{
-	Arrow_pos = 0;
-}
-
-void Entity::UpdateArrow(int start_height, iPoint target_pos, int curve_height, float time_secs)
-{
-	SDL_Rect rect = { 0,0,45,8};
-	iPoint pos;
-
-	iPoint initial_point = { GetPosition().x,GetPosition().y - start_height };
-	iPoint last_point = target_pos;
-	iPoint mid_point = { (initial_point.x + last_point.x) / 2,((initial_point.y + last_point.y) / 2) - curve_height };
-
-	pos.x = ((1 - Arrow_pos)*(1 - Arrow_pos)*initial_point.x) + ((2 * Arrow_pos)*(1 - Arrow_pos)*mid_point.x) + ((Arrow_pos*Arrow_pos)*last_point.x);
-	pos.y = ((1 - Arrow_pos)*(1 - Arrow_pos)*initial_point.y) + ((2 * Arrow_pos)*(1 - Arrow_pos)*mid_point.y) + ((Arrow_pos*Arrow_pos)*last_point.y);
-
-	App->render->PushInGameSprite(App->tex->GetTexture(T_ARROW_BOMB), pos.x, pos.y, &rect, SDL_FLIP_NONE, 0, 0, 1, 0, false);
-	float diferential = 1/ time_secs;
-
-	Arrow_pos += diferential;
-	if (Arrow_pos > 1) Arrow_pos = 1;
-}
-
 const int Entity::GetHp() const
 {
-	return hp;
+	return current_hp;
 }
 
 const int Entity::GetArmor() const
@@ -132,9 +115,9 @@ const int Entity::GetArmor() const
 	return armor;
 }
 
-void Entity::IncreaseArmor(int extra_defense)
+const int Entity::GetAttack() const
 {
-	armor += extra_defense;
+	return attack;
 }
 
 const iPoint Entity::GetPivot() const
@@ -182,6 +165,12 @@ const SDL_Rect Entity::GetInWorldTextureRect() const
 	return rect;
 }
 
+//Setters
+void Entity::SetEntityStatus(ENTITY_STATUS status)
+{
+	entity_status = status;
+}
+
 void Entity::SetArmor(int new_armor)
 {
 	armor = new_armor;
@@ -189,12 +178,18 @@ void Entity::SetArmor(int new_armor)
 
 void Entity::SetHp(int new_hp)
 {
-	hp = new_hp;
+	current_hp = new_hp;
 }
 
-const int Entity::GetAttack() const 
+void Entity::SetMaxHp(const int new_max_hp)
 {
-	return attack;
+	max_hp = new_max_hp;
+}
+
+void Entity::SetLife(const int hp)
+{
+	SetMaxHp(hp);
+	SetHp(hp);
 }
 
 void Entity::SetPivot(int x, int y)
@@ -227,25 +222,38 @@ void Entity::SetAttack(int new_attack)
 {
 	attack = new_attack;
 }
-void Entity::Attack(Entity* entity)
+
+//Arrow, SHOULD UPDATE ITSELVE
+void Entity::ResetArrowPos()
 {
-	entity->SetHp(entity->hp - this->attack);
+	Arrow_pos = 0;
 }
 
-void Entity::Damaged(int dmg)
+float Entity::GetArrowPos() const
 {
-	if (armor >= dmg)
-		hp--;
-	else
-		hp -= (dmg - armor);
+	return Arrow_pos;
 }
 
-void Entity::UpgradeUnit(int plushealth) {
+void Entity::UpdateArrow(int start_height, iPoint target_pos, int curve_height, float time_secs)
+{
+	SDL_Rect rect = { 0,0,45,8 };
+	iPoint pos;
 
-	this->SetHp(GetHp() + plushealth);
+	iPoint initial_point = { GetPosition().x,GetPosition().y - start_height };
+	iPoint last_point = target_pos;
+	iPoint mid_point = { (initial_point.x + last_point.x) / 2,((initial_point.y + last_point.y) / 2) - curve_height };
 
+	pos.x = ((1 - Arrow_pos)*(1 - Arrow_pos)*initial_point.x) + ((2 * Arrow_pos)*(1 - Arrow_pos)*mid_point.x) + ((Arrow_pos*Arrow_pos)*last_point.x);
+	pos.y = ((1 - Arrow_pos)*(1 - Arrow_pos)*initial_point.y) + ((2 * Arrow_pos)*(1 - Arrow_pos)*mid_point.y) + ((Arrow_pos*Arrow_pos)*last_point.y);
+
+	App->render->PushInGameSprite(App->tex->GetTexture(T_ARROW_BOMB), pos.x, pos.y, &rect, SDL_FLIP_NONE, 0, 0, 1, 0, false);
+	float diferential = 1 / time_secs;
+
+	Arrow_pos += diferential;
+	if (Arrow_pos > 1) Arrow_pos = 1;
 }
 
+//Extras
 /*
 void Entity::DrawPointMinimap()
 {
@@ -259,14 +267,3 @@ void Entity::DrawPointMinimap()
 	//Draw enemy units points
 	App->render->Blit((SDL_Texture*)App->uimanager->GetAtlas(), unit_minimap_pos.x - App->render->camera->GetPosition().x, unit_minimap_pos.y - App->render->camera->GetPosition().y, &atlas_point);
 }*/
-
-const SDL_Rect Entity::GetTextureRectWorldPos() const
-{
-	SDL_Rect ret;
-
-	ret = GetRect();
-	ret.x = GetPosition().x - GetPivot().x;
-	ret.y = GetPosition().y - GetPivot().y;
-
-	return ret;
-}

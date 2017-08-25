@@ -28,7 +28,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 	switch (u_type)
 	{
 	case U_GOD:
-		SetHp(1000);
+		SetLife(1000);
 		attack = 100;
 		SetArmor(50);
 		speed = 15.0f;
@@ -45,7 +45,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		//INFANTRY
 
 	case U_MILITIA:
-		SetHp(43);
+		SetLife(43);
 		attack = 6;
 		SetArmor(2);
 		speed = 1.35f;
@@ -60,7 +60,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_MANATARMS:
-		SetHp(58);
+		SetLife(58);
 		attack = 7;
 		SetArmor(4);
 		speed = 1.27f;
@@ -75,7 +75,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_LONGSWORDMAN:
-		SetHp(118);
+		SetLife(118);
 		attack = 11;
 		SetArmor(5);
 		speed = 1.28f;
@@ -90,7 +90,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_TWOHANDEDSWORDMAN:
-		SetHp(95);
+		SetLife(95);
 		attack = 13;
 		SetArmor(7);
 		speed = 1.30f;
@@ -105,7 +105,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_CHAMPION:
-		SetHp(152);
+		SetLife(152);
 		attack = 14;
 		SetArmor(8);
 		speed = 1.30f;
@@ -120,7 +120,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_SPEARMAN:
-		SetHp(55);
+		SetLife(55);
 		attack = 6;
 		SetArmor(1);
 		speed = 1.29f;
@@ -135,7 +135,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_PIKEMAN:
-		SetHp(65);
+		SetLife(65);
 		attack = 5;
 		SetArmor(1);
 		speed = 1.29f;
@@ -153,7 +153,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		//ARCHERS
 
 	case U_ARCHER:
-		SetHp(41);
+		SetLife(41);
 		attack = 6;
 		SetArmor(1);
 		speed = 1.29f;
@@ -169,7 +169,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 
 
 	case U_ARBALEST:
-		SetHp(50);
+		SetLife(50);
 		attack = 7;
 		SetArmor(1);
 		speed = 1.29f;
@@ -184,7 +184,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_CAVALRYARCHER:
-		SetHp(65);
+		SetLife(65);
 		attack = 6;
 		SetArmor(2);
 		speed = 1.55f;
@@ -199,7 +199,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_HEAVYCAVALRYARCHER:
-		SetHp(81);
+		SetLife(81);
 		attack = 8;
 		SetArmor(4);
 		speed = 1.55f;
@@ -217,7 +217,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		//CAVALRY
 
 	case U_PALADIN:
-		SetHp(167);
+		SetLife(167);
 		attack = 16;
 		SetArmor(6);
 		speed = 1.58f;
@@ -232,7 +232,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_KNIGHT:
-		SetHp(137);
+		SetLife(137);
 		attack = 12;
 		SetArmor(5);
 		speed = 1.60f;
@@ -247,7 +247,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_CAVALIER:
-		SetHp(125);
+		SetLife(125);
 		attack = 13;
 		SetArmor(3);
 		speed = 1.55f;
@@ -265,7 +265,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		//SIEGE
 
 	case U_SIEGERAM:
-		SetHp(600);
+		SetLife(600);
 		attack = 110;
 		SetArmor(4);
 		speed = 0.7f;
@@ -280,7 +280,7 @@ Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), posi
 		break;
 
 	case U_MANGONEL:
-		SetHp(500);
+		SetLife(500);
 		attack = 67;
 		SetArmor(-5);
 		speed = 0.7f;

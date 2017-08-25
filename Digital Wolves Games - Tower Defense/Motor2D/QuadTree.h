@@ -53,7 +53,7 @@ public:
 	void DrawEntities() const;
 	void DrawTiles() const;
 
-	void SaveAll(pugi::xml_node& node);
+	//void SaveAll(pugi::xml_node& node);
 	//void BlitMinimap();
 
 private:
@@ -98,7 +98,7 @@ public:
 	//Draw
 	void Draw() const;
 
-	void SaveAll(pugi::xml_node& node);
+	//void SaveAll(pugi::xml_node& node);
 
 	//void BlitMinimap() const;
 

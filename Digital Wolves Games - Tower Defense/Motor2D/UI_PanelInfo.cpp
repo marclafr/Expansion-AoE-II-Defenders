@@ -22,7 +22,7 @@ UI_PanelInfoSingleEntity::UI_PanelInfoSingleEntity(iPoint pos, SDL_Rect panel_ba
 		building = (Building*)entity;
 		//Icon
 		//TODO: entity_icon = new UI_Image(App->gui->data.selection_start_pos, App->gui->GetBuildingIcon(unit));
-		if (building->IsTower())
+		if (building->GetBuildingType() == B_TURRET)
 		{
 			tower = (Tower*) building;
 			range_icon = new UI_Image(App->gui->data.range_icon_pos, App->gui->data.range_icon);
@@ -134,17 +134,8 @@ UI_PanelInfoMultipleEntities::UI_PanelInfoMultipleEntities(iPoint pos, SDL_Rect 
 			case B_NO_BUILDING:
 				break;
 			case B_TURRET:
-			case B_CANNON:
-			case B_TURRET_UPGRADED_FIRE:
-			case B_TURRET_UPGRADED_ICE:
-			case B_TURRET_UPGRADED_AIR:
-			case B_CANNON_UPGRADED_FIRE:
-			case B_CANNON_UPGRADED_ICE:
-			case B_CANNON_UPGRADED_AIR:
 				break;
-			case B_WOOD_WALL:
-			case B_STONE_WALL:
-			case B_BRICK_WALL:
+			case B_WALL:
 				break;
 			case B_TOWNHALL:
 				break;
