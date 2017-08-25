@@ -2,6 +2,28 @@
 #define __UI_PANNEL_INFO_H__
 
 #include "j1Gui.h"
+class Task;
+
+#define MARGIN 5 //pixels
+#define BUTTON_WIDTH 25 //pixels
+#define BUTTON_HEIGHT 25 //pixels
+
+class UI_PanelButtons : public UI_Element
+{
+public:
+	UI_PanelButtons(iPoint pos, SDL_Rect panel_background_rect, Task* task, SDL_Rect rect_idle, int num_buttons_width, SDL_Rect rect_mouse_on_top = { 0,0,0,0 } , SDL_Rect rect_clicking = { 0,0,0,0 }, char* description = nullptr, SDL_Rect description_background_rect = { 0,0,0,0 });
+	~UI_PanelButtons();
+
+	bool Update();
+	bool Draw(SDL_Texture* atlas, int alpha = 255);
+
+	void AddButton(Task* task, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top = { 0,0,0,0 }, SDL_Rect rect_clicking = { 0,0,0,0 }, char* description = nullptr, SDL_Rect description_background_rect = { 0,0,0,0 });
+
+private:
+	int num_buttons_width;
+	std::vector<UI_Button*> panel_buttons;
+	std::vector<Task*> tasks;
+};
 
 class UI_PanelInfoSingleEntity : public UI_Element
 {
@@ -32,6 +54,7 @@ public:
 	UI_PanelInfoMultipleEntities(iPoint pos, SDL_Rect panel_background_rect, std::vector<Entity*> selection);
 	~UI_PanelInfoMultipleEntities();
 
+	bool Update();
 	bool Draw(SDL_Texture* atlas, int alpha = 255);
 
 private:

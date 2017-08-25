@@ -19,7 +19,7 @@
 #include "j1ScoreScene.h"
 #include "j1WaveManager.h"
 #include "j1Gui.h"
-
+#include "UI_PanelInfo.h"
 #include "j1Scene.h"
 
 /*#include "UIButton.h"
@@ -59,6 +59,7 @@ bool j1Scene::Start()
 	App->gui->CreateButton({ 500, 500 }, { 1190,936,25,25 }, { 1216,936,25,25 }, { 1242,936,25,25 }, "This is another test");
 	App->gui->CreateLabel({ 250,250 }, { 400,1750,25,25 }, "This is a test.");
 	App->gui->CreateImage({ 0,0 }, { 0,1011,1367,23 });
+	panel_buttons = (UI_Element*)App->gui->CreatePanelButtons({ 700,700 }, { 0,0,0,0 }, nullptr, { 1190,936,25,25 }, 3, { 1216,936,25,25 }, { 1242,936,25,25 }, "FIRST");
 	//---
 
 	gold = new ResourceManager();
@@ -220,8 +221,13 @@ bool j1Scene::PostUpdate()
 			selection[0]->Damaged(1);
 	
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-		App->gui->CreateAppearingImage({ 800,300 }, { 400,1750,25,25 }, 10.0f);		
-	//-------------
+	{
+		UI_PanelButtons* panel_buttonsPB = (UI_PanelButtons*)panel_buttons;
+		panel_buttonsPB->AddButton(nullptr, { 1190,936,25,25 }, { 1216,936,25,25 }, { 1242,936,25,25 }, "SECOND+++");
+		//App->gui->CreateAppearingImage({ 800,300 }, { 400,1750,25,25 }, 10.0f);		
+		
+	}
+	// ------------ -
 
 	//TODO: defeat
 	/*if (townhall->GetHp() <= 0)
@@ -267,6 +273,7 @@ bool j1Scene::CleanUp()
 	//App->tutorial->Disable();
 	
 	//App->uimanager->SetAllToDelete();
+	App->gui->DeletePanelButtons((UI_PanelButtons*)panel_buttons);
 
 	return true;
 }

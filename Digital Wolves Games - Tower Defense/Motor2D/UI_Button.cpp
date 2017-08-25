@@ -76,17 +76,20 @@ bool UI_Button::Draw(SDL_Texture * atlas, int alpha)
 	}
 	return true;
 }
-
-bool UI_Button::Update()
+#include "p2Log.h"
+bool UI_Button::Update()	//returning true means the player clicked the button //KEY_UP
 {
 	if (img_idle->IsMouseInside())
 	{
 		button_state = UI_B_MOUSE_ON_TOP;
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 			button_state = UI_B_CLICKING;
+
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+			return true;
 	}
 	else
 		button_state = UI_B_IDLE;
 
-	return true;
+	return false;
 }

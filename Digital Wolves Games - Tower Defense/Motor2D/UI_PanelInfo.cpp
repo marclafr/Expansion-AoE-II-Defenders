@@ -7,6 +7,8 @@
 #include "Towers.h"
 #include "Units.h"
 #include "Camera.h"
+#include "Task.h"
+#include "p2Math.h"
 #include "UI_PanelInfo.h"
 
 UI_PanelInfoSingleEntity::UI_PanelInfoSingleEntity(iPoint pos, SDL_Rect panel_background_rect, Entity* entity) : UI_Element(UI_E_PANEL_INFO_SINGLE, pos, panel_background_rect)
@@ -171,6 +173,14 @@ UI_PanelInfoMultipleEntities::~UI_PanelInfoMultipleEntities()
 		DELETE_PTR(panel_hpbars[i]);
 }
 
+bool UI_PanelInfoMultipleEntities::Update()
+{
+	for (int i = 0; i < panel_buttons.size(); i++)
+		panel_buttons[i]->Update();
+
+	return true;
+}
+
 bool UI_PanelInfoMultipleEntities::Draw(SDL_Texture * atlas, int alpha)
 {
 	//Draw the panel background
@@ -186,4 +196,69 @@ bool UI_PanelInfoMultipleEntities::Draw(SDL_Texture * atlas, int alpha)
 		panel_hpbars[i]->Draw(atlas, alpha);
 
 	return true;
+}
+
+UI_PanelButtons::UI_PanelButtons(iPoint pos, SDL_Rect panel_background_rect, Task * task, SDL_Rect rect_idle, int num_buttons_width, SDL_Rect rect_mouse_on_top, SDL_Rect rect_clicking, char* description, SDL_Rect description_background_rect)
+	: UI_Element(UI_E_PANEL_BUTTONS, pos, panel_background_rect), num_buttons_width(num_buttons_width)
+{
+	if (IsZero(rect_mouse_on_top))
+		rect_mouse_on_top = rect_idle;
+
+	if (IsZero(rect_clicking))
+		rect_clicking = rect_idle;
+
+	panel_buttons.push_back(new UI_Button({ pos.x + MARGIN, pos.y + MARGIN }, rect_idle, rect_mouse_on_top, rect_clicking, description, description_background_rect));
+	tasks.push_back(task);
+}
+
+UI_PanelButtons::~UI_PanelButtons()
+{
+	for (int i = 0; i < panel_buttons.size(); i++)
+		DELETE_PTR(panel_buttons[i]);
+
+	for (int i = 0; i < tasks.size(); i++)
+		DELETE_PTR(tasks[i]);
+}
+
+bool UI_PanelButtons::Update()
+{
+	for (int i = 0; i < panel_buttons.size(); i++)
+		if (panel_buttons[i]->Update())
+			//Uncomment this when tasks are done TODO// tasks[i]->Execute();
+
+	return true;
+}
+
+bool UI_PanelButtons::Draw(SDL_Texture * atlas, int alpha)
+{
+	//Draw the panel background
+	if (not_in_world == true)
+		App->render->PushUISprite(atlas, pos.x - App->render->camera->GetPosition().x, pos.y - App->render->camera->GetPosition().y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
+	else
+		App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
+
+	for (int i = 0; i < panel_buttons.size(); i++)
+		panel_buttons[i]->Draw(atlas, alpha);
+
+	return true;
+}
+
+void UI_PanelButtons::AddButton(Task * task, SDL_Rect rect_idle, SDL_Rect rect_mouse_on_top, SDL_Rect rect_clicking, char* description, SDL_Rect description_background_rect)
+{
+	if (IsZero(rect_mouse_on_top))
+		rect_mouse_on_top = rect_idle;
+
+	if (IsZero(rect_clicking))
+		rect_clicking = rect_idle;
+
+	//TODO SOLVE POSITIONING
+	int column = 0;
+	for (column = 0; column < panel_buttons.size(); column++)
+		column++;
+
+	int line = column / num_buttons_width;
+	column -= (line * num_buttons_width);
+
+	panel_buttons.push_back(new UI_Button({ pos.x + column*(BUTTON_WIDTH + MARGIN), pos.y + line*(BUTTON_HEIGHT + MARGIN) }, rect_idle, rect_mouse_on_top, rect_clicking, description, description_background_rect));
+	tasks.push_back(task);
 }

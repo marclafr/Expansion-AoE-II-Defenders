@@ -118,6 +118,7 @@ public:
 
 	std::vector<Entity*> selection;
 	UI_Element* panel_info;
+	UI_Element* panel_buttons;
 };
 
 #endif // __j1SCENE_H__
