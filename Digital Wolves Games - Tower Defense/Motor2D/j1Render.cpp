@@ -547,7 +547,7 @@ void j1Render::CleanUpUISpriteVec()
 	ui_sprite_vec.clear();
 }
 
-Sprite::Sprite(SDL_Texture * texture, int x, int y, const SDL_Rect * section, SDL_RendererFlip flip, int pivot_x, int pivot_y,const int alpha, float speed, double angle): texture(texture), x(x), y(y), flip(flip), pivot_x(pivot_x), pivot_y(pivot_y), alpha(alpha), speed(speed), angle(angle)
+Sprite::Sprite(SDL_Texture * texture, int x, int y, const SDL_Rect * section, SDL_RendererFlip flip, int pivot_x, int pivot_y, float speed, double angle, const int alpha): texture(texture), x(x), y(y), flip(flip), pivot_x(pivot_x), pivot_y(pivot_y), alpha(alpha), speed(speed), angle(angle)
 {
 	if (section != nullptr)
 	{
