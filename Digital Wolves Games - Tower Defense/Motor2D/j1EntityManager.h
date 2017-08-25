@@ -31,6 +31,7 @@ public:
 
 	Entity* CreateUnit(UNIT_TYPE u_type,const iPoint& pos, Side side);
 	Entity* CreateBuilding(BUILDING_TYPE b_type, const iPoint& pos, bool builded = false) const;
+	Entity* CreateWall(const iPoint& pos, bool builded = false) const;
 	/*Entity* CreateTower(TOWER_TYPE t_type, fPoint pos) const;
 	Entity* CreateResource(RESOURCE_TYPE r_type, fPoint pos, int amount_collect, int time) const;*/
 

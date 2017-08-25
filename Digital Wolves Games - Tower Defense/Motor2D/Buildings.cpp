@@ -70,11 +70,8 @@ Building::Building(BUILDING_TYPE b_type, iPoint pos, bool builded) : Entity(E_BU
 	}
 
 	buildtimer.Start();
-	iPoint p = App->map->WorldToMap(pos.x, pos.y);
 
-	App->pathfinding->MakeNoWalkable(p);
-	App->pathfinding->MakeNoConstruible_neutral(p);
-	App->pathfinding->MakeNoConstruible_ally(p);
+	App->pathfinding->MakeNoWalkable(pos);
 }
 
 Building::~Building()
@@ -108,7 +105,7 @@ void Building::AI()
 		if (GetHp() <= 0)
 			Destroyed();
 
-		if (buildtimer.ReadSec() >= 2.0f)
+		if (buildtimer.ReadSec() >= DELAY_BETWEEN_BUILD_PHASES)
 		{
 			state_changed = true;
 			state = BS_IN_CONSTRUCTION_END;
@@ -121,7 +118,7 @@ void Building::AI()
 		if (GetHp() <= 0)
 			Destroyed();
 
-		if (buildtimer.ReadSec() >= 2.0f)
+		if (buildtimer.ReadSec() >= DELAY_BETWEEN_BUILD_PHASES)
 		{
 			state_changed = true;
 			state = BS_BUILT;

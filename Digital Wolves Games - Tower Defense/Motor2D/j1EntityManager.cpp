@@ -1,7 +1,6 @@
 #include <vector>
 #include "j1App.h"
 #include "j1Pathfinding.h"
-#include "Units.h"
 //#include "j1UIManager.h"
 //#include "UIHUDPanelInfo.h"
 #include "j1Scene.h"
@@ -17,6 +16,9 @@
 #include "j1Gui.h"
 
 #include "j1EntityManager.h"
+#include "Units.h"
+#include "Buildings.h"
+#include "Wall.h"
 
 #define MAX_SELECTION 25
 
@@ -72,6 +74,13 @@ Entity * j1EntityManager::CreateBuilding(BUILDING_TYPE b_type, const iPoint& pos
 	entity_quadtree->PushBack(new_entity);
 	//if (b_type == B_TOWNHALL)
 		//App->uimanager->SetTownHall((Building*)new_entity);
+	return new_entity;
+}
+
+Entity * j1EntityManager::CreateWall(const iPoint & pos, bool builded) const
+{
+	Entity* new_entity = (Entity*) new Wall(pos, builded);
+	entity_quadtree->PushBack(new_entity);
 	return new_entity;
 }
 

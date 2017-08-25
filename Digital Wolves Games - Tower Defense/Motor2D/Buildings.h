@@ -12,6 +12,8 @@
 #include "j1Investigations.h"
 #include "p2Point.h"
 
+#define DELAY_BETWEEN_BUILD_PHASES 1.5f //secs
+
 enum BUILDING_TYPE
 {
 	B_NO_BUILDING = 0,
@@ -37,7 +39,7 @@ protected:
 	iPoint left_tile;
 	std::vector<iPoint> tiles;
 	BUILDING_STATE state = BS_IN_CONSTRUCTION_BEGINING;
-	bool state_changed = false;
+	bool state_changed = true;
 	BUILDING_TYPE building_type;
 	j1Timer buildtimer;
 	j1Timer DieTimer;
