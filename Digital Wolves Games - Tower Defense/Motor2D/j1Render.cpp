@@ -359,12 +359,12 @@ void j1Render::PushInGameSprite(const Entity* entity, const int alpha)
 		if (entity->GetEntityType() == E_UNIT)
 		{
 			if (((Unit*)entity)->GetDir() == D_NORTH_EAST || ((Unit*)entity)->GetDir() == D_EAST || ((Unit*)entity)->GetDir() == D_SOUTH_EAST)
-				entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_HORIZONTAL, entity->GetPivot().x, entity->GetPivot().y, alpha);
+				entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_HORIZONTAL, entity->GetPivot().x, entity->GetPivot().y, 1.0f, 0.0, alpha);
 			else
-				entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y, alpha);
+				entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y, 1.0f, 0.0, alpha);
 		}
 		else
-			entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y, alpha);
+			entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y, 1.0f, 0.0, alpha);
 
 		PushInGameSprite(entity_sprite);
 	}
