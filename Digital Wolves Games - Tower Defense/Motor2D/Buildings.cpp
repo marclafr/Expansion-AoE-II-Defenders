@@ -91,21 +91,48 @@ void Building::AI()
 {
 	switch (state)
 	{
-	case BS_IN_CONSTRUCTION:
+	case BS_IN_CONSTRUCTION_BEGINING:
 		if (GetHp() <= 0)
-			Destroied();
+			Destroyed();
 
-		if (buildtimer.ReadSec() >= 6.0f)
+		if (buildtimer.ReadSec() >= 2.0f)
+		{
+			state_changed = true;
+			state = BS_IN_CONSTRUCTION_MIDDLE;
+			buildtimer.Start();
+			//need to change texture for everything but TH and uni
+		}
+		break;
+
+	case BS_IN_CONSTRUCTION_MIDDLE:
+		if (GetHp() <= 0)
+			Destroyed();
+
+		if (buildtimer.ReadSec() >= 2.0f)
+		{
+			state_changed = true;
+			state = BS_IN_CONSTRUCTION_END;
+			buildtimer.Start();
+			//need to change texture for everything but TH and uni
+		}
+		break;
+
+	case BS_IN_CONSTRUCTION_END:
+		if (GetHp() <= 0)
+			Destroyed();
+
+		if (buildtimer.ReadSec() >= 2.0f)
 		{
 			state_changed = true;
 			state = BS_BUILT;
+			buildtimer.Start();
 			//need to change texture for everything but TH and uni
 		}
 		break;
 
 	case BS_BUILT:
 		if (GetHp() <= 0)
-			Destroied();
+			Destroyed();
 
 		if (App->entity_manager->AreUnitsInRect(GetInWorldTextureRect()))
 		{
@@ -120,7 +147,7 @@ void Building::AI()
 
 		break;
 
-	case BS_DESTROIED:
+	case BS_DESTROYED:
 		if (GetHp() <= 0 && DieTimer.ReadSec() >= 2.0f)
 			DestroyBuilding();
 		break;
@@ -143,7 +170,11 @@ void Building::ChangeTexture()
 {
 	switch (state)
 	{
-	case BS_IN_CONSTRUCTION:
+	case BS_IN_CONSTRUCTION_BEGINING:
+		break;
+	case BS_IN_CONSTRUCTION_MIDDLE:
+		break;
+	case BS_IN_CONSTRUCTION_END:
 		SetRect({ 98,0,100,75 });
 		SetPivot(0.55 * 100, 75 * 0.643836);
 		break;
@@ -154,8 +185,8 @@ void Building::ChangeTexture()
 		case B_TURRET:
 			break;
 		case B_WALL:
-			SetRect({ 610,289,100,106 });
-			SetPivot(0.49 * 100, 106 * 0.754717);
+			//SetRect({ 610,289,100,106 });
+			//SetPivot(0.49 * 100, 106 * 0.754717);
 			break;
 		case B_TOWNHALL:
 			SetRect({ 477,0,366,317 });
@@ -174,13 +205,13 @@ void Building::ChangeTexture()
 		}
 		break;
 
-	case BS_DESTROIED:
+	case BS_DESTROYED:
 		SetRect({ 313, 1, 91, 51 });
 		SetPivot(0.362637 * 91, 0.431373 * 51);
 		break;
 
 	default:
-		LOG("Can not change building texture with null building state state");
+		LOG("Can not change building texture with null building state");
 		break;
 	}
 }
@@ -190,9 +221,9 @@ void Building::Draw()
 	App->render->PushInGameSprite(this);
 }
 
-void Building::Destroied()
+void Building::Destroyed()
 {
-	state = BS_DESTROIED;
+	state = BS_DESTROYED;
 	state_changed = true;
 	App->audio->PlayFx(App->audio->fx_building_destroyed);
 	DieTimer.Start();

@@ -24,17 +24,19 @@ enum BUILDING_TYPE
 enum BUILDING_STATE
 {
 	BS_NO_STATE,
-	BS_IN_CONSTRUCTION,
+	BS_IN_CONSTRUCTION_BEGINING,
+	BS_IN_CONSTRUCTION_MIDDLE,
+	BS_IN_CONSTRUCTION_END,
 	BS_BUILT,
-	BS_DESTROIED
+	BS_DESTROYED
 };
 
 class Building : public Entity
 {
-private:
+protected:
 	iPoint left_tile;
 	std::vector<iPoint> tiles;
-	BUILDING_STATE state = BS_IN_CONSTRUCTION;
+	BUILDING_STATE state = BS_IN_CONSTRUCTION_BEGINING;
 	bool state_changed = false;
 	BUILDING_TYPE building_type;
 	j1Timer buildtimer;
@@ -43,15 +45,15 @@ private:
 	AnimationManager* building_fire;
 
 public:
-	Building(BUILDING_TYPE b_type, iPoint pos, bool builded);
+	Building(BUILDING_TYPE b_type, iPoint pos, bool builded = false);
 	~Building();
 
-	virtual void Update(float dt); // defines order
+	void Update(float dt); // defines order
 	virtual void AI();
 	virtual void ChangeTexture();
 	void Draw();
 
-	void Destroied();
+	void Destroyed();
 	void DestroyBuilding();
 	
 	//Setters

@@ -65,17 +65,18 @@ Entity * j1EntityManager::CreateUnit(UNIT_TYPE u_type,const iPoint& pos, Side si
 	return new_entity;
 }
 
-//TODO uncoment and fix
-/*
-Entity * j1EntityManager::CreateBuilding(BUILDING_TYPE b_type, fPoint pos, bool builded) const
+
+Entity * j1EntityManager::CreateBuilding(BUILDING_TYPE b_type, const iPoint& pos, bool builded) const
 {
 	Entity* new_entity = (Entity*) new Building(b_type, pos, builded);
 	entity_quadtree->PushBack(new_entity);
-	if (b_type == B_TOWNHALL)
-		App->uimanager->SetTownHall((Building*)new_entity);
+	//if (b_type == B_TOWNHALL)
+		//App->uimanager->SetTownHall((Building*)new_entity);
 	return new_entity;
 }
 
+//TODO uncoment and fix
+/*
 Entity * j1EntityManager::CreateTower(TOWER_TYPE t_type, fPoint pos) const
 {
 	Entity* new_entity = (Entity*) new Tower(t_type, pos);

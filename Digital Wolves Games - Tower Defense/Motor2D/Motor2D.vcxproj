@@ -131,6 +131,7 @@
     <ClCompile Include="UI_Text_Input.cpp" />
     <ClCompile Include="Units.cpp" />
     <ClCompile Include="j1Video.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buildings.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="UI_Text_Input.h" />
     <ClInclude Include="Units.h" />
     <ClInclude Include="j1Video.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AOEII_Defenders.rc" />

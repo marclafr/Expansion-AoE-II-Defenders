@@ -157,6 +157,7 @@
     <ClCompile Include="UI_MultiLabel.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buildings.h">
@@ -327,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="p2Math.h">
       <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
