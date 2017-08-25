@@ -134,7 +134,7 @@ Entity * QuadTreeNode::SearchFirst(const SDL_Rect rect) const
 			if (entities[i] != nullptr)
 			{
 				SDL_Rect entity_rect = entities[i]->GetInWorldTextureRect();
-				if (Overlaps(entity_rect, rect))
+				if (RectsOverlap(entity_rect, rect))
 				{
 					ret = entities[i];
 					break;
@@ -166,7 +166,7 @@ Entity * QuadTreeNode::SearchFirstUnit(const SDL_Rect & rect) const
 			if (entities[i] != nullptr)
 			{
 				SDL_Rect entity_rect = entities[i]->GetInWorldTextureRect();
-				if (Overlaps(entity_rect, rect))
+				if (RectsOverlap(entity_rect, rect))
 					if (entities[i]->GetEntityType() == E_UNIT)
 					{
 						ret = entities[i];

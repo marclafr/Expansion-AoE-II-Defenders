@@ -27,6 +27,8 @@ class UI_AppearingImage;
 class UI_HPBar;
 class UI_PanelInfoSingleEntity;
 class UI_PanelInfoMultipleEntities;
+class UI_PanelButtons;
+class Task;
 
 class Entity;
 class Building;
@@ -99,6 +101,7 @@ enum UI_ELEMENT_TYPE
 	UI_E_HP_BAR,
 	UI_E_PANEL_INFO_SINGLE,
 	UI_E_PANEL_INFO_MULTIPLE,
+	UI_E_PANEL_BUTTONS,
 };
 
 class UI_Element
@@ -167,8 +170,10 @@ public:
 	UI_TextInput* CreateTextInput(iPoint pos, char* txt, FONT_NAME font_name = OPENSANS_REGULAR, SDL_Color color = { (0), (0), (0), (255) }, bool not_in_world = true);
 	UI_PanelInfoSingleEntity* CreatePanel(Entity* selection);
 	UI_PanelInfoMultipleEntities* CreatePanel(std::vector<Entity*> selection);
+	UI_PanelButtons* CreatePanelButtons(iPoint pos, SDL_Rect panel_background_rect, Task* task, SDL_Rect rect_idle, int num_buttons_width, SDL_Rect rect_mouse_on_top = { 0,0,0,0 }, SDL_Rect rect_clicking = { 0,0,0,0 }, char* description = nullptr, SDL_Rect description_background_rect = { 0,0,0,0 });
 	//-----------------------
-	// Gui creation functions
+
+	// Gui deleting functions
 	void DeleteImage(UI_Image* img);
 	void DeleteButton(UI_Button* button);
 	void DeleteLabel(UI_Label* label);
@@ -178,6 +183,7 @@ public:
 	void DeleteTextInput(UI_TextInput* txt_input);
 	void DeletePanelInfo(UI_PanelInfoSingleEntity* panel_info);
 	void DeletePanelInfo(UI_PanelInfoMultipleEntities* panel_info);
+	void DeletePanelButtons(UI_PanelButtons* panel_buttons);
 	//-----------------------
 
 

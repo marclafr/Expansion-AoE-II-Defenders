@@ -290,6 +290,14 @@ UI_PanelInfoMultipleEntities* j1Gui::CreatePanel(std::vector<Entity*> selection)
 	return ret;
 }
 
+UI_PanelButtons * j1Gui::CreatePanelButtons(iPoint pos, SDL_Rect panel_background_rect, Task * task, SDL_Rect rect_idle, int num_buttons_width, SDL_Rect rect_mouse_on_top, SDL_Rect rect_clicking, char * description, SDL_Rect description_background_rect)
+{
+	UI_PanelButtons* ret = nullptr;
+	ret = new UI_PanelButtons(pos, panel_background_rect, task, rect_idle, num_buttons_width, rect_mouse_on_top, rect_clicking, description, description_background_rect);
+	ui_elements.push_back(ret);
+	return ret;
+}
+
 
 void j1Gui::DeleteImage(UI_Image* img)
 {
@@ -397,6 +405,18 @@ void j1Gui::DeletePanelInfo(UI_PanelInfoMultipleEntities * panel_info)
 		}
 
 	DELETE_PTR(panel_info);
+}
+
+void j1Gui::DeletePanelButtons(UI_PanelButtons * panel_buttons)
+{
+	for (std::vector<UI_Element*>::iterator it = ui_elements.begin(); it != ui_elements.end(); ++it)
+		if (*it == panel_buttons)
+		{
+			ui_elements.erase(it);
+			break;
+		}
+
+	DELETE_PTR(panel_buttons);
 }
 
 // const getter for atlas
