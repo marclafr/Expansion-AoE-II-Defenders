@@ -23,7 +23,8 @@ UI_PanelInfoSingleEntity::UI_PanelInfoSingleEntity(iPoint pos, SDL_Rect panel_ba
 	case E_BUILDING:
 		building = (Building*)entity;
 		//Icon
-		//TODO: entity_icon = new UI_Image(App->gui->data.selection_start_pos, App->gui->GetBuildingIcon(unit));
+		//TODO: 
+		//entity_icon = new UI_Image(App->gui->data.selection_start_pos, App->gui->GetBuildingIcon(unit));
 		if (building->GetBuildingType() == B_TURRET)
 		{
 			tower = (Tower*) building;
@@ -92,13 +93,18 @@ bool UI_PanelInfoSingleEntity::Draw(SDL_Texture * atlas, int alpha)
 		else
 			App->render->PushUISprite(atlas, pos.x, pos.y, &atlas_rect, SDL_FLIP_NONE, 0, 0, 1, 0, alpha);
 
-		entity_icon->Draw(atlas, alpha);
-		attack_icon->Draw(atlas, alpha);
-		armor_icon->Draw(atlas, alpha);
+		if (entity_icon != nullptr)
+			entity_icon->Draw(atlas, alpha);
+		if (attack_icon != nullptr)
+			attack_icon->Draw(atlas, alpha);
+		if (armor_icon != nullptr)
+			armor_icon->Draw(atlas, alpha);
 		if (range_icon != nullptr)
 			range_icon->Draw(atlas, alpha);
-		attack_label->Draw(atlas, alpha);
-		armor_label->Draw(atlas, alpha);
+		if (attack_label != nullptr)
+			attack_label->Draw(atlas, alpha);
+		if (armor_label != nullptr)
+			armor_label->Draw(atlas, alpha);
 		if (range_label != nullptr)
 			range_label->Draw(atlas, alpha);
 	}
