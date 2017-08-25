@@ -52,6 +52,11 @@ int UI_Label::GetTextHeight()
 	return text->text_rect.h;
 }
 
+int UI_Label::GetTextWidth()
+{
+	return text->text_rect.w;
+}
+
 void UI_Label::SetText(char * new_txt)
 {
 	text->text = new_txt;

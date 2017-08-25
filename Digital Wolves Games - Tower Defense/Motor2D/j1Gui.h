@@ -8,7 +8,7 @@
 #include "j1Fonts.h"
 
 #define CURSOR_WIDTH 2
-#define BACKGROUND_RECT_DEFAULT_TEXT { 359, 1579, 200, 200 }
+#define DEFAULT_BACKGROUND_RECT_TEXT { 359, 1579, 200, 200 }
 #define NO_RECT { 0, 0, 0, 0 }
 #define TEXT_RIGHT_DISPLACEMENT 5 //pixels
 
@@ -159,7 +159,7 @@ public:
 
 	// Gui creation functions
 	UI_Image* CreateImage(iPoint pos, SDL_Rect atlas_rect, bool not_in_world = true);
-	UI_Button* CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description = nullptr, bool not_in_world = true, SDL_Rect description_background_rect = BACKGROUND_RECT_DEFAULT_TEXT);
+	UI_Button* CreateButton(iPoint pos, SDL_Rect atlas_rect_idle, SDL_Rect atlas_rect_mouse_on_top, SDL_Rect atlas_rect_clicking, char* description = nullptr, bool not_in_world = true, SDL_Rect description_background_rect = DEFAULT_BACKGROUND_RECT_TEXT);
 	UI_Label* CreateLabel(iPoint pos, SDL_Rect atlas_rect, char* txt, bool has_background = true, bool not_in_world = true);
 	UI_MultiLabel* CreateMultiLabel(iPoint pos, SDL_Rect atlas_rect, char* txt, int max_labels = 1, int label_to_remove = 0, bool has_max_labels = false, bool has_background = true, bool not_in_world = true);
 	UI_AppearingLabel* CreateAppearingLabel(iPoint pos, SDL_Rect atlas_rect, float seconds_on_screen, char* txt, bool has_background = true, bool not_in_world = true);

@@ -1,3 +1,4 @@
+#include "p2Log.h"
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Fonts.h"
@@ -10,7 +11,7 @@
 #include "j1Input.h"
 #include "j1Map.h"
 #include "j1FileSystem.h"
-#include "p2Log.h"
+#include "j1Scene.h"
 #include "j1Console.h"
 
 #define CONSOLE_POS { 5, 25 }
@@ -177,7 +178,7 @@ bool j1Console::UnderstandCommand(const char * command)
 				break;
 
 			case ADD_GOLD:
-				App->debug_features.add_gold = true;
+				App->scene->gold->AddGold(1000);
 				LOG("1000 Gold added");
 				break;
 

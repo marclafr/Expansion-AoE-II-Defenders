@@ -29,7 +29,7 @@ UI_PanelInfoSingleEntity::UI_PanelInfoSingleEntity(iPoint pos, SDL_Rect panel_ba
 			//attribute_value_range = std::to_string(tower->GetRange());
 			attribute_pos = App->gui->data.range_icon_pos;
 			attribute_pos.x += App->gui->data.attributes_displacement;
-			range_label = new UI_Label(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
+			range_label = new UI_Label(attribute_pos, DEFAULT_BACKGROUND_RECT_TEXT, (char*)attribute_value_range.c_str());
 		}
 		break;
 
@@ -42,7 +42,7 @@ UI_PanelInfoSingleEntity::UI_PanelInfoSingleEntity(iPoint pos, SDL_Rect panel_ba
 		attribute_value_range = std::to_string(unit->GetRange());
 		attribute_pos = App->gui->data.range_icon_pos;
 		attribute_pos.x += App->gui->data.attributes_displacement;
-		range_label = new UI_Label(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_range.c_str());
+		range_label = new UI_Label(attribute_pos, DEFAULT_BACKGROUND_RECT_TEXT, (char*)attribute_value_range.c_str());
 		break;
 
 	case E_RESOURCE:
@@ -58,13 +58,13 @@ UI_PanelInfoSingleEntity::UI_PanelInfoSingleEntity(iPoint pos, SDL_Rect panel_ba
 	attribute_value_attack = std::to_string(entity->GetAttack());
 	attribute_pos = App->gui->data.attack_icon_pos;
 	attribute_pos.x += App->gui->data.attributes_displacement;
-	attack_label = new UI_Label(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_attack.c_str());
+	attack_label = new UI_Label(attribute_pos, DEFAULT_BACKGROUND_RECT_TEXT, (char*)attribute_value_attack.c_str());
 	//Armor
 	armor_icon = new UI_Image(App->gui->data.armor_icon_pos, App->gui->data.armor_icon);
 	attribute_value_armor = std::to_string(entity->GetArmor());
 	attribute_pos = App->gui->data.armor_icon_pos;
 	attribute_pos.x += App->gui->data.attributes_displacement;
-	armor_label = new UI_Label(attribute_pos, BACKGROUND_RECT_DEFAULT_TEXT, (char*)attribute_value_armor.c_str());
+	armor_label = new UI_Label(attribute_pos, DEFAULT_BACKGROUND_RECT_TEXT, (char*)attribute_value_armor.c_str());
 }
 
 UI_PanelInfoSingleEntity::~UI_PanelInfoSingleEntity()
