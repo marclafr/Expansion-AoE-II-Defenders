@@ -34,24 +34,24 @@ void Wall::ChangeTexture()
 			switch (orientation)
 			{
 			case WO_CORNER:
-				SetRect({ 773,389,76,82 });
-				SetPivot(0.526316f * 76, 0.743902f * 82);
-				break;
-			case WO_VERTICAL:
-				SetRect({ 849,389,75,83 });
-				SetPivot(0.466667f * 75, 0.746988f * 83);
-				break;
-			case WO_HORIZONTAL:
 				SetRect({ 610,289,100,106 });
 				SetPivot(0.49f * 100, 0.754717f * 106);
 				break;
-			case WO_DIAGONAL_BOT_TOP:
+			case WO_VERTICAL:
+				SetRect({ 610,389,51,97 });
+				SetPivot(0.490196f * 51, 0.742268f * 97);
+				break;
+			case WO_HORIZONTAL:
 				SetRect({ 661,389,112,68 });
 				SetPivot(0.491071f * 112, 0.808824f * 68);
 				break;
+			case WO_DIAGONAL_BOT_TOP:
+				SetRect({ 773,389,76,82 });
+				SetPivot(0.526316f * 76, 0.743902f * 82);
+				break;
 			case WO_DIAGONAL_TOP_BOT:
-				SetRect({ 610,389,51,97 });
-				SetPivot(0.490196f * 51, 0.742268f * 97);
+				SetRect({ 849,389,75,83 });
+				SetPivot(0.466667f * 75, 0.746988f * 83);
 				break;
 			default:
 				LOG("Invalid wall orientation, cant get texture");
