@@ -41,6 +41,9 @@ public:
 	//Setters
 	void SetOrientation(WALL_ORIENTATION orientation);
 	void SetLevel(WALL_LEVELS level);
+
+	//Getters
+	const iPoint& GetPixelPos() const;
 };
 
 #endif //!_WALL

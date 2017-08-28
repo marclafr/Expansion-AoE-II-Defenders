@@ -172,19 +172,13 @@ void Building::ChangeTexture()
 	case BS_IN_CONSTRUCTION_MIDDLE:
 		break;
 	case BS_IN_CONSTRUCTION_END:
-		SetRect({ 98,0,100,75 });
-		SetPivot(0.55 * 100, 75 * 0.643836);
+		//SetRect({ 98,0,100,75 });
+		//SetPivot(0.55 * 100, 75 * 0.643836);
 		break;
 
 	case BS_BUILT:
 		switch (building_type)
 		{
-		case B_TURRET:
-			break;
-		case B_WALL:
-			//SetRect({ 610,289,100,106 });
-			//SetPivot(0.49 * 100, 106 * 0.754717);
-			break;
 		case B_TOWNHALL:
 			SetRect({ 477,0,366,317 });
 			SetPivot(0.52459 * 366, 0.72555 * 317);
@@ -196,8 +190,7 @@ void Building::ChangeTexture()
 			break;
 
 		default:
-			LOG("Error BUILDING TYPE STATS NULL");
-			building_type = B_NO_BUILDING;
+			LOG("Error BUILDING TYPE NULL, can't set texture");
 			break;
 		}
 		break;
@@ -238,7 +231,14 @@ void Building::SetPositions()
 {
 	switch (building_type)
 	{
-	case B_TURRET:
+	case B_TOWNHALL:
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 4; j++)
+			{
+				iPoint tile(left_tile.x + j, left_tile.y - i);
+				App->pathfinding->MakeNoWalkable(tile);
+				tiles.push_back(tile);
+			}
 		break;
 
 	}
@@ -247,6 +247,41 @@ void Building::SetPositions()
 const iPoint & Building::GetPosition() const
 {
 	return left_tile;
+}
+
+const iPoint & Building::GetPixelPosition() const
+{
+	//Get leftmost vertex in pixels
+	iPoint left(App->map->MapToWorld(left_tile));
+	left.x -= App->map->data.tile_width / 2.0f;
+	left.y += App->map->data.tile_height / 2.0f;
+	
+	iPoint right_tile(GetPosition());
+
+	switch (building_type)
+	{
+	case B_TOWNHALL:	
+		right_tile.y -= 4;
+		right_tile.x += 4;
+		break;
+
+	case B_UNIVERSITY:
+		
+		break;
+
+	default:
+		LOG("Error BUILDING TYPE NULL, can't return pixel pos");
+		break;
+	}
+
+	iPoint right(App->map->MapToWorld(right_tile));
+	right.x += App->map->data.tile_width / 2.0f;
+	right.y += App->map->data.tile_height / 2.0f;
+
+	iPoint vec(right.x - left.x, right.y - left.y);
+
+	iPoint ret(left.x + (vec.x /2.0f), left.y + (vec.y / 2.0f));
+	return ret;
 }
 
 const BUILDING_TYPE Building::GetBuildingType() const

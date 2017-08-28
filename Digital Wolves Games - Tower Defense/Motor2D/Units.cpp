@@ -587,7 +587,7 @@ const iPoint& Unit::GetPosition() const
 	return position;
 }
 
-const iPoint Unit::GetPixelPosition() const
+const iPoint& Unit::GetPixelPosition() const
 {
 	iPoint ret = App->map->MapToWorld(GetPosition());
 	ret.y += App->map->data.tile_height / 2.0f;

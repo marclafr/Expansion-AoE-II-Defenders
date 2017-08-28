@@ -167,7 +167,7 @@ public:
 	const iPoint& GetPosition() const;
 	const float GetX() const;
 	const float GetY() const;
-	const iPoint GetPixelPosition() const;
+	const iPoint& GetPixelPosition() const;
 	const DIRECTION GetDir() const;
 	const UNIT_TYPE GetUnitType() const;
 	const UNIT_CLASS GetUnitClass() const;

@@ -89,8 +89,6 @@ public:
 		return (x == v.x && y == v.y);
 	}
 
-
-
 	bool operator !=(const p2Point& v) const
 	{
 		return (x != v.x || y != v.y);

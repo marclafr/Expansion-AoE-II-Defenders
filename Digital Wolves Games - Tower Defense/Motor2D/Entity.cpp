@@ -55,11 +55,6 @@ void Entity::UpgradeUnit(int plushealth) {
 }
 
 //Getters
-const iPoint Entity::GetPixelPosition() const
-{
-	return App->map->MapToWorld(GetPosition());
-}
-
 bool Entity::Inside(SDL_Rect rect) const
 {
 	iPoint pixel_pos = GetPixelPosition();

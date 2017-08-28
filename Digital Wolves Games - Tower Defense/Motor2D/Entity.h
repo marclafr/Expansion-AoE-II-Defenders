@@ -65,7 +65,7 @@ public:
 	void UpgradeUnit(int plushealth);
 
 	//Geters
-	virtual const iPoint GetPixelPosition() const;
+	virtual const iPoint& GetPixelPosition() const = 0;
 	bool Inside(SDL_Rect rect) const;	
 	ENTITY_TYPE GetEntityType() const;
 	ENTITY_STATUS GetEntityStatus();

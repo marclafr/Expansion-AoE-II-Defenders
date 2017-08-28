@@ -63,6 +63,7 @@ public:
 
 	//Getters
 	const iPoint& GetPosition() const;
+	const iPoint& GetPixelPosition() const;
 	const BUILDING_TYPE GetBuildingType() const;
 	IsoRect GetBuildRectangle();
 	const int GetMaxHp() const;

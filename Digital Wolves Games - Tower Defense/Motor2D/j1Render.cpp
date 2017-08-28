@@ -355,22 +355,17 @@ void j1Render::PushInGameSprite(const Entity* entity, const int alpha)
 	if (camera->InsideRenderTarget(in_camera_pos.x, in_camera_pos.y))
 	{
 		Sprite* entity_sprite;
+		iPoint blit_pos(entity->GetPixelPosition());
 
 		if (entity->GetEntityType() == E_UNIT)
 		{
 			if (((Unit*)entity)->GetDir() == D_NORTH_EAST || ((Unit*)entity)->GetDir() == D_EAST || ((Unit*)entity)->GetDir() == D_SOUTH_EAST)
-				entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_HORIZONTAL, entity->GetPivot().x, entity->GetPivot().y, 1.0f, 0.0, alpha);
+				entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), blit_pos.x, blit_pos.y, &entity->GetRect(), SDL_FLIP_HORIZONTAL, entity->GetPivot().x, entity->GetPivot().y, 1.0f, 0.0, alpha);
 			else
-				entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y, 1.0f, 0.0, alpha);
-		}
-		else if (entity->GetEntityType() == E_BUILDING)
-		{
-			iPoint blit_pos(entity->GetPixelPosition());
-			blit_pos.y += App->map->data.tile_height / 2.0f;
-			entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), blit_pos.x, blit_pos.y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y, 1.0f, 0.0, alpha);
+				entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), blit_pos.x, blit_pos.y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y, 1.0f, 0.0, alpha);
 		}
 		else
-			entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), entity->GetPixelPosition().x, entity->GetPixelPosition().y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y, 1.0f, 0.0, alpha);
+			entity_sprite = new Sprite(App->tex->GetTexture(entity->GetTextureID()), blit_pos.x, blit_pos.y, &entity->GetRect(), SDL_FLIP_NONE, entity->GetPivot().x, entity->GetPivot().y, 1.0f, 0.0, alpha);
 
 		PushInGameSprite(entity_sprite);
 	}

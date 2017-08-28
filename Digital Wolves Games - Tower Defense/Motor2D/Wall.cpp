@@ -1,4 +1,6 @@
 #include "p2Log.h"
+#include "j1App.h"
+#include "j1Map.h"
 #include "Buildings.h"
 #include "Wall.h"
 
@@ -161,4 +163,11 @@ void Wall::SetOrientation(WALL_ORIENTATION orientation)
 void Wall::SetLevel(WALL_LEVELS level)
 {
 	this->level = level;
+}
+
+const iPoint & Wall::GetPixelPos() const
+{
+	iPoint ret (App->map->MapToWorld(GetPosition()));
+	ret.y += App->map->data.tile_height / 2.0f;
+	return ret;
 }
