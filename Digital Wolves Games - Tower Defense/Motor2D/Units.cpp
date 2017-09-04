@@ -411,6 +411,7 @@ void Unit::AI()
 				else
 					GoToEnemy();
 			}
+			GoToEnemy();
 			break;
 		}
 
@@ -681,6 +682,84 @@ bool Unit::InRange(const iPoint & tile) const
 	return abs(vector.x) <= range && abs(vector.y) <= range;
 }
 
+void Unit::GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const
+{
+	while (range > 0)
+	{
+		iPoint current_tile(position.x - range, position.y - range);
+
+		//Left
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.x = position.x + i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.x++;
+
+		//Down
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.y = position.y + i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.y++;
+
+		//Right
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.x = position.x - i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.x--;
+
+		//Up
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.y = position.y - i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.y--;
+
+		range--;
+	}
+}
+
+const iPoint & Unit::FindClosestEmptyAttackTile(const Entity* target, int tile_range) const
+{
+	iPoint ret(-1, -1);
+
+	if (tile_range < 1)
+	{
+		LOG("Tile range inferior to 1");
+		return ret;
+	}
+
+	std::vector<iPoint> empty_attack_tiles;
+
+	target->GetEmptyAttackPositions(empty_attack_tiles, range);
+
+	if (empty_attack_tiles.size() == 0)
+		return ret;
+
+	float shortest_distance = NUM_TILES;
+	float distance_to_tile = 0.0f;
+
+	for (std::vector<iPoint>::iterator it = empty_attack_tiles.begin(); it != empty_attack_tiles.end(); ++it)
+	{
+		distance_to_tile = it->DistanceTo(position);
+		if (shortest_distance > distance_to_tile)
+		{
+			shortest_distance = distance_to_tile;
+			ret = *it;
+		}
+	}
+	return ret;
+}
+
 const Unit * Unit::GetCollision() const
 {
 	return collision;
@@ -937,6 +1016,7 @@ bool Unit::OutOfHP() const
 void Unit::EnemyInSight()
 {
 	App->pathfinding->MakeWalkable(position);
+
 	Entity* ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this, E_UNIT);
 	if (ret == nullptr)
 		ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this);
@@ -953,7 +1033,7 @@ void Unit::EnemyInSight()
 
 void Unit::GoToEnemy()
 {
-	destination = App->pathfinding->FindClosestEmptyAttackTile(target->GetPosition(), range, this);
+	destination = FindClosestEmptyAttackTile(target, range);
 
 	if (destination == position)
 	{
@@ -973,7 +1053,7 @@ void Unit::GoToEnemy()
 void Unit::ChangeDirecctionToEnemy()
 {
 	iPoint destination_tile;
-	destination_tile = App->pathfinding->FindClosestEmptyAttackTile(target->GetPosition(), range, this);
+	destination_tile = FindClosestEmptyAttackTile(target, range);
 	if (destination_tile.y == -1)
 		target = nullptr;
 	else

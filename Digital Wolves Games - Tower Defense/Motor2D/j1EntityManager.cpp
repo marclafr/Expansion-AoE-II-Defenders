@@ -214,7 +214,7 @@ Entity * j1EntityManager::LookForEnemies(int pixel_range, iPoint pos, Side side,
 		{
 			if (attacker->GetEntityType() == E_UNIT)
 			{
-				if (App->pathfinding->FindClosestEmptyAttackTile((*it)->GetPosition(), ((Unit*)attacker)->GetRange(), attacker).y != -1)
+				if (((Unit*)attacker)->FindClosestEmptyAttackTile(*it, ((Unit*)attacker)->GetRange()).y != -1)
 				{
 					ret = *it;
 					shortest_distance = current_distance;

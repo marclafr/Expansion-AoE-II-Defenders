@@ -67,6 +67,9 @@ public:
 	const BUILDING_TYPE GetBuildingType() const;
 	IsoRect GetBuildRectangle();
 	const int GetMaxHp() const;
+	void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const;
+
+	//Extra
 	//virtual void Save(pugi::xml_node&);
 };
 

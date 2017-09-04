@@ -184,6 +184,9 @@ public:
 	const float GetSpeed() const;
 	bool InRange(const iPoint& tile) const;
 
+	void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const;
+	const iPoint& FindClosestEmptyAttackTile(const Entity* target, int tile_range) const;
+
 	const Unit* GetCollision() const;
 	const DIRECTION GetDirection(iPoint objective) const;
 	void SetAction(const ACTION action);

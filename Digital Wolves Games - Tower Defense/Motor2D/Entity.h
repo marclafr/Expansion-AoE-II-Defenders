@@ -1,9 +1,11 @@
 #ifndef _ENTITY
 #define _ENTITY
 
+#include <vector>
 #include "SDL\include\SDL.h"
 #include "p2Point.h"
 #include "PugiXml\src\pugixml.hpp"
+
 enum TextureID;
 
 enum ENTITY_TYPE
@@ -79,6 +81,7 @@ public:
 	const Side GetSide() const;
 	const float GetAIDT() const;
 	const SDL_Rect GetInWorldTextureRect() const;
+	virtual void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const = 0;
 
 	//Seters
 protected:

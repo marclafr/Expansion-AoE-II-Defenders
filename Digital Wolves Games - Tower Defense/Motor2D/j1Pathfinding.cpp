@@ -41,9 +41,6 @@ bool j1PathFinding::CleanUp()
 	if(map != nullptr) RELEASE_ARRAY(map);
 	if (path_debug_text != nullptr) SDL_DestroyTexture(path_debug_text);
 	if (walkability_debug_text != nullptr) SDL_DestroyTexture(walkability_debug_text);
-	//if (node_map != nullptr) RELEASE_ARRAY(node_map);
-	//if (constructible_map_ally != nullptr) RELEASE_ARRAY(constructible_map_ally);
-	//if (constructible_map_neutral != nullptr) RELEASE_ARRAY(constructible_map_neutral);
 	return true;
 }
 
@@ -64,22 +61,8 @@ void j1PathFinding::SetMap(uint width, uint height, uchar* data)
 
 	RELEASE_ARRAY(map);
 	map = new uchar[width*height];
-	//create a node_map
-	//RELEASE_ARRAY(node_map);
-	//node_map = new PathNode[width*height];
-
 	memcpy(map, data, width*height);
 }
-/*
-void j1PathFinding::SetConstructibleMaps(uint width, uint height, uchar* data, uchar* data2)
-{
-	constructible_map_ally = new uchar[width*height];
-	memcpy(constructible_map_ally, data, width*height);
-
-	constructible_map_neutral = new uchar[width*height];
-	memcpy(constructible_map_neutral, data2, width*height);
-
-}*/
 
 // Utility: return true if pos is inside the map boundaries
 bool j1PathFinding::CheckBoundaries(const iPoint& tile) const
@@ -95,39 +78,6 @@ bool j1PathFinding::IsWalkable(const iPoint& tile) const
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
-/*
-bool j1PathFinding::IsConstructible_ally(const iPoint& tile) const
-{
-	uchar t = GetTileAtConstructible_ally(tile);
-	return t != INVALID_WALK_CODE && t > 1;
-}
-
-bool j1PathFinding::IsConstructible_neutral(const iPoint& tile) const
-{
-	uchar t = GetTileAtConstructible_neutral(tile);
-	return t != INVALID_WALK_CODE && t > 1;
-}
-
-void j1PathFinding::MakeNoConstruible_ally(const iPoint& tile)
-{
-	constructible_map_ally[tile.y*width + tile.x] = INVALID_WALK_CODE;
-}
-
-void j1PathFinding::MakeNoConstruible_neutral(const iPoint& tile)
-{
-	constructible_map_neutral[tile.y*width + tile.x] = INVALID_WALK_CODE;
-}
-
-void j1PathFinding::MakeConstruible_neutral(const iPoint& tile)
-{
-	constructible_map_neutral[tile.y*width + tile.x] = 10;
-}
-
-void j1PathFinding::MakeConstruible_ally(const iPoint& tile)
-{
-	constructible_map_ally[tile.y*width + tile.x] = 10;
-}*/
-
 void j1PathFinding::MakeNoWalkable(const iPoint& tile)
 {
 	map[tile.y*width + tile.x] = INVALID_WALK_CODE;
@@ -138,103 +88,6 @@ void j1PathFinding::MakeWalkable(const iPoint& tile)
 	map[tile.y*width + tile.x] = 34;
 }
 
-iPoint j1PathFinding::FindEmptyTile(iPoint from, Elipse collision) const
-{
-	IsoRect tile;
-	iPoint start(from.x - 1, from.y - 1);
-	iPoint pos;
-	fPoint rect_center;
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 3; j++)
-		{
-			pos = iPoint(start.x + i, start.y + j);
-			if (IsWalkable(pos))
-			{
-				rect_center = fPoint(App->map->MapToWorld(pos.x, pos.y).x, App->map->MapToWorld(pos.x, pos.y).y);
-				rect_center.x += App->map->data.tile_width / 2.0f;
-				rect_center.x += App->map->data.tile_height / 2.0f;
-				tile = IsoRect(rect_center, App->map->data.tile_width, App->map->data.tile_height);
-				/*if (!tile.Overlaps(collision))
-					return pos;*/
-			}
-		}		 
-	return iPoint(-1,-1);
-}
-
-iPoint j1PathFinding::FindClosestEmptyAttackTile(iPoint objective_tile, int tile_range, Entity* attacker)
-{	
-	iPoint ret(-1, -1);
-
-	if (tile_range < 1)
-	{
-		LOG("Tile range inferior to 1");
-		return ret;
-	}
-
-	iPoint attacker_tile = attacker->GetPosition();
-	std::vector<iPoint> empty_attack_tiles;
-
-	while (tile_range > 0)
-	{
-		iPoint current_tile(objective_tile.x - tile_range, objective_tile.y - tile_range);
-
-		//Left
-		for (int i = -tile_range; i < tile_range; i++)
-		{
-			current_tile.x = objective_tile.x + i;
-			if (IsWalkable(current_tile))
-				empty_attack_tiles.push_back(current_tile);
-		}
-		current_tile.x++;
-
-		//Down
-		for (int i = -tile_range; i < tile_range; i++)
-		{
-			current_tile.y = objective_tile.y + i;
-			if (IsWalkable(current_tile))
-				empty_attack_tiles.push_back(current_tile);
-		}
-		current_tile.y++;
-
-		//Right
-		for (int i = -tile_range; i < tile_range; i++)
-		{
-			current_tile.x = objective_tile.x - i;
-			if (IsWalkable(current_tile))
-				empty_attack_tiles.push_back(current_tile);
-		}
-		current_tile.x--;
-
-		//Up
-		for (int i = -tile_range; i < tile_range; i++)
-		{
-			current_tile.y = objective_tile.y - i;
-			if (IsWalkable(current_tile))
-				empty_attack_tiles.push_back(current_tile);
-		}
-		current_tile.y--;
-
-		tile_range--;
-	}
-	
-	if (empty_attack_tiles.size() == 0)
-		return ret;
-
-	float shortest_distance = NUM_TILES;
-	float distance_to_tile = 0.0f;
-
-	for(std::vector<iPoint>::iterator it = empty_attack_tiles.begin(); it != empty_attack_tiles.end(); ++it)
-	{
-		distance_to_tile = it->DistanceTo(attacker_tile);
-		if (shortest_distance > distance_to_tile)
-		{
-			shortest_distance = distance_to_tile;
-			ret = *it;
-		}
-	}
-	return ret;
-}
-
 // Utility: return the walkability value of a tile
 uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 {
@@ -243,23 +96,6 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 
 	return INVALID_WALK_CODE;
 }
-
-/*
-uchar j1PathFinding::GetTileAtConstructible_ally(const iPoint& pos) const
-{
-	if (CheckBoundaries(pos))
-		return constructible_map_ally[(pos.y*width) + pos.x];
-
-	return INVALID_WALK_CODE;
-}
-
-uchar j1PathFinding::GetTileAtConstructible_neutral(const iPoint& pos) const
-{
-	if (CheckBoundaries(pos))
-		return constructible_map_neutral[(pos.y*width) + pos.x];
-
-	return INVALID_WALK_CODE;
-}*/
 
 // To request all tiles involved in the last generated path
 const std::vector<iPoint>& j1PathFinding::GetLastPath() const

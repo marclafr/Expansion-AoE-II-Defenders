@@ -299,6 +299,59 @@ const int Building::GetMaxHp() const
 	return max_hp;
 }
 
+void Building::GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const
+{
+
+	for (std::vector<iPoint>::const_iterator it = tiles.begin(); it != tiles.end(); ++it)
+	{
+		iPoint position = *it;
+		int tile_range = range;
+
+		while (tile_range > 0)
+		{
+			iPoint current_tile(position.x - tile_range, position.y - tile_range);
+
+			//Left
+			for (int i = -tile_range; i < tile_range; i++)
+			{
+				current_tile.x = position.x + i;
+				if (App->pathfinding->IsWalkable(current_tile))
+					vec.push_back(current_tile);
+			}
+			current_tile.x++;
+
+			//Down
+			for (int i = -tile_range; i < tile_range; i++)
+			{
+				current_tile.y = position.y + i;
+				if (App->pathfinding->IsWalkable(current_tile))
+					vec.push_back(current_tile);
+			}
+			current_tile.y++;
+
+			//Right
+			for (int i = -tile_range; i < tile_range; i++)
+			{
+				current_tile.x = position.x - i;
+				if (App->pathfinding->IsWalkable(current_tile))
+					vec.push_back(current_tile);
+			}
+			current_tile.x--;
+
+			//Up
+			for (int i = -tile_range; i < tile_range; i++)
+			{
+				current_tile.y = position.y - i;
+				if (App->pathfinding->IsWalkable(current_tile))
+					vec.push_back(current_tile);
+			}
+			current_tile.y--;
+
+			tile_range--;
+		}
+	}
+}
+
 /*void Building::Save(pugi::xml_node &data)
 {
 		pugi::xml_node build = data.child("buildings");
