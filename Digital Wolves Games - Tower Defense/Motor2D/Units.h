@@ -12,7 +12,7 @@
 #define SLOW_PROPORTION 1.7f
 #define SLOW_TIME 5.0f
 
-//range in tiles
+//range in tiles // will be turned to float (sqrt(range^2 + range^2)) to get diagonals
 #define CLOSE_COMBAT_RANGE 1
 #define MID_COMBAT_RANGE 2
 #define LONG_COMBAT_RANGE 3
@@ -175,7 +175,7 @@ public:
 	const int GetUnitRadius() const;
 	bool GetPath(const iPoint& destination);
 	const int GetAttack() const;
-	const int GetRange() const;
+	const float GetRange() const;
 	const Elipse GetUnitCircle() const;
 	const bool IsMoving() const;
 	const iPoint& GetDestination() const;

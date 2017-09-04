@@ -393,7 +393,7 @@ void Unit::AI()
 			break;
 		}
 
-		if (target != nullptr && DistanceInTiles(target->GetPosition()) <= range)
+		if (target != nullptr && target->DistanceInTiles(position) <= GetRange())
 		{
 			Fight();
 			break;
@@ -443,7 +443,7 @@ void Unit::AI()
 
 		if (Move())
 		{
-			if (target != nullptr && DistanceInTiles(target->GetPosition()) <= range)
+			if (target != nullptr && target->DistanceInTiles(position) <= GetRange())
 				Fight();
 			else
 				GoIdle(); 
@@ -506,7 +506,7 @@ void Unit::AI()
 			break;
 		}
 
-		if (DistanceInTiles(target->GetPosition()) <= range)
+		if (target->DistanceInTiles(position) > GetRange())
 		{
 			GoIdle();
 			break;
@@ -639,9 +639,10 @@ const int Unit::GetAttack() const
 	return attack;
 }
 
-const int Unit::GetRange() const
+const float Unit::GetRange() const
 {
-	return range;
+	float real_range = sqrt(range*range + range*range);
+	return real_range;
 }
 
 const Elipse Unit::GetUnitCircle() const
@@ -1033,7 +1034,15 @@ void Unit::EnemyInSight()
 
 void Unit::GoToEnemy()
 {
-	destination = FindClosestEmptyAttackTile(target, range);
+	iPoint ret = FindClosestEmptyAttackTile(target, range);
+
+	if (ret.y != -1)
+		destination = ret;
+	else
+	{
+		GoIdle();
+		return;
+	}
 
 	if (destination == position)
 	{
@@ -1041,11 +1050,6 @@ void Unit::GoToEnemy()
 		return;
 	}
 
-	if (destination.y == -1)
-	{
-		target = nullptr;
-		GoIdle();
-	}
 	else
 		GoTo(destination);
 }
