@@ -68,6 +68,7 @@ public:
 	IsoRect GetBuildRectangle();
 	const int GetMaxHp() const;
 	void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const;
+	const float DistanceInTiles(const iPoint& pos) const; // Always distance to closest tile
 
 	//Extra
 	//virtual void Save(pugi::xml_node&);

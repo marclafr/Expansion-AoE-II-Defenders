@@ -393,7 +393,7 @@ void Unit::AI()
 			break;
 		}
 
-		if (target != nullptr && InRange(target->GetPosition()))
+		if (target != nullptr && DistanceInTiles(target->GetPosition()) <= range)
 		{
 			Fight();
 			break;
@@ -443,7 +443,7 @@ void Unit::AI()
 
 		if (Move())
 		{
-			if (target != nullptr && InRange(target->GetPosition()))
+			if (target != nullptr && DistanceInTiles(target->GetPosition()) <= range)
 				Fight();
 			else
 				GoIdle(); 
@@ -506,7 +506,7 @@ void Unit::AI()
 			break;
 		}
 
-		if (!InRange(target->GetPosition()))
+		if (DistanceInTiles(target->GetPosition()) <= range)
 		{
 			GoIdle();
 			break;
@@ -676,10 +676,10 @@ const float Unit::GetSpeed() const
 	return speed;
 }
 
-bool Unit::InRange(const iPoint & tile) const
+const float Unit::DistanceInTiles(const iPoint & pos) const
 {
-	fPoint vector(tile.x - position.x, tile.y - position.y);
-	return abs(vector.x) <= range && abs(vector.y) <= range;
+	fPoint vec(pos.x - position.x, pos.y - position.y);
+	return sqrt(vec.x * vec.x + vec.y * vec.y);
 }
 
 void Unit::GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const

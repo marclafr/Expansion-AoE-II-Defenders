@@ -82,6 +82,7 @@ public:
 	const float GetAIDT() const;
 	const SDL_Rect GetInWorldTextureRect() const;
 	virtual void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const = 0;
+	virtual const float DistanceInTiles(const iPoint& pos) const = 0;
 
 	//Seters
 protected:

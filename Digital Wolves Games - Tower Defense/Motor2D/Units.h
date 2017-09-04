@@ -182,7 +182,7 @@ public:
 	const float FramesToTileCenter() const;
 	const fPoint& PixelsToTileCenter() const;
 	const float GetSpeed() const;
-	bool InRange(const iPoint& tile) const;
+	const float DistanceInTiles(const iPoint& pos) const;
 
 	void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const;
 	const iPoint& FindClosestEmptyAttackTile(const Entity* target, int tile_range) const;

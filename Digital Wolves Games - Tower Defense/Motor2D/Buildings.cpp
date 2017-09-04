@@ -352,6 +352,21 @@ void Building::GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) cons
 	}
 }
 
+const float Building::DistanceInTiles(const iPoint & pos) const
+{
+	float closest_distance = App->map->data.width * App->map->data.height;
+
+	for (std::vector<iPoint>::const_iterator it = tiles.begin(); it != tiles.end(); ++it)
+	{
+		fPoint vec(pos.x - (*it).x, pos.y - (*it).y);
+		float distance = sqrt(vec.x * vec.x + vec.y * vec.y);
+
+		if (distance < closest_distance)
+			closest_distance = distance;
+	}
+	return closest_distance;
+}
+
 /*void Building::Save(pugi::xml_node &data)
 {
 		pugi::xml_node build = data.child("buildings");
