@@ -735,6 +735,9 @@ void DebugFeatures::UpdateDebug()
 	if (pf)
 		App->pathfinding->Debug();
 
+	if (print_walkability_map)
+		App->pathfinding->DrawWalkabilityMap();
+
 	/*
 	if (unlock_investigations)
 	{

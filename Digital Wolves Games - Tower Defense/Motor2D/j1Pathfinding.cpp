@@ -25,7 +25,12 @@ j1PathFinding::~j1PathFinding()
 
 bool j1PathFinding::Start()
 {
-	debug_tex = App->tex->Load("maps/path2.png", T_MAP);
+	path_debug_text = App->tex->Load("maps/path2.png", T_PATH_DEBUG);
+	walkability_debug_text = App->tex->Load("maps/meta.png", T_WALKABILITY_DEBUG);
+
+	SDL_SetTextureAlphaMod(path_debug_text, 150);
+	SDL_SetTextureAlphaMod(walkability_debug_text, 150);
+
 	return true;
 }
 
@@ -34,9 +39,11 @@ bool j1PathFinding::CleanUp()
 {
 	last_path.clear();
 	if(map != nullptr) RELEASE_ARRAY(map);
-	if (node_map != nullptr) RELEASE_ARRAY(node_map);
-	if (constructible_map_ally != nullptr) RELEASE_ARRAY(constructible_map_ally);
-	if (constructible_map_neutral != nullptr) RELEASE_ARRAY(constructible_map_neutral);
+	if (path_debug_text != nullptr) SDL_DestroyTexture(path_debug_text);
+	if (walkability_debug_text != nullptr) SDL_DestroyTexture(walkability_debug_text);
+	//if (node_map != nullptr) RELEASE_ARRAY(node_map);
+	//if (constructible_map_ally != nullptr) RELEASE_ARRAY(constructible_map_ally);
+	//if (constructible_map_neutral != nullptr) RELEASE_ARRAY(constructible_map_neutral);
 	return true;
 }
 
@@ -59,11 +66,11 @@ void j1PathFinding::SetMap(uint width, uint height, uchar* data)
 	map = new uchar[width*height];
 	//create a node_map
 	//RELEASE_ARRAY(node_map);
-	node_map = new PathNode[width*height];
+	//node_map = new PathNode[width*height];
 
 	memcpy(map, data, width*height);
 }
-
+/*
 void j1PathFinding::SetConstructibleMaps(uint width, uint height, uchar* data, uchar* data2)
 {
 	constructible_map_ally = new uchar[width*height];
@@ -72,7 +79,7 @@ void j1PathFinding::SetConstructibleMaps(uint width, uint height, uchar* data, u
 	constructible_map_neutral = new uchar[width*height];
 	memcpy(constructible_map_neutral, data2, width*height);
 
-}
+}*/
 
 // Utility: return true if pos is inside the map boundaries
 bool j1PathFinding::CheckBoundaries(const iPoint& tile) const
@@ -88,6 +95,7 @@ bool j1PathFinding::IsWalkable(const iPoint& tile) const
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
+/*
 bool j1PathFinding::IsConstructible_ally(const iPoint& tile) const
 {
 	uchar t = GetTileAtConstructible_ally(tile);
@@ -118,7 +126,7 @@ void j1PathFinding::MakeConstruible_neutral(const iPoint& tile)
 void j1PathFinding::MakeConstruible_ally(const iPoint& tile)
 {
 	constructible_map_ally[tile.y*width + tile.x] = 10;
-}
+}*/
 
 void j1PathFinding::MakeNoWalkable(const iPoint& tile)
 {
@@ -236,6 +244,7 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 	return INVALID_WALK_CODE;
 }
 
+/*
 uchar j1PathFinding::GetTileAtConstructible_ally(const iPoint& pos) const
 {
 	if (CheckBoundaries(pos))
@@ -250,17 +259,12 @@ uchar j1PathFinding::GetTileAtConstructible_neutral(const iPoint& pos) const
 		return constructible_map_neutral[(pos.y*width) + pos.x];
 
 	return INVALID_WALK_CODE;
-}
+}*/
 
 // To request all tiles involved in the last generated path
 const std::vector<iPoint>& j1PathFinding::GetLastPath() const
 {
 	return last_path;
-}
-
-PathNode* j1PathFinding::GetPathNode(int x, int y)
-{
-	return &node_map[(y*width) + x];
 }
 
 const iPoint& j1PathFinding::FindNearestWalkable(const iPoint& position, const iPoint& destination) const
@@ -1585,7 +1589,29 @@ void j1PathFinding::Debug()
 		++item)
 	{
 		pos = App->map->MapToWorld(item->x, item->y);
-		App->render->PushInGameSprite(debug_tex, pos.x - App->map->data.tile_width / 2.0f, pos.y);
+		App->render->PushInGameSprite(path_debug_text, pos.x - App->map->data.tile_width / 2.0f, pos.y);
+	}
+}
+
+void j1PathFinding::DrawWalkabilityMap() const
+{
+	SDL_Rect red { 96,0,96,46 };
+	SDL_Rect green{ 0,0,96,46 };
+
+	uint iterator = 0;
+
+	while (iterator != width * height)
+	{
+		iPoint tile(iterator / width, iterator % width);
+		iPoint pixel_pos = App->map->MapToWorld(tile);
+		pixel_pos.x -= App->map->data.tile_width / 2.0f;
+
+		if(IsWalkable(tile))
+			App->render->PushInGameSprite(walkability_debug_text, pixel_pos, &green);
+		else
+			App->render->PushInGameSprite(walkability_debug_text, pixel_pos, &red);
+
+		iterator++;
 	}
 }
 

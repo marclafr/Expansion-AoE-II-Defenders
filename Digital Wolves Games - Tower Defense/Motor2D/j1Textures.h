@@ -14,7 +14,8 @@ struct SDL_Surface;
 enum TextureID
 {
 	T_UI,
-	T_MAP,
+	T_PATH_DEBUG,
+	T_WALKABILITY_DEBUG,
 	T_TILESET,
 	T_AOE_UI_FONT,
 	T_CONSOLE_TEXT,

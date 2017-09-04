@@ -37,8 +37,8 @@ bool j1Map::Start()
 		uchar* data2 = NULL;
 		if (CreateWalkabilityMap(w, h, &data))
 			App->pathfinding->SetMap(w, h, data);
-		if (CreateConstructibleMap1(w, h, &data) && App->map->CreateConstructibleMap2(w, h, &data2))
-			App->pathfinding->SetConstructibleMaps(w, h, data, data2);
+		//if (CreateConstructibleMap1(w, h, &data) && App->map->CreateConstructibleMap2(w, h, &data2))
+			//App->pathfinding->SetConstructibleMaps(w, h, data, data2);
 		RELEASE_ARRAY(data2);
 		RELEASE_ARRAY(data);
 	}
@@ -92,6 +92,7 @@ bool j1Map::CreateWalkabilityMap(int& width, int & height, uchar** buffer) {
 	return ret;
 
 }
+/*
 bool j1Map::CreateConstructibleMap1(int& width, int & height, uchar** buffer) {
 
 	bool ret = false;
@@ -172,7 +173,7 @@ bool j1Map::CreateConstructibleMap2(int& width, int & height, uchar** buffer) {
 	return ret;
 
 }
-
+*/
 void j1Map::Draw()
 {
 	if (map_loaded == false)
@@ -183,8 +184,7 @@ void j1Map::Draw()
 		MapLayer* layer = *item;
 
 		if (layer->properties.Get("Nodraw") == true)
-			if (App->debug_features.debug_mode == false || App->debug_features.print_walkability_map == false)
-				continue;
+			continue;
 
 		for (int y = 0; y < data.height; y++)
 			for (int x = 0; x < data.width; x++)

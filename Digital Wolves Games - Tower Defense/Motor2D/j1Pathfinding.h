@@ -63,7 +63,7 @@ public:
 
 	// Sets up the walkability map
 	void SetMap(uint width, uint height, uchar* data);
-	void SetConstructibleMaps(uint width, uint height, uchar* data, uchar* data2);
+	//void SetConstructibleMaps(uint width, uint height, uchar* data, uchar* data2);
 
 	//float CreatePath(const iPoint & origin, const iPoint & destination);
 	// To request all tiles involved in the last generated path
@@ -74,12 +74,12 @@ public:
 
 	// Utility: returns true is the tile is walkable
 	bool IsWalkable(const iPoint& tile) const;
-	bool IsConstructible_ally(const iPoint& tile) const;
-	bool IsConstructible_neutral(const iPoint& tile) const;
-	void MakeNoConstruible_ally(const iPoint& tile);
-	void MakeNoConstruible_neutral(const iPoint& tile);
-	void MakeConstruible_ally(const iPoint& tile);
-	void MakeConstruible_neutral(const iPoint& tile);
+	//bool IsConstructible_ally(const iPoint& tile) const;
+	//bool IsConstructible_neutral(const iPoint& tile) const;
+	//void MakeNoConstruible_ally(const iPoint& tile);
+	//void MakeNoConstruible_neutral(const iPoint& tile);
+	//void MakeConstruible_ally(const iPoint& tile);
+	//void MakeConstruible_neutral(const iPoint& tile);
 	void MakeNoWalkable(const iPoint& tile);
 	void MakeWalkable(const iPoint& tile);
 	iPoint FindEmptyTile(iPoint from, Elipse collision) const;
@@ -87,12 +87,11 @@ public:
 
 	// Utility: return the walkability value of a tile
 	uchar GetTileAt(const iPoint& pos) const;
-	uchar GetTileAtConstructible_ally(const iPoint& pos) const;
-	uchar GetTileAtConstructible_neutral(const iPoint& pos) const;
-
-	PathNode* GetPathNode(int x, int y);
+	//uchar GetTileAtConstructible_ally(const iPoint& pos) const;
+	//uchar GetTileAtConstructible_neutral(const iPoint& pos) const;
 
 	void Debug();
+	void DrawWalkabilityMap() const;
 
 	void AddPath(std::vector<iPoint>* path);
 
@@ -176,9 +175,9 @@ private:
 
 	// all map walkability values [0..255]
 	uchar* map = nullptr;
-	PathNode* node_map = nullptr;
-	uchar* constructible_map_ally = nullptr;
-	uchar* constructible_map_neutral = nullptr;
+	//PathNode* node_map = nullptr;
+	//uchar* constructible_map_ally = nullptr;
+	//uchar* constructible_map_neutral = nullptr;
 
 	// we store the created path here
 	std::vector<iPoint> last_path;
@@ -192,7 +191,8 @@ private:
 	std::list<ForcedNeighbour> frontier;
 	std::vector<PathNode*> visited;
 
-	SDL_Texture* debug_tex;
+	SDL_Texture* path_debug_text = nullptr;
+	SDL_Texture* walkability_debug_text = nullptr;
 };
 
 // ---------------------------------------------------------------------
