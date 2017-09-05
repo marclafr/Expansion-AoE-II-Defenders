@@ -12,6 +12,7 @@ enum BUTTONSUNDERGROUND;
 enum TURRET_UPGRADE;
 enum UNIT_TYPE;
 enum INVESTIGATION_TYPE;
+enum TOWER_TYPE;
 struct SDL_Rect;
 struct info_button;
 
@@ -28,16 +29,11 @@ public:
 class CreateTowerTask : public Task
 {
 private:
-	BUILDING_TYPE type;
-	fPoint position;
-	Side side;
+	TOWER_TYPE type;
+	iPoint map_pos;
 
 public:
-	CreateTowerTask();
-
-	CreateTowerTask(BUILDING_TYPE type, fPoint position, Side side);
-
-	void Set(BUILDING_TYPE type, fPoint position, Side side);
+	CreateTowerTask(iPoint position, TOWER_TYPE type);
 
 	bool Execute();
 };

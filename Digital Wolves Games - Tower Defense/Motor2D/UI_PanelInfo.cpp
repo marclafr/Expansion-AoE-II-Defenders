@@ -213,7 +213,7 @@ UI_PanelButtons::UI_PanelButtons(iPoint pos, SDL_Rect panel_background_rect, Tas
 	if (IsZero(rect_clicking))
 		rect_clicking = rect_idle;
 
-	panel_buttons.push_back(new UI_Button({ pos.x + MARGIN, pos.y + MARGIN }, rect_idle, rect_mouse_on_top, rect_clicking, description, description_background_rect));
+	panel_buttons.push_back(new UI_Button({ pos.x, pos.y }, rect_idle, rect_mouse_on_top, rect_clicking, description, description_background_rect));
 	tasks.push_back(task);
 }
 
@@ -230,7 +230,7 @@ bool UI_PanelButtons::Update()
 {
 	for (int i = 0; i < panel_buttons.size(); i++)
 		if (panel_buttons[i]->Update())
-			//Uncomment this when tasks are done TODO// tasks[i]->Execute();
+			tasks[i]->Execute();
 
 	return true;
 }
@@ -259,7 +259,7 @@ void UI_PanelButtons::AddButton(Task * task, SDL_Rect rect_idle, SDL_Rect rect_m
 
 	//TODO SOLVE POSITIONING
 	int column = 0;
-	for (column = 0; column < panel_buttons.size(); column++)
+	for (column = 0; column < panel_buttons.size(); )
 		column++;
 
 	int line = column / num_buttons_width;

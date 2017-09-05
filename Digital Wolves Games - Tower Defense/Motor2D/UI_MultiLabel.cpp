@@ -73,7 +73,7 @@ bool UI_MultiLabel::EraseLabel(UI_Label* label)
 	if (labels.size() > 0)
 	{
 		std::vector<UI_Label*>::iterator it = labels.begin();
-		while (it._Ptr != &labels[label_to_remove])
+		while (*it != labels[label_to_remove])
 			it++;
 		DELETE_PTR(labels[label_to_remove]);
 		labels.erase(it);

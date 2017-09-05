@@ -19,6 +19,7 @@
 #include "j1ScoreScene.h"
 #include "j1WaveManager.h"
 #include "j1Gui.h"
+#include "Task.h"
 #include "UI_PanelInfo.h"
 #include "j1Scene.h"
 
@@ -59,7 +60,7 @@ bool j1Scene::Start()
 	App->gui->CreateButton({ 500, 500 }, { 1190,936,25,25 }, { 1216,936,25,25 }, { 1242,936,25,25 }, "This is another test");
 	App->gui->CreateLabel({ 250,250 }, { 400,1750,25,25 }, "This is a test.");
 	App->gui->CreateImage({ 0,0 }, { 0,1011,1367,23 });
-	panel_buttons = (UI_Element*)App->gui->CreatePanelButtons({ 700,700 }, { 0,0,0,0 }, nullptr, { 1190,936,25,25 }, 3, { 1216,936,25,25 }, { 1242,936,25,25 }, "FIRST");
+	panel_buttons = (UI_Element*)App->gui->CreatePanelButtons({ 700,400 }, { 0,0,0,0 }, new CreateTowerTask({500, 500}, T_BASIC_TOWER), { 1190,936,25,25 }, 3, { 1216,936,25,25 }, { 1242,936,25,25 }, "FIRST");
 	//---
 
 	gold = new ResourceManager();
@@ -138,13 +139,13 @@ bool j1Scene::Update(float dt)
 	App->input->GetMousePosition(x, y);
 	iPoint res = App->render->ScreenToWorld(x, y);
 	
-	/*
+	
 	if (placing_tower == T_BASIC_TOWER)
 		PlacingTower(T_BASIC_TOWER);
 	if (placing_tower == T_BOMBARD_TOWER)
 		PlacingTower(T_BOMBARD_TOWER);
-	if (placing_wall == true)
-		PlacingWall();*/
+//	if (placing_wall == true)
+//		PlacingWall();
 
 	//SELECTION
 	if (selecting)
@@ -278,7 +279,7 @@ bool j1Scene::CleanUp()
 	return true;
 }
 
-/*
+
 void j1Scene::PlacingTower(TOWER_TYPE type)
 {
 	SDL_Texture* tower_tex;
@@ -291,10 +292,11 @@ void j1Scene::PlacingTower(TOWER_TYPE type)
 
 	iPoint map_coordinates = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);
 	iPoint pos = App->map->MapToWorld(map_coordinates.x, map_coordinates.y);
+	pos.y += App->map->data.tile_height / 2.0f;
 
-	if (resources->CanBuildTower(type))
+	if (gold->CanBuildTower(type))
 	{
-		if ((App->pathfinding->IsConstructible_neutral(map_coordinates) == false && App->pathfinding->IsConstructible_ally(map_coordinates) == false) || App->entity_manager->AbleToBuild(map_coordinates) == false)
+		if (App->pathfinding->IsWalkable(map_coordinates) == false)
 		{
 			App->tex->GetTowerTexture(tower_tex, rect, pivot, type, BTT_RED); //texture rect
 			App->render->PushInGameSprite(tower_tex, pos.x, pos.y, &rect, SDL_FLIP_NONE, pivot.x, pivot.y);
@@ -307,16 +309,14 @@ void j1Scene::PlacingTower(TOWER_TYPE type)
 			if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 			{
 				App->audio->PlayFx(App->audio->fx_construction);
-
-				if (App->pathfinding->IsConstructible_neutral(map_coordinates) == true || App->pathfinding->IsConstructible_ally(map_coordinates) == true)
-					resources->BuildTower(type, pos);
+				gold->BuildTower(type, map_coordinates);
 			}
 		}
 	}
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
 		placing_tower = T_NO_TYPE;
 }
-
+/*
 void j1Scene::PlacingWall()
 {
 	SDL_Texture* wall_tex = App->tex->GetTexture(T_TURRET);

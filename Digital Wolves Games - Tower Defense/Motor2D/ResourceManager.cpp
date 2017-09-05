@@ -97,7 +97,7 @@ bool ResourceManager::CanBuildTower(TOWER_TYPE type) const
 	return false;
 }
 
-bool ResourceManager::BuildTower(TOWER_TYPE type)
+bool ResourceManager::BuildTower(TOWER_TYPE type, const iPoint& pos)
 {
 	switch (type)
 	{
@@ -131,7 +131,7 @@ bool ResourceManager::BuildTower(TOWER_TYPE type)
 	case T_BOMBARD_AIR_TOWER:
 		break;
 	}
-	//App->entity_manager->CreateTower(type, fPoint(pos.x, pos.y));
+	App->entity_manager->CreateTower(type, pos);
 	return false;
 }
 

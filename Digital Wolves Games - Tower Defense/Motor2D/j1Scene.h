@@ -65,9 +65,9 @@ public:
 	//Enable Module with submodules
 	void CreateSceneUI();
 
-	/*void PlacingTower(TOWER_TYPE type);
+	void PlacingTower(TOWER_TYPE type);
 	
-	void PlacingWall();*/
+	//void PlacingWall();
 
 	void HandleInput(SDL_Event event);
 

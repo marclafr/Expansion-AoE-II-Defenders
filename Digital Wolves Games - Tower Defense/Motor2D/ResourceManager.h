@@ -50,7 +50,7 @@ public:
 
 	//Entity creation
 	bool CanBuildTower(TOWER_TYPE type) const;
-	bool BuildTower(TOWER_TYPE type);
+	bool BuildTower(TOWER_TYPE type, const iPoint& pos);
 	bool CanBuildWall(BUILDING_TYPE type) const;
 	bool CanBuildAmountOfWalls(int number_of_walls) const;
 	void BuildWall(BUILDING_TYPE type);

@@ -1,4 +1,7 @@
+#include "p2Log.h"
 #include "j1App.h"
+#include "j1Map.h"
+#include "j1Input.h"
 #include "j1EntityManager.h"
 #include "j1SceneManager.h"
 #include "j1Scene.h"
@@ -9,7 +12,6 @@
 #include "Units.h"
 #include "j1Tutorial.h"
 #include "j1WaveManager.h"
-#include "p2Log.h"
 /*#include "UIComponents.h"
 #include "j1UIManager.h"
 #include "UIHUDMenuInGame.h"*/
@@ -19,20 +21,11 @@
 
 #include "Task.h"
 
-CreateTowerTask::CreateTowerTask() : type(B_NO_BUILDING), position(fPoint(0.0f, 0.0f)), side(S_NO_SIDE) {}
-
-CreateTowerTask::CreateTowerTask(BUILDING_TYPE type, fPoint position, Side side) : type(type), position(position), side(side) {}
-
-void CreateTowerTask::Set(BUILDING_TYPE type, fPoint position, Side side)
-{
-	this->type = type;
-	this->position = position;
-	this->side = side;
-}
+CreateTowerTask::CreateTowerTask(iPoint position, TOWER_TYPE type) : map_pos(position), type(type) {}
 
 bool CreateTowerTask::Execute()
 {
-	//App->entity_manager->CreateBuilding(type, position, side);
+	iPoint tile = App->map->WorldToMap(map_pos.x - App->render->camera->GetPosition().x, map_pos.y - App->render->camera->GetPosition().y);
 	return true;
 }
 

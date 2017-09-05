@@ -20,6 +20,7 @@ UI_Label::UI_Label(iPoint pos, SDL_Rect atlas_rect, char * txt, bool has_backgro
 
 UI_Label::~UI_Label()
 {
+	DELETE_PTR(text);
 }
 
 bool UI_Label::Draw(SDL_Texture* atlas, int alpha)
@@ -73,4 +74,6 @@ Text::Text(char* txt) : text(txt)
 
 Text::~Text()
 {
+	SDL_DestroyTexture(text_texture);
+	RELEASE_ARRAY(text);
 }

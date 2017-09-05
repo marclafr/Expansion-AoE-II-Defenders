@@ -5,8 +5,8 @@
 class Task;
 
 #define MARGIN 5 //pixels
-#define BUTTON_WIDTH 25 //pixels
-#define BUTTON_HEIGHT 25 //pixels
+#define BUTTON_WIDTH 30 //pixels
+#define BUTTON_HEIGHT 45 //pixels
 
 class UI_PanelButtons : public UI_Element
 {
