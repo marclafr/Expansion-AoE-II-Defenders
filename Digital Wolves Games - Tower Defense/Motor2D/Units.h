@@ -101,69 +101,78 @@ private:
 	enum DIRECTION direction;
 	UNIT_CLASS unit_class; //todo understeand and delete
 	fPoint position_in_tile;	
-
 	int attack;
 	int range;
 	float speed; //pixels per frame
 	fPoint directional_speed;
 	float rate_of_fire; // maybe attackSpeed?
 
+	//path
 	iPoint position; //tile
 	iPoint destination; //tile
 	uint path_position; //tile
 	Elipse unit_circle;
-
-	int rand_num;
-	AnimationManager* animation;
-	AnimationManager* idle_siege;
-	bool changed;
-	Entity* target;
-	bool siege_attacked = false;
-
 	std::vector<iPoint> path_vec;
 
+	AnimationManager* animation;
+	AnimationManager* idle_siege; //siedge should be a sub class
+	bool changed;
+	Entity* target;
+	bool siege_attacked = false; //siedge should be a sub class
+
+	//buffs and debuffs
 	bool slowed = false;
 	j1Timer slow_timer;
-
-	//Investigations bonuses:
 	bool bonus_attack = false;
 	bool bonus_defense = false;
-	Unit* collision = nullptr;
 
+private:
+	//AI internal functions
+		//Functional
+	bool Move();
 	void UnitDies();
-
-	bool OutOfHP() const;
-	void EnemyInSight();
 	void GoToEnemy();
 	void ChangeDirecctionToEnemy();
 	void GoIdle();
-	bool DestinationFull() const;
-	bool EnemyDead();
 	void DoDamage();
 	//bool AproachEnemy();
 	//void SetAttackPosition();
 	void Fight();
 	void MoveAway();
-	//void CheckUnitsBuffs();
-	//void GoToTileCenter();
 	void CenterUnit();
 	void ChangeAnimation();
-	int GetFrameAttack();
-
-	void GetNextPathPosition();
 	void MoveToNextTile();
 
-public:
+		//Getters
+	bool OutOfHP() const;
+	void EnemyInSight();
+	bool DestinationFull() const;	
+	bool EnemyDead();	
+	//void CheckUnitsBuffs();
+	int GetFrameAttack();
+	void GetNextPathPosition();
+	void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const; //gives empty attack positions to attack this unit
+	const iPoint& FindClosestEmptyAttackTile() const;
 
+public:
+	//Constructors & Destructors
 	Unit(UNIT_TYPE u_type, iPoint pos, Side side);
 	~Unit();
-	
-	void Update( float dt); // defines order
 
-	bool Move();
+	//Main Functions
+	void Update( float dt); // defines order
 	void AI();
 	void Draw();
 
+	//Usefull
+	void LookAt(const iPoint& pos);
+	bool GoTo(const iPoint& destination);
+	bool ChangeDirection(const iPoint& destination);
+	void PlayDeathSound() const;
+	void PlayAttackSound() const;
+	void SlowUnit();
+
+	//Getters
 	const iPoint& GetPosition() const;
 	const float GetX() const;
 	const float GetY() const;
@@ -183,22 +192,12 @@ public:
 	const fPoint& PixelsToTileCenter() const;
 	const float GetSpeed() const;
 	const float DistanceInTiles(const iPoint& pos) const;
-
-	void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const;
-	const iPoint& FindClosestEmptyAttackTile(const Entity* target, int tile_range) const;
-
-	const Unit* GetCollision() const;
 	const DIRECTION GetDirection(iPoint objective) const;
+
+	//Setters
 	void SetAction(const ACTION action);
 
-	void LookAt(const iPoint& pos);
-	bool GoTo(const iPoint& destination);
-	bool ChangeDirection(const iPoint& destination);
-	void PlayDeathSound() const;
-	void PlayAttackSound() const;
-
-	void SlowUnit();
-
+	//Extras
 	void Save(pugi::xml_node& );
 };
 

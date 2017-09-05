@@ -13,6 +13,7 @@
 #include "j1Score.h"
 #include "j1Scene.h"
 
+//Constructors & Destructors
 Unit::Unit(UNIT_TYPE u_type, iPoint pos, Side side) : Entity(E_UNIT, side), position(pos), unit_type(u_type), direction(D_EAST), action(A_IDLE), changed(false), target(nullptr), unit_circle(GetPosition(), 18), path_position(0)
 {
 	//Add paths
@@ -313,6 +314,7 @@ Unit::~Unit()
 		delete animation;
 }
 
+//Main Functions
 void Unit::Update(float dt)
 {	
 	AI();
@@ -324,47 +326,6 @@ void Unit::Update(float dt)
 	}
 
 	Draw();
-}
-
-bool Unit::Move()
-{
-	if (position_in_tile.x == 0 && position_in_tile.y == 0)
-	{
-		if (position == destination)
-			return true;
-
-		if (position == path_vec[path_position])
-			GetNextPathPosition();
-		
-		if (target == nullptr)
-			EnemyInSight();
-
-		MoveToNextTile();
-	}
-	else
-	{
-		int dir_factor_x = 0;
-		int dir_factor_y = 0;
-
-		if (position_in_tile.x != 0)
-		{
-			if ((position_in_tile.x > 0 && position_in_tile.x - directional_speed.x < 0)
-				|| (position_in_tile.x < 0 && position_in_tile.x - directional_speed.x > 0))
-				position_in_tile.x = 0;
-			else
-				position_in_tile.x -= directional_speed.x;
-		}
-
-		if (position_in_tile.y != 0)
-		{
-			if ((position_in_tile.y > 0 && position_in_tile.y - directional_speed.y < 0)
-				|| (position_in_tile.y < 0 && position_in_tile.y - directional_speed.y > 0))
-				position_in_tile.y = 0;
-			else
-				position_in_tile.y -= directional_speed.y;
-		}
-	}
-	return false;
 }
 
 void Unit::AI()
@@ -573,6 +534,645 @@ void Unit::Draw()
 
 }
 
+//AI internal functions (private)
+	//Functional
+bool Unit::Move()
+{
+	if (position_in_tile.x == 0 && position_in_tile.y == 0)
+	{
+		if (position == destination)
+			return true;
+
+		if (position == path_vec[path_position])
+			GetNextPathPosition();
+		
+		if (target == nullptr)
+			EnemyInSight();
+
+		MoveToNextTile();
+	}
+	else
+	{
+		int dir_factor_x = 0;
+		int dir_factor_y = 0;
+
+		if (position_in_tile.x != 0)
+		{
+			if ((position_in_tile.x > 0 && position_in_tile.x - directional_speed.x < 0)
+				|| (position_in_tile.x < 0 && position_in_tile.x - directional_speed.x > 0))
+				position_in_tile.x = 0;
+			else
+				position_in_tile.x -= directional_speed.x;
+		}
+
+		if (position_in_tile.y != 0)
+		{
+			if ((position_in_tile.y > 0 && position_in_tile.y - directional_speed.y < 0)
+				|| (position_in_tile.y < 0 && position_in_tile.y - directional_speed.y > 0))
+				position_in_tile.y = 0;
+			else
+				position_in_tile.y -= directional_speed.y;
+		}
+	}
+	return false;
+}
+
+void Unit::UnitDies()
+{
+	action = A_DIE;
+
+	for (std::vector<Entity*>::iterator it = App->scene->selection.begin(); it != App->scene->selection.end(); ++it)
+		if ((*it) == this)
+		{
+			SetEntityStatus(ST_NON_SELECTED);
+			App->scene->selection.erase(it);
+			break;
+		}
+
+	/*if (GetSide() == S_ENEMY)
+	App->score->EnemyKilled();*/
+
+	if (unit_type == U_SIEGERAM)
+		App->entity_manager->DropUnits(GetX(), GetY());
+
+	changed = true;
+	PlayDeathSound();
+}
+
+void Unit::GoToEnemy()
+{
+	iPoint ret = FindClosestEmptyAttackTile();
+
+	if (ret.y != -1)
+		destination = ret;
+	else
+	{
+		GoIdle();
+		return;
+	}
+
+	if (destination == position)
+	{
+		GoIdle();
+		return;
+	}
+
+	else
+		GoTo(destination);
+}
+
+void Unit::ChangeDirecctionToEnemy()
+{
+	iPoint destination_tile;
+	destination_tile = FindClosestEmptyAttackTile();
+	if (destination_tile.y == -1)
+		target = nullptr;
+	else
+		ChangeDirection(destination_tile);
+}
+
+void Unit::GoIdle()
+{
+	action = A_IDLE;
+	changed = true;
+}
+
+void Unit::DoDamage()
+{
+	LookAt(target->GetPosition());
+
+	if (unit_class == C_ARCHER)
+	{
+		if (unit_type == U_GOD)
+			App->projectile_manager->CreateProjectile(GetPixelPosition(), target, attack, 5, 30, 0, P_ICE_ARROW);
+		else
+			App->projectile_manager->CreateProjectile(GetPixelPosition(), target, attack, 15, 20, 0, P_BASIC_ARROW);
+	}
+
+	else if (unit_type == U_MANGONEL)
+		App->projectile_manager->CreateProjectile(GetPixelPosition(), target, attack, 30, 40, 50, P_CANNONBALL);
+
+	else
+		target->Damaged(attack);
+
+	PlayAttackSound();
+
+	if (unit_class == C_SIEGE)
+		siege_attacked = true;
+
+	if (destination != position)
+		LOG("NOT EQUAL!!!!!!!");
+}
+
+/*TODO
+bool Unit::AproachEnemy()
+{
+	SetAttackPosition();
+
+	SetPosition(GetX() + move_vector.x*speed, GetY() + move_vector.y*speed);
+	unit_circle.SetPosition({ GetX(), GetY() });
+
+	if (GetPosition().DistanceTo(target->GetPosition()) <= APPROACH)
+		return true;
+	return false;
+}*/
+
+/*TODO
+void Unit::SetAttackPosition()
+{
+	if (range != CLOSE_COMBAT_RANGE || GetUnitType() == U_SIEGERAM)
+		StartAttack();
+	else
+	{
+		action = A_APPROACH;
+		float delta_x = target->GetX() - GetX();
+		float delta_y = target->GetY() - GetY();
+		float distance = sqrtf(delta_x * delta_x + delta_y * delta_y);
+
+		move_vector.x = delta_x * (APPROACH / distance);
+		move_vector.y = delta_y * (APPROACH / distance);
+
+		float modul = sqrt(move_vector.x*move_vector.x + move_vector.y * move_vector.y);
+
+		move_vector.x = move_vector.x / modul;
+		move_vector.y = move_vector.y / modul;
+	}
+}*/
+
+void Unit::Fight()
+{
+	if (target->GetEntityType() == E_UNIT)
+	{
+		if (((Unit*)target)->range == 1 && range == 1 && ((Unit*)target)->target == this)
+		{
+			if (((Unit*)target)->GetAction() == A_IDLE || ((Unit*)target)->GetAction() == A_FIGHT)
+			{
+				action = A_FIGHT;
+				LookAt(target->GetPosition());
+				changed = true;
+			}
+		}
+		else
+		{
+			action = A_FIGHT;
+			LookAt(target->GetPosition());
+			changed = true;
+		}
+	}
+	else
+	{
+		action = A_FIGHT;
+		LookAt(target->GetPosition());
+		changed = true;
+	}
+}
+
+void Unit::MoveAway()
+{
+	iPoint new_pos = App->pathfinding->FindNearestEmpty(this);
+	if (new_pos.y == -1)
+		LOG("CAN NOT FIND EMPTY POS");
+	else
+		GoTo(new_pos);
+}
+
+void Unit::CenterUnit()
+{
+	position_in_tile.x = 0;
+	position_in_tile.y = 0;
+}
+
+void Unit::ChangeAnimation()
+{
+	if (unit_type == U_GOD)
+	{
+		if (action == A_CENTER || action == A_APPROACH)
+			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, A_MOVE, direction));
+		if (action == A_FIGHT)
+			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, action, direction), this->rate_of_fire);
+		else
+			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, action, direction));
+	}
+	else
+	{
+		if (action == A_CENTER || action == A_APPROACH)
+			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, A_MOVE, direction));
+		if (action == A_FIGHT)
+			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, action, direction), this->rate_of_fire);
+		else
+			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, action, direction));
+
+		if (unit_class == C_SIEGE)
+			idle_siege->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, A_IDLE, direction));;
+	}
+}
+
+void Unit::MoveToNextTile()
+{
+	int dx = 0;
+	int dy = 0;
+
+	switch (direction)
+	{
+	case D_NO_DIRECTION:
+		break;
+	case D_NORTH:
+		dx--;
+		dy--;
+		break;
+	case D_NORTH_EAST:
+		dy--;
+		break;
+	case D_EAST:
+		dx++;
+		dy--;
+		break;
+	case D_SOUTH_EAST:
+		dx++;
+		break;
+	case D_SOUTH:
+		dx++;
+		dy++;
+		break;
+	case D_SOUTH_WEST:
+		dy++;
+		break;
+	case D_WEST:
+		dx--;
+		dy++;
+		break;
+	case D_NORTH_WEST:
+		dx--;
+		break;
+	default:
+		break;
+	}
+
+	if (App->pathfinding->IsWalkable(iPoint(position.x + dx, position.y + dy)))
+	{
+		App->pathfinding->MakeWalkable(position);
+
+		iPoint pos_now = App->map->MapToWorld(position);
+
+		position.x += dx;
+		position.y += dy;
+
+		App->pathfinding->MakeNoWalkable(position);
+
+		iPoint pos_later = App->map->MapToWorld(position);
+
+		position_in_tile.x = pos_later.x - pos_now.x;
+		position_in_tile.y = pos_later.y - pos_now.y;
+	}
+	else
+		GoTo(destination);
+}
+
+	//Getters
+bool Unit::OutOfHP() const
+{
+	if (GetHp() <= 0)
+		return true;
+	return false;
+}
+
+void Unit::EnemyInSight()
+{
+	App->pathfinding->MakeWalkable(position);
+
+	Entity* ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this, E_UNIT);
+	if (ret == nullptr)
+		ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this);
+
+	App->pathfinding->MakeNoWalkable(position);
+
+	if (ret != nullptr)
+	{
+		target = ret;
+		if (action != A_IDLE)
+			GoIdle();
+	}
+}
+
+bool Unit::DestinationFull() const
+{
+	if (App->pathfinding->IsWalkable(destination))
+		return false;
+	return true;
+}
+
+bool Unit::EnemyDead()
+{
+	if (target->GetHp() <= 0.0f)
+	{
+		target = nullptr;
+		return true;
+	}
+	return false;
+}
+
+/*
+void Unit::CheckUnitsBuffs()
+{
+	//Bonus attack
+	if (bonus_attack == false)
+	{
+		switch (unit_class)
+		{
+		case C_INFANTRY:
+			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_INFANTRY_ATTACK)) == INV_LVL_UNLOCKED)
+			{
+				attack += 6;
+				bonus_attack = true;
+			}
+			break;
+		case C_ARCHER:
+			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_ARCHERS_ATTACK)) == INV_LVL_UNLOCKED)
+			{
+				attack += 5;
+				bonus_attack = true;
+			}
+			break;
+		case C_CAVALRY:
+			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_CAVALRY_ATTACK)) == INV_LVL_UNLOCKED)
+			{
+				attack += 7;
+				bonus_attack = true;
+			}
+			break;
+		}
+	}
+	//-------------
+	//Bonus defense
+	if (bonus_defense == false)
+	{
+		switch (unit_class)
+		{
+		case C_INFANTRY:
+			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_INFANTRY_DEFENSE)) == INV_LVL_UNLOCKED)
+			{
+				IncreaseArmor(4);
+				bonus_defense = true;
+			}
+			break;
+		case C_ARCHER:
+			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_ARCHERS_DEFENSE)) == INV_LVL_UNLOCKED)
+			{
+				IncreaseArmor(3);
+				bonus_defense = true;
+			}
+			break;
+		case C_CAVALRY:
+			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_CAVALRY_DEFENSE)) == INV_LVL_UNLOCKED)
+			{
+				IncreaseArmor(4);
+				bonus_defense = true;
+			}
+			break;
+		}
+	}
+	//-------------
+}
+*/
+
+int Unit::GetFrameAttack()
+{
+	switch (unit_type)
+	{
+	case U_MANGONEL:
+		return 2;
+		break;
+	case U_SIEGERAM:
+		return 9;
+		break;
+	default:
+		return 0;
+		break;
+	}
+}
+
+void Unit::GetNextPathPosition()
+{
+	path_position--;
+	LookAt(path_vec[path_position]);
+
+	iPoint distance = App->map->MapToWorld(path_vec[path_position]) - App->map->MapToWorld(position);
+	if (distance.x == 0)
+	{
+		directional_speed.x = 0;
+		if (distance.y > 0)
+			directional_speed.y = speed;
+		else
+			directional_speed.y = -speed;
+	}
+	else if (distance.y == 0)
+	{
+		directional_speed.x = speed;
+		if (distance.x > 0)
+			directional_speed.x = speed;
+		else
+			directional_speed.x = -speed;
+	}
+	else
+	{
+		float angle = atanf((abs((float)distance.y)) / abs((float)distance.x));
+		directional_speed.x = speed * cosf(angle);
+		directional_speed.y = speed * sinf(angle);
+
+		if (distance.x < 0)
+			directional_speed.x *= -1.0f;
+		if (distance.y < 0)
+			directional_speed.y *= -1.0f;
+	}
+}
+
+void Unit::GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const
+{
+	while (range > 0)
+	{
+		iPoint current_tile(position.x - range, position.y - range);
+
+		//Left
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.x = position.x + i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.x++;
+
+		//Down
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.y = position.y + i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.y++;
+
+		//Right
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.x = position.x - i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.x--;
+
+		//Up
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.y = position.y - i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.y--;
+
+		range--;
+	}
+}
+
+const iPoint & Unit::FindClosestEmptyAttackTile() const
+{
+	iPoint ret(-1, -1);
+
+	if (range < 1)
+	{
+		LOG("Tile range inferior to 1");
+		return ret;
+	}
+
+	std::vector<iPoint> empty_attack_tiles;
+
+	target->GetEmptyAttackPositions(empty_attack_tiles, range);
+
+	if (empty_attack_tiles.size() == 0)
+		return ret;
+
+	float shortest_distance = NUM_TILES;
+	float distance_to_tile = 0.0f;
+
+	for (std::vector<iPoint>::iterator it = empty_attack_tiles.begin(); it != empty_attack_tiles.end(); ++it)
+	{
+		distance_to_tile = it->DistanceTo(position);
+		if (shortest_distance > distance_to_tile)
+		{
+			shortest_distance = distance_to_tile;
+			ret = *it;
+		}
+	}
+	return ret;
+}
+//Private functions end
+
+//Usefull
+void Unit::LookAt(const iPoint& pos)
+{
+	DIRECTION dir = GetDirection(pos);
+
+	if (dir != direction)
+	{
+		this->direction = dir;
+		changed = true;
+	}
+
+}
+
+bool Unit::GoTo(const iPoint& destination)
+{
+	bool ret = false;
+	if (GetPath(destination) != false)
+	{
+		this->destination = destination;
+		ret = true;
+	}
+	else
+		this->destination = path_vec[0];
+
+	action = A_MOVE;
+	changed = true;
+	path_position = path_vec.size() - 1;
+	return ret;
+}
+
+bool Unit::ChangeDirection(const iPoint& destination)
+{
+	bool ret = false;
+
+	if (GetPath(destination) != true)
+	{
+		this->destination = destination;
+		ret = true;
+	}
+	else
+		this->destination = path_vec[0];
+
+	path_position = path_vec.size() - 1;
+	return false;
+}
+
+void Unit::PlayDeathSound() const
+{
+	int rand_num = rand() % 5;
+
+	switch (rand_num)
+	{
+	case 0:
+		App->audio->PlayFx(App->audio->fx_twohanded_die01);
+		break;
+	case 1:
+		App->audio->PlayFx(App->audio->fx_twohanded_die02);
+		break;
+	case 2:
+		App->audio->PlayFx(App->audio->fx_twohanded_die03);
+		break;
+	case 3:
+		App->audio->PlayFx(App->audio->fx_twohanded_die04);
+		break;
+	case 4:
+		App->audio->PlayFx(App->audio->fx_twohanded_die05);
+		break;
+	}
+}
+
+void Unit::PlayAttackSound() const
+{
+	if (unit_class == C_ARCHER)
+		App->audio->PlayFx(App->audio->fx_arrow);
+
+	else if (unit_type == U_SIEGERAM)
+		App->audio->PlayFx(App->audio->fx_siegeram_hit);
+
+	else
+	{
+		int rand_num = rand() % 3;
+
+		switch (rand_num)
+		{
+		case 0:
+			App->audio->PlayFx(App->audio->fx_attack01);
+			break;
+		case 1:
+			App->audio->PlayFx(App->audio->fx_attack02);
+			break;
+		case 2:
+			App->audio->PlayFx(App->audio->fx_attack03);
+			break;
+		}
+	}
+}
+
+void Unit::SlowUnit()
+{
+	if (slowed == false)
+	{
+		this->speed /= SLOW_PROPORTION;
+		slowed = true;
+		slow_timer.Start();
+	}
+}
+
+//Getters
 const float Unit::GetX() const
 {
 	return position.x;
@@ -683,88 +1283,7 @@ const float Unit::DistanceInTiles(const iPoint & pos) const
 	return sqrt(vec.x * vec.x + vec.y * vec.y);
 }
 
-void Unit::GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const
-{
-	while (range > 0)
-	{
-		iPoint current_tile(position.x - range, position.y - range);
 
-		//Left
-		for (int i = -range; i < range; i++)
-		{
-			current_tile.x = position.x + i;
-			if (App->pathfinding->IsWalkable(current_tile))
-				vec.push_back(current_tile);
-		}
-		current_tile.x++;
-
-		//Down
-		for (int i = -range; i < range; i++)
-		{
-			current_tile.y = position.y + i;
-			if (App->pathfinding->IsWalkable(current_tile))
-				vec.push_back(current_tile);
-		}
-		current_tile.y++;
-
-		//Right
-		for (int i = -range; i < range; i++)
-		{
-			current_tile.x = position.x - i;
-			if (App->pathfinding->IsWalkable(current_tile))
-				vec.push_back(current_tile);
-		}
-		current_tile.x--;
-
-		//Up
-		for (int i = -range; i < range; i++)
-		{
-			current_tile.y = position.y - i;
-			if (App->pathfinding->IsWalkable(current_tile))
-				vec.push_back(current_tile);
-		}
-		current_tile.y--;
-
-		range--;
-	}
-}
-
-const iPoint & Unit::FindClosestEmptyAttackTile(const Entity* target, int tile_range) const
-{
-	iPoint ret(-1, -1);
-
-	if (tile_range < 1)
-	{
-		LOG("Tile range inferior to 1");
-		return ret;
-	}
-
-	std::vector<iPoint> empty_attack_tiles;
-
-	target->GetEmptyAttackPositions(empty_attack_tiles, range);
-
-	if (empty_attack_tiles.size() == 0)
-		return ret;
-
-	float shortest_distance = NUM_TILES;
-	float distance_to_tile = 0.0f;
-
-	for (std::vector<iPoint>::iterator it = empty_attack_tiles.begin(); it != empty_attack_tiles.end(); ++it)
-	{
-		distance_to_tile = it->DistanceTo(position);
-		if (shortest_distance > distance_to_tile)
-		{
-			shortest_distance = distance_to_tile;
-			ret = *it;
-		}
-	}
-	return ret;
-}
-
-const Unit * Unit::GetCollision() const
-{
-	return collision;
-}
 
 const DIRECTION Unit::GetDirection(iPoint objective) const
 {
@@ -788,543 +1307,13 @@ const DIRECTION Unit::GetDirection(iPoint objective) const
 		return D_NORTH_WEST;
 }
 
+//Setters
 void Unit::SetAction(const ACTION action)
 {
 	this->action = action;
 }
 
-void Unit::LookAt(const iPoint& pos)
-{
-	DIRECTION dir = GetDirection(pos);
-	
-	if (dir != direction)
-	{
-		this->direction = dir;
-		changed = true;
-	}
-
-}
-
-bool Unit::GoTo(const iPoint& destination)
-{
-	bool ret = false;
-	if (GetPath(destination) != false)
-	{
-		this->destination = destination;
-		ret = true;
-	}
-	else
-		this->destination = path_vec[0];
-
-	action = A_MOVE;
-	changed = true;
-	path_position = path_vec.size() - 1;
-	return ret;
-}
-
-bool Unit::ChangeDirection(const iPoint& destination)
-{
-	bool ret = false;
-
-	if (GetPath(destination) != true)
-	{
-		this->destination = destination;
-		ret = true;
-	}
-	else
-		this->destination = path_vec[0];
-
-	path_position = path_vec.size() - 1;
-	return false;
-}
-
-void Unit::PlayDeathSound() const
-{
-	int rand_num = rand() % 5;
-
-	switch (rand_num)
-	{
-	case 0:
-		App->audio->PlayFx(App->audio->fx_twohanded_die01);
-		break;
-	case 1:
-		App->audio->PlayFx(App->audio->fx_twohanded_die02);
-		break;
-	case 2:
-		App->audio->PlayFx(App->audio->fx_twohanded_die03);
-		break;
-	case 3:
-		App->audio->PlayFx(App->audio->fx_twohanded_die04);
-		break;
-	case 4:
-		App->audio->PlayFx(App->audio->fx_twohanded_die05);
-		break;
-	}	
-}
-
-void Unit::GetNextPathPosition()
-{
-	path_position--;
-	LookAt(path_vec[path_position]);
-
-	iPoint distance = App->map->MapToWorld(path_vec[path_position]) - App->map->MapToWorld(position);
-	if (distance.x == 0)
-	{
-		directional_speed.x = 0;
-		if(distance.y > 0)
-			directional_speed.y = speed;
-		else
-			directional_speed.y = -speed;
-	}
-	else if (distance.y == 0)
-	{
-		directional_speed.x = speed;
-		if (distance.x > 0)
-			directional_speed.x = speed;
-		else
-			directional_speed.x = -speed;
-	}
-	else
-	{
-		float angle = atanf((abs((float)distance.y)) / abs((float)distance.x));
-		directional_speed.x = speed * cosf(angle);
-		directional_speed.y = speed * sinf(angle);
-
-		if (distance.x < 0)
-			directional_speed.x *= -1.0f;
-		if (distance.y < 0)
-			directional_speed.y *= -1.0f;
-	}
-}
-
-void Unit::MoveToNextTile()
-{
-	int dx = 0;
-	int dy = 0;
-
-	switch (direction)
-	{
-	case D_NO_DIRECTION:
-		break;
-	case D_NORTH:
-		dx--;
-		dy--;
-		break;
-	case D_NORTH_EAST:
-		dy--;
-		break;
-	case D_EAST:
-		dx++;
-		dy--;
-		break;
-	case D_SOUTH_EAST:
-		dx++;
-		break;
-	case D_SOUTH:
-		dx++;
-		dy++;
-		break;
-	case D_SOUTH_WEST:
-		dy++;
-		break;
-	case D_WEST:
-		dx--;
-		dy++;
-		break;
-	case D_NORTH_WEST:
-		dx--;
-		break;
-	default:
-		break;
-	}
-
-	if (App->pathfinding->IsWalkable(iPoint(position.x + dx, position.y + dy)))
-	{
-		App->pathfinding->MakeWalkable(position);
-
-		iPoint pos_now = App->map->MapToWorld(position);
-
-		position.x += dx;
-		position.y += dy;
-
-		App->pathfinding->MakeNoWalkable(position);
-
-		iPoint pos_later = App->map->MapToWorld(position);
-
-		position_in_tile.x = pos_later.x - pos_now.x;
-		position_in_tile.y = pos_later.y - pos_now.y;
-	}
-	else
-		GoTo(destination);
-}
-
-void Unit::PlayAttackSound() const
-{
-	if(unit_class == C_ARCHER)
-		App->audio->PlayFx(App->audio->fx_arrow);
-
-	else if(unit_type == U_SIEGERAM)
-		App->audio->PlayFx(App->audio->fx_siegeram_hit);
-
-	else
-	{
-		int rand_num = rand() % 3;
-
-		switch (rand_num)
-		{
-		case 0:
-			App->audio->PlayFx(App->audio->fx_attack01);
-			break;
-		case 1:
-			App->audio->PlayFx(App->audio->fx_attack02);
-			break;
-		case 2:
-			App->audio->PlayFx(App->audio->fx_attack03);
-			break;
-		}
-	}
-}
-
-void Unit::UnitDies()
-{
-	action = A_DIE;
-
-	for (std::vector<Entity*>::iterator it = App->scene->selection.begin(); it != App->scene->selection.end(); ++it)
-		if ((*it) == this)
-		{
-			SetEntityStatus(ST_NON_SELECTED);
-			App->scene->selection.erase(it);
-			break;
-		}
-	
-	/*if (GetSide() == S_ENEMY)
-		App->score->EnemyKilled();*/
-
-	if (unit_type == U_SIEGERAM)
-		App->entity_manager->DropUnits(GetX(), GetY());
-
-	changed = true;
-	PlayDeathSound();
-}
-
-bool Unit::OutOfHP() const
-{
-	if (GetHp() <= 0)
-		return true;
-	return false;
-}
-
-void Unit::EnemyInSight()
-{
-	App->pathfinding->MakeWalkable(position);
-
-	Entity* ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this, E_UNIT);
-	if (ret == nullptr)
-		ret = App->entity_manager->LookForEnemies(VISION_RANGE, GetPixelPosition(), GetSide(), this);
-
-	App->pathfinding->MakeNoWalkable(position);
-
-	if (ret != nullptr)
-	{
-		target = ret;
-		if (action != A_IDLE)
-			GoIdle();
-	}
-}
-
-void Unit::GoToEnemy()
-{
-	iPoint ret = FindClosestEmptyAttackTile(target, range);
-
-	if (ret.y != -1)
-		destination = ret;
-	else
-	{
-		GoIdle();
-		return;
-	}
-
-	if (destination == position)
-	{
-		GoIdle();
-		return;
-	}
-
-	else
-		GoTo(destination);
-}
-
-void Unit::ChangeDirecctionToEnemy()
-{
-	iPoint destination_tile;
-	destination_tile = FindClosestEmptyAttackTile(target, range);
-	if (destination_tile.y == -1)
-		target = nullptr;
-	else
-		ChangeDirection(destination_tile);
-}
-
-void Unit::GoIdle()
-{
-	action = A_IDLE;
-	changed = true;
-}
-
-bool Unit::DestinationFull() const
-{
-	if (App->pathfinding->IsWalkable(destination))
-		return false;
-	return true;
-}
-
-bool Unit::EnemyDead()
-{
-	if (target->GetHp() <= 0.0f)
-	{
-		target = nullptr;
-		return true;
-	}
-	return false;
-}
-
-void Unit::DoDamage()
-{
-	LookAt(target->GetPosition());
-
-	if (unit_class == C_ARCHER)
-	{
-		if (unit_type == U_GOD)
-			App->projectile_manager->CreateProjectile(GetPixelPosition(), target, attack, 5, 30, 0, P_ICE_ARROW);
-		else
-			App->projectile_manager->CreateProjectile(GetPixelPosition(), target, attack, 15, 20, 0, P_BASIC_ARROW);
-	}
-
-	else if(unit_type == U_MANGONEL)
-		App->projectile_manager->CreateProjectile(GetPixelPosition(), target, attack, 30, 40, 50, P_CANNONBALL);
-
-	else
-		target->Damaged(attack);
-
-	PlayAttackSound();
-
-	if (unit_class == C_SIEGE)
-		siege_attacked = true;
-
-	if (destination != position)
-		LOG("NOT EQUAL!!!!!!!");
-}
-
-/*TODO
-bool Unit::AproachEnemy()
-{
-	SetAttackPosition();
-
-	SetPosition(GetX() + move_vector.x*speed, GetY() + move_vector.y*speed);
-	unit_circle.SetPosition({ GetX(), GetY() });
-
-	if (GetPosition().DistanceTo(target->GetPosition()) <= APPROACH)
-		return true;
-	return false;
-}*/
-
-/*TODO
-void Unit::SetAttackPosition()
-{
-	if (range != CLOSE_COMBAT_RANGE || GetUnitType() == U_SIEGERAM)
-		StartAttack();
-	else
-	{
-		action = A_APPROACH;
-		float delta_x = target->GetX() - GetX();
-		float delta_y = target->GetY() - GetY();
-		float distance = sqrtf(delta_x * delta_x + delta_y * delta_y);
-
-		move_vector.x = delta_x * (APPROACH / distance);
-		move_vector.y = delta_y * (APPROACH / distance);
-
-		float modul = sqrt(move_vector.x*move_vector.x + move_vector.y * move_vector.y);
-
-		move_vector.x = move_vector.x / modul;
-		move_vector.y = move_vector.y / modul;
-	}
-}*/
-
-void Unit::Fight()
-{
-	if (target->GetEntityType() == E_UNIT)
-	{
-		if (((Unit*)target)->range == 1 && range == 1 && ((Unit*)target)->target == this)
-		{
-			if (((Unit*)target)->GetAction() == A_IDLE || ((Unit*)target)->GetAction() == A_FIGHT)
-			{
-				action = A_FIGHT;
-				LookAt(target->GetPosition());
-				changed = true;
-			}
-		}
-		else
-		{
-			action = A_FIGHT;
-			LookAt(target->GetPosition());
-			changed = true;
-		}
-	}
-	else
-	{
-		action = A_FIGHT;
-		LookAt(target->GetPosition());
-		changed = true;
-	}
-}
-
-void Unit::MoveAway()
-{
-	iPoint new_pos = App->pathfinding->FindNearestEmpty(this);
-	if (new_pos.y == -1)
-		LOG("CAN NOT FIND EMPTY POS");
-	else
-		GoTo(new_pos);
-}
-
-/*
-void Unit::CheckUnitsBuffs()
-{
-	//Bonus attack
-	if (bonus_attack == false)
-	{
-		switch (unit_class)
-		{
-		case C_INFANTRY:
-			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_INFANTRY_ATTACK)) == INV_LVL_UNLOCKED)
-			{
-				attack += 6;
-				bonus_attack = true;
-			}
-			break;
-		case C_ARCHER:
-			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_ARCHERS_ATTACK)) == INV_LVL_UNLOCKED)
-			{
-				attack += 5;
-				bonus_attack = true;
-			}
-			break;
-		case C_CAVALRY:
-			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_CAVALRY_ATTACK)) == INV_LVL_UNLOCKED)
-			{
-				attack += 7;
-				bonus_attack = true;
-			}
-			break;
-		}
-	}
-	//-------------
-	//Bonus defense
-	if (bonus_defense == false)
-	{
-		switch (unit_class)
-		{
-		case C_INFANTRY:
-			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_INFANTRY_DEFENSE)) == INV_LVL_UNLOCKED)
-			{
-				IncreaseArmor(4);
-				bonus_defense = true;
-			}
-			break;
-		case C_ARCHER:
-			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_ARCHERS_DEFENSE)) == INV_LVL_UNLOCKED)
-			{
-				IncreaseArmor(3);
-				bonus_defense = true;
-			}
-			break;
-		case C_CAVALRY:
-			if (App->investigations->GetLevel(App->investigations->GetInvestigation(INV_CAVALRY_DEFENSE)) == INV_LVL_UNLOCKED)
-			{
-				IncreaseArmor(4);
-				bonus_defense = true;
-			}
-			break;
-		}
-	}
-	//-------------
-}
-*/
-
-//TODO or erase
-/*
-void Unit::GoToTileCenter()
-{
-	iPoint tile = GetTile();
-	iPoint tile_center = App->map->MapToWorld(tile.x, tile.y);
-
-	action = A_CENTER;
-	float delta_x = tile_center.x - GetX();
-	float delta_y = tile_center.y - GetY();
-	float distance = sqrtf(delta_x * delta_x + delta_y * delta_y);
-
-	float modul = sqrt(move_vector.x*move_vector.x + move_vector.y * move_vector.y);
-
-	move_vector.x = move_vector.x / modul;
-	move_vector.y = move_vector.y / modul;
-}*/
-
-void Unit::CenterUnit()
-{
-	position_in_tile.x = 0;
-	position_in_tile.y = 0;
-}
-
-void Unit::ChangeAnimation()
-{
-	if (unit_type == U_GOD)
-	{
-		if (action == A_CENTER || action == A_APPROACH)
-			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, A_MOVE, direction));
-		if (action == A_FIGHT)
-			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, action, direction), this->rate_of_fire);
-		else
-			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, action, direction));
-	}
-	else
-	{
-		if (action == A_CENTER || action == A_APPROACH)
-			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, A_MOVE, direction));
-		if (action == A_FIGHT)
-			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, action, direction), this->rate_of_fire);
-		else
-			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, action, direction));
-
-		if (unit_class == C_SIEGE)
-			idle_siege->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, A_IDLE, direction));;
-	}
-}
-
-int Unit::GetFrameAttack()
-{
-	switch (unit_type)
-	{
-	case U_MANGONEL:
-		return 2;
-		break;
-	case U_SIEGERAM:
-		return 9;
-		break;
-	default:
-		return 0;
-		break;
-	}
-}
-
-void Unit::SlowUnit()
-{
-	if (slowed == false)
-	{
-		this->speed /= SLOW_PROPORTION;
-		slowed = true;
-		slow_timer.Start();
-	}
-}
-
+//Extra
 void Unit::Save(pugi::xml_node &data)
 {
 	pugi::xml_node build = data.child("units");
