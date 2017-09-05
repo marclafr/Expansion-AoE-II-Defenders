@@ -26,6 +26,7 @@ CreateTowerTask::CreateTowerTask(iPoint position, TOWER_TYPE type) : map_pos(pos
 bool CreateTowerTask::Execute()
 {
 	iPoint tile = App->map->WorldToMap(map_pos.x - App->render->camera->GetPosition().x, map_pos.y - App->render->camera->GetPosition().y);
+	App->scene->placing_tower = type;
 	return true;
 }
 
