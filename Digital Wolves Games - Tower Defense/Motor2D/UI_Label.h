@@ -1,17 +1,17 @@
 #ifndef __UI_LABEL_H__
 #define __UI_LABEL_H__
 
+#include <string>
 #include "j1Gui.h"
 
-class Text
+struct Text
 {
-public:
 	Text(char* txt);
 	~Text();
 
 	SDL_Texture* text_texture;
 	SDL_Rect text_rect;
-	char* text;
+	std::string* text;
 };
 
 class UI_Label : public UI_Element

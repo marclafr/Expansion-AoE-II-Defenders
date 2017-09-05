@@ -32,14 +32,13 @@
 
 // Deletes an array of buffers
 #define RELEASE_ARRAY( x ) \
-    {                              \
-    if( x != NULL )              \
-	    {                            \
-      delete[] x;                \
-	  x = NULL;                    \
-	    }                            \
-                              \
-    }
+{                          \
+	if( x != nullptr )     \
+	{                      \
+		delete[] x;        \
+		x = nullptr;       \
+	}                      \
+}
 
 #define DELETE_PTR( x )		\
 {							\

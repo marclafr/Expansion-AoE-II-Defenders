@@ -13,8 +13,8 @@ UI_Label::UI_Label(iPoint pos, SDL_Rect atlas_rect, char * txt, bool has_backgro
 	text->text_rect.y = atlas_rect.y;
 
 	//Set Text
-	text->text_texture = App->font->Print(text->text, TEXTS_COLOR);
-	App->font->CalcSize(text->text, text->text_rect.w, text->text_rect.h);
+	text->text_texture = App->font->Print(text->text->c_str(), TEXTS_COLOR);
+	App->font->CalcSize(text->text->c_str(), text->text_rect.w, text->text_rect.h);
 	text->text_rect.w += (2 * TEXT_RIGHT_DISPLACEMENT);
 }
 
@@ -60,20 +60,21 @@ int UI_Label::GetTextWidth()
 
 void UI_Label::SetText(char * new_txt)
 {
-	text->text = new_txt;
+	text->text->replace(0, -1, new_txt);
 	if (text->text_texture != nullptr)
 		SDL_DestroyTexture(text->text_texture);
-	text->text_texture = App->font->Print(text->text, TEXTS_COLOR);
-	App->font->CalcSize(text->text, text->text_rect.w, text->text_rect.h);
+	text->text_texture = App->font->Print(text->text->c_str(), TEXTS_COLOR);
+	App->font->CalcSize(text->text->c_str(), text->text_rect.w, text->text_rect.h);
 	text->text_rect.w += (2 * TEXT_RIGHT_DISPLACEMENT);
 }
 
-Text::Text(char* txt) : text(txt)
+Text::Text(char* txt)
 {
+	text = new std::string(txt);
 }
 
 Text::~Text()
 {
 	SDL_DestroyTexture(text_texture);
-	RELEASE_ARRAY(text);
+	DELETE_PTR(text);
 }
