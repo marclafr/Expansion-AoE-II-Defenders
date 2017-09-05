@@ -193,6 +193,7 @@ public:
 	const float DistanceInTiles(const iPoint& pos) const;
 	const DIRECTION GetDirection(iPoint objective) const;
 	void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const; //gives empty attack positions to attack this unit
+	const int GetTileRange() const;
 
 	//Setters
 	void SetAction(const ACTION action);

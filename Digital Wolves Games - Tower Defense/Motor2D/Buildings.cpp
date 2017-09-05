@@ -247,7 +247,9 @@ void Building::SetPositions()
 				tiles.push_back(tile);
 			}
 		break;
-
+	default:
+		tiles.push_back(left_tile);
+		break;
 	}
 }
 
@@ -308,7 +310,6 @@ const int Building::GetMaxHp() const
 
 void Building::GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const
 {
-
 	for (std::vector<iPoint>::const_iterator it = tiles.begin(); it != tiles.end(); ++it)
 	{
 		iPoint position = *it;

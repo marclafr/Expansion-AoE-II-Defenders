@@ -1305,6 +1305,11 @@ void Unit::GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const
 	}
 }
 
+const int Unit::GetTileRange() const
+{
+	return range;
+}
+
 //Setters
 void Unit::SetAction(const ACTION action)
 {
