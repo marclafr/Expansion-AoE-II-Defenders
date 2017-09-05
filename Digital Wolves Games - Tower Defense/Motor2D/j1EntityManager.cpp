@@ -22,6 +22,7 @@
 
 #define MAX_SELECTION 25
 
+//Constructors & Destructors
 j1EntityManager::j1EntityManager() : j1Module()
 {
 	name.assign("entity_manager");
@@ -29,24 +30,9 @@ j1EntityManager::j1EntityManager() : j1Module()
 
 j1EntityManager::~j1EntityManager() {}
 
+//Main Functions
 bool j1EntityManager::Start()
 {
-
-	/*float m = App->map->data.height;
-	float n = App->map->data.width;
-
-	float map_h = (m + n) * 0.5f * App->map->data.tile_height + 75;//75 1 4 each tile
-	float map_w = (m + n) * 0.5f * App->map->data.tile_width;
-
-	float map_x = (m - n) * 0.5f * 0.5f * App->map->data.tile_width;
-	float map_y = (m + n) * 0.5f * 0.5f * App->map->data.tile_height + 75 / 2; //75 1 4 each tile
-
-	//IsoRect map(iPoint(map_x, map_y), map_w, map_h);
-	//IsoRect map(fPoint(map_x, map_y), map_w, map_h);*/
-
-	//this should not be 76 * 76
-	//IsoRect map(fPoint( / 2.0f,  / 2.0f), App->map->data.width, App->map->data.height);
-
 	entity_quadtree = new QuadTree({0,0}, App->map->data.width, App->map->data.tile_width, App->map->data.height, App->map->data.tile_height);
 
 	return true;
@@ -58,6 +44,27 @@ bool j1EntityManager::CleanUp() {
 	return true;
 }
 
+bool j1EntityManager::Update(float dt)
+{
+	entity_quadtree->UpdateAll(dt);
+	return true;
+}
+
+bool j1EntityManager::PostUpdate()
+{
+	entity_quadtree->DeleteEntities();
+	/*if (siegeram_destroyed == true)
+	{
+	App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x + 10.0f, siegeram_pos.y		 }, S_ENEMY);
+	App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x - 10.0f, siegeram_pos.y		 }, S_ENEMY);
+	App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x,		  siegeram_pos.y + 10.0f }, S_ENEMY);
+	App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x,		  siegeram_pos.y - 10.0f }, S_ENEMY);
+	siegeram_destroyed = false;
+	}*/
+	return true;
+}
+
+//Usefull
 Entity * j1EntityManager::CreateUnit(UNIT_TYPE u_type,const iPoint& pos, Side side)
 {
 	Entity* new_entity = (Entity*) new Unit(u_type, pos, side);
@@ -66,7 +73,6 @@ Entity * j1EntityManager::CreateUnit(UNIT_TYPE u_type,const iPoint& pos, Side si
 	App->pathfinding->MakeNoWalkable(pos);
 	return new_entity;
 }
-
 
 Entity * j1EntityManager::CreateBuilding(BUILDING_TYPE b_type, const iPoint& pos, bool builded) const
 {
@@ -84,15 +90,14 @@ Entity * j1EntityManager::CreateWall(const iPoint & pos, bool builded) const
 	return new_entity;
 }
 
-//TODO uncoment and fix
-/*
-Entity * j1EntityManager::CreateTower(TOWER_TYPE t_type, fPoint pos) const
+Entity * j1EntityManager::CreateTower(TOWER_TYPE t_type, const iPoint& pos) const
 {
 	Entity* new_entity = (Entity*) new Tower(t_type, pos);
 	entity_quadtree->PushBack(new_entity);
 	return new_entity;
 }
 
+/*
 Entity * j1EntityManager::CreateResource(RESOURCE_TYPE r_type, fPoint pos, int amount_collect, int time) const
 {
 	Entity* new_entity = (Entity*) new Resources(r_type, pos, amount_collect, time);
@@ -180,17 +185,20 @@ void j1EntityManager::UnselectEverything() const
 	App->scene->selection.clear();
 }
 
-/*
-//TODO: This function is unused   Why???
-void j1EntityManager::Select(Entity * select) const
+//Getters
+void j1EntityManager::CheckClick(int mouse_x, int mouse_y) const
 {
-	App->entity_manager->UnselectEverything();
-	select->SetEntityStatus(ST_SELECTED);
-	App->scene->selection.push_back(select);
-	App->gui->CreatePanel(App->scene->selection);
-	//App->uimanager->CreatePanelInfo(App->scene->selection);
+	App->scene->selection.clear();
+	iPoint click_point = App->render->ScreenToWorld(mouse_x, mouse_y);
+	Entity* clicked = entity_quadtree->SearchFirst(1, click_point);
+	if(clicked != nullptr)
+		App->scene->selection.push_back(clicked);
 }
-*/
+
+bool j1EntityManager::AreUnitsInRect(const SDL_Rect & rect) const
+{
+	return (entity_quadtree->SearchFirstUnit(rect) != nullptr);
+}
 
 Entity * j1EntityManager::LookForEnemies(int pixel_range, iPoint pos, Side side, Entity* attacker, ENTITY_TYPE entity_type) const
 {
@@ -230,40 +238,6 @@ Entity * j1EntityManager::LookForEnemies(int pixel_range, iPoint pos, Side side,
 	return ret;
 }
 
-void j1EntityManager::CheckClick(int mouse_x, int mouse_y) const
-{
-	App->scene->selection.clear();
-	iPoint click_point = App->render->ScreenToWorld(mouse_x, mouse_y);
-	Entity* clicked = entity_quadtree->SearchFirst(1, click_point);
-	if(clicked != nullptr)
-		App->scene->selection.push_back(clicked);
-}
-
-bool j1EntityManager::AreUnitsInRect(const SDL_Rect & rect) const
-{
-	return (entity_quadtree->SearchFirstUnit(rect) != nullptr);
-}
-
-bool j1EntityManager::Update(float dt)
-{
-	entity_quadtree->UpdateAll(dt);
-	return true;
-}
-
-bool j1EntityManager::PostUpdate()
-{
-	entity_quadtree->DeleteEntities();
-	/*if (siegeram_destroyed == true)
-	{
-		App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x + 10.0f, siegeram_pos.y		 }, S_ENEMY);
-		App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x - 10.0f, siegeram_pos.y		 }, S_ENEMY);
-		App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x,		  siegeram_pos.y + 10.0f }, S_ENEMY);
-		App->entity_manager->CreateUnit(U_CHAMPION, { siegeram_pos.x,		  siegeram_pos.y - 10.0f }, S_ENEMY);
-		siegeram_destroyed = false;
-	}*/
-	return true;
-}
-
 Entity * j1EntityManager::CheckForCombat(iPoint position, int range, Side side) const
 {
 	return entity_quadtree->SearchFirstEnemy(range, position, side);
@@ -274,13 +248,12 @@ Entity* j1EntityManager::CheckForObjective(iPoint position, int vision_range, Si
 	return entity_quadtree->SearchFirstEnemy(vision_range, position, side);
 }
 
-bool j1EntityManager::IsUnitInTile(const Unit* unit, const iPoint tile)const
+void j1EntityManager::GetEntitiesInIsoRect(const IsoRect rect, std::vector<Entity*>& vec) const
 {
-	if (tile == App->map->WorldToMap(unit->GetX(), unit->GetY()))
-		return true;
-	return false;
+	entity_quadtree->SearchInIsoRect(rect, vec);
 }
 
+//Extras
 void j1EntityManager::DrawQuadTree() const
 {
 	entity_quadtree->Draw();
@@ -480,11 +453,6 @@ void j1EntityManager::DropUnits(float pos_x, float pos_y)
 {
 	entity_quadtree->BlitMinimap();
 }*/
-
-void j1EntityManager::GetEntitiesInIsoRect(const IsoRect rect, std::vector<Entity*>& vec) const
-{
-	entity_quadtree->SearchInIsoRect(rect, vec);
-}
 
 Entity * j1EntityManager::ClickSelect(const iPoint & mouse_pos) const
 {

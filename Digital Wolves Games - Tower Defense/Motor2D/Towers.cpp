@@ -13,7 +13,7 @@
 #include "j1Investigations.h"
 #include "j1Scene.h"
 
-Tower::Tower(TOWER_TYPE t_type, iPoint pos) : Building(B_TURRET, pos, S_ALLY), tower_type(t_type)
+Tower::Tower(TOWER_TYPE t_type,const iPoint& pos) : Building(B_TURRET, pos, S_ALLY), tower_type(t_type)
 {
 	SDL_Rect tower_rect;
 	iPoint pivot;

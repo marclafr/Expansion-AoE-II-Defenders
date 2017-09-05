@@ -42,7 +42,7 @@ private:
 
 public:
 	iPoint arrowpos;
-	Tower(TOWER_TYPE t_type, iPoint pos);
+	Tower(TOWER_TYPE t_type,const iPoint& pos);
 	~Tower();
 	bool UpgradeTurret(TOWER_TYPE new_type); //only built turrets
 	bool CanUpgrade(TOWER_TYPE new_type);
