@@ -75,9 +75,7 @@ enum ACTION
 	A_DIE,
 	A_DISAPPEAR,
 	A_IDLE,
-	A_MOVE,
-	A_APPROACH,
-	A_CENTER
+	A_MOVE
 };
 
 enum DIRECTION
@@ -135,8 +133,6 @@ private:
 	void ChangeDirecctionToEnemy();
 	void GoIdle();
 	void DoDamage();
-	//bool AproachEnemy();
-	//void SetAttackPosition();
 	void Fight();
 	void MoveAway();
 	void CenterUnit();

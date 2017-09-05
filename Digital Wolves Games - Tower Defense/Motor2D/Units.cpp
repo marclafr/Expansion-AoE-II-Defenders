@@ -409,47 +409,7 @@ void Unit::AI()
 			else
 				GoIdle(); 
 		}
-			
-
 		break;
-
-	/*case A_APPROACH:
-
-		if (OutOfHP())
-		{
-			UnitDies();
-			break;
-		}
-
-		if (EnemyDead())
-		{
-			GoIdle();
-			break;
-		}
-
-		if (AproachEnemy() == true)
-			StartAttack();
-
-		break;
-
-	case A_CENTER:
-
-		if (OutOfHP())
-		{
-			UnitDies();
-			break;
-		}
-		
-		if (DestinationFull())
-		{
-			GoIdle();
-			break;
-		}
-
-		//if (CenterUnit() == true)
-			//StartAttack();
-
-		break;*/
 
 	case A_FIGHT:
 
@@ -512,7 +472,7 @@ void Unit::Draw()
 	SDL_Rect rect;
 	iPoint pivot;
 
-	if (unit_class == C_SIEGE && (action == A_MOVE || action == A_APPROACH || action == A_CENTER))
+	if (unit_class == C_SIEGE && (action == A_MOVE))
 	{	
 		idle_siege->Update(rect, pivot);
 
@@ -664,41 +624,6 @@ void Unit::DoDamage()
 		LOG("NOT EQUAL!!!!!!!");
 }
 
-/*TODO
-bool Unit::AproachEnemy()
-{
-	SetAttackPosition();
-
-	SetPosition(GetX() + move_vector.x*speed, GetY() + move_vector.y*speed);
-	unit_circle.SetPosition({ GetX(), GetY() });
-
-	if (GetPosition().DistanceTo(target->GetPosition()) <= APPROACH)
-		return true;
-	return false;
-}*/
-
-/*TODO
-void Unit::SetAttackPosition()
-{
-	if (range != CLOSE_COMBAT_RANGE || GetUnitType() == U_SIEGERAM)
-		StartAttack();
-	else
-	{
-		action = A_APPROACH;
-		float delta_x = target->GetX() - GetX();
-		float delta_y = target->GetY() - GetY();
-		float distance = sqrtf(delta_x * delta_x + delta_y * delta_y);
-
-		move_vector.x = delta_x * (APPROACH / distance);
-		move_vector.y = delta_y * (APPROACH / distance);
-
-		float modul = sqrt(move_vector.x*move_vector.x + move_vector.y * move_vector.y);
-
-		move_vector.x = move_vector.x / modul;
-		move_vector.y = move_vector.y / modul;
-	}
-}*/
-
 void Unit::Fight()
 {
 	if (target->GetEntityType() == E_UNIT)
@@ -746,8 +671,6 @@ void Unit::ChangeAnimation()
 {
 	if (unit_type == U_GOD)
 	{
-		if (action == A_CENTER || action == A_APPROACH)
-			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, A_MOVE, direction));
 		if (action == A_FIGHT)
 			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, U_HEAVYCAVALRYARCHER, action, direction), this->rate_of_fire);
 		else
@@ -755,8 +678,6 @@ void Unit::ChangeAnimation()
 	}
 	else
 	{
-		if (action == A_CENTER || action == A_APPROACH)
-			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, A_MOVE, direction));
 		if (action == A_FIGHT)
 			animation->ChangeAnimation(App->anim->GetAnimationType(ANIM_UNIT, unit_type, action, direction), this->rate_of_fire);
 		else
