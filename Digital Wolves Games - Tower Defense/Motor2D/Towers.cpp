@@ -151,11 +151,15 @@ void Tower::DoBattle()
 {
 	if (target != nullptr)
 	{
-		if (target->GetPixelPosition().DistanceTo(GetPixelPosition()) > range)
-			target = nullptr;
+		Attack();
 
-		if (target != nullptr && target->GetHp() <= 0)
+		iPoint tower_pos(GetPixelPosition());
+		iPoint target_pos(target->GetPixelPosition());
+
+		if (tower_pos.DistanceTo(target_pos) > range)
 			target = nullptr;
+		else if (target->GetHp() <= 0)
+			target = nullptr;	
 	}
 
 	if (target == nullptr)

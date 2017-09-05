@@ -35,7 +35,7 @@ private:
 	PROJECTILE_TYPE projectile_type;
 	float rate_of_fire;
 	int projectile_spd;
-	float range;
+	int range;
 	j1Timer attack_timer;
 	Unit* target = nullptr;
 	AnimationManager* anim_fire = nullptr;
