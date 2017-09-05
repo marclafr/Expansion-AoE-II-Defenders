@@ -739,7 +739,7 @@ void j1Scene::HandleInput( SDL_Event event)
 		if (event.button.button == SDL_SCANCODE_K)
 		{
 			iPoint tile = App->map->WorldToMap(x - App->render->camera->GetPosition().x, y - App->render->camera->GetPosition().y);
-			App->entity_manager->CreateTower(tile);
+			App->entity_manager->CreateTower(T_BASIC_TOWER, tile);
 		}
 			//App->SaveGame("save_game.xml");
 

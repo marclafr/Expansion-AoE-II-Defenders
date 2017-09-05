@@ -160,7 +160,7 @@ void Tower::DoBattle()
 
 	if (target == nullptr)
 	{
-		target = (Unit*)App->entity_manager->LookForEnemies(GetRange(), GetPosition(), GetSide(), this);
+		target = (Unit*)App->entity_manager->LookForEnemies(GetRange(), GetPixelPosition(), GetSide(), this);
 		if (target != nullptr)
 			Attack();
 	}
