@@ -986,52 +986,6 @@ void Unit::GetNextPathPosition()
 	}
 }
 
-void Unit::GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const
-{
-	while (range > 0)
-	{
-		iPoint current_tile(position.x - range, position.y - range);
-
-		//Left
-		for (int i = -range; i < range; i++)
-		{
-			current_tile.x = position.x + i;
-			if (App->pathfinding->IsWalkable(current_tile))
-				vec.push_back(current_tile);
-		}
-		current_tile.x++;
-
-		//Down
-		for (int i = -range; i < range; i++)
-		{
-			current_tile.y = position.y + i;
-			if (App->pathfinding->IsWalkable(current_tile))
-				vec.push_back(current_tile);
-		}
-		current_tile.y++;
-
-		//Right
-		for (int i = -range; i < range; i++)
-		{
-			current_tile.x = position.x - i;
-			if (App->pathfinding->IsWalkable(current_tile))
-				vec.push_back(current_tile);
-		}
-		current_tile.x--;
-
-		//Up
-		for (int i = -range; i < range; i++)
-		{
-			current_tile.y = position.y - i;
-			if (App->pathfinding->IsWalkable(current_tile))
-				vec.push_back(current_tile);
-		}
-		current_tile.y--;
-
-		range--;
-	}
-}
-
 const iPoint & Unit::FindClosestEmptyAttackTile() const
 {
 	iPoint ret(-1, -1);
@@ -1283,8 +1237,6 @@ const float Unit::DistanceInTiles(const iPoint & pos) const
 	return sqrt(vec.x * vec.x + vec.y * vec.y);
 }
 
-
-
 const DIRECTION Unit::GetDirection(iPoint objective) const
 {
 	iPoint direction_vec = objective - position;
@@ -1305,6 +1257,52 @@ const DIRECTION Unit::GetDirection(iPoint objective) const
 		return D_WEST;
 	if (direction_vec.x < 0 && direction_vec.y == 0)
 		return D_NORTH_WEST;
+}
+
+void Unit::GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const
+{
+	while (range > 0)
+	{
+		iPoint current_tile(position.x - range, position.y - range);
+
+		//Left
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.x = position.x + i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.x++;
+
+		//Down
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.y = position.y + i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.y++;
+
+		//Right
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.x = position.x - i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.x--;
+
+		//Up
+		for (int i = -range; i < range; i++)
+		{
+			current_tile.y = position.y - i;
+			if (App->pathfinding->IsWalkable(current_tile))
+				vec.push_back(current_tile);
+		}
+		current_tile.y--;
+
+		range--;
+	}
 }
 
 //Setters

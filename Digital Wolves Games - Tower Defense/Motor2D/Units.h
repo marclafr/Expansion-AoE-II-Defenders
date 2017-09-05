@@ -151,7 +151,6 @@ private:
 	//void CheckUnitsBuffs();
 	int GetFrameAttack();
 	void GetNextPathPosition();
-	void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const; //gives empty attack positions to attack this unit
 	const iPoint& FindClosestEmptyAttackTile() const;
 
 public:
@@ -193,6 +192,7 @@ public:
 	const float GetSpeed() const;
 	const float DistanceInTiles(const iPoint& pos) const;
 	const DIRECTION GetDirection(iPoint objective) const;
+	void GetEmptyAttackPositions(std::vector<iPoint>& vec, int range) const; //gives empty attack positions to attack this unit
 
 	//Setters
 	void SetAction(const ACTION action);

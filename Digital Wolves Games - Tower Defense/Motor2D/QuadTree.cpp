@@ -360,59 +360,6 @@ void QuadTreeNode::SearchForEnemies(int pixel_range, iPoint from, std::vector<En
 				childs[i]->SearchForEnemies(pixel_range, from, vec, side, entity_type);
 }
 
-Entity * QuadTreeNode::SearchFirstCollisionInTile(iPoint tile, Entity* exeption)
-{
-	iPoint i_pos = App->map->MapToWorld(tile.x, tile.y);
-	fPoint tile_center(i_pos.x, i_pos.y);
-	IsoRect rect(tile_center, App->map->data.tile_width, App->map->data.tile_height);
-	return SearchFirstCollision(rect, exeption);
-}
-
-void QuadTreeNode::SearchCollisions(iPoint tile, std::vector<Unit*>& vec, Entity * exeption)
-{
-	if (childs[0] == nullptr)
-	{
-		for (int i = 0; i < NODE_ENTITIES; i++)
-			if (entities[i] != nullptr)
-			{
-				if (tile == entities[i]->GetPosition() && entities[i] != exeption && entities[i]->GetHp() > 0 && ((Unit*)entities[i])->GetCollision() == nullptr && ((Unit*)entities[i])->GetAction() != A_MOVE)
-					vec.push_back((Unit*)entities[i]);
-			}
-			else
-				break;
-	}
-	else
-		for (int i = 0; i < 4; i++)
-			if (childs[i]->area->TileInside(tile))
-				childs[i]->SearchCollisions(tile, vec, exeption);
-}
-
-Entity * QuadTreeNode::SearchFirstCollision(IsoRect rect, Entity * exeption) const
-{
-	Entity* ret = nullptr;
-
-	if (childs[0] == nullptr)
-	{
-		for (int i = 0; i < NODE_ENTITIES; i++)
-			if (entities[i] != nullptr)
-			{
-				if (rect.Inside(entities[i]->GetPosition()) && entities[i] != exeption && entities[i]->GetHp() > 0 && ((Unit*) entities[i])->GetCollision() == nullptr && ((Unit*)entities[i])->GetAction() != A_MOVE)
-					ret = entities[i];
-			}
-			else
-				break;
-	}
-	else
-		for (int i = 0; i < 4; i++)
-			if (childs[i]->area->Overlaps(rect))
-			{
-				ret = childs[i]->SearchFirst(rect, exeption);
-				if (ret != nullptr)
-					break;
-			}
-	return ret;
-}
-
 bool QuadTreeNode::PushToCorrectChild(Entity * entity)
 {
 	for (int i = 0; i < 4; i++)
@@ -782,16 +729,6 @@ void QuadTree::SearchForEnemies(int pixel_range, iPoint from, std::vector<Entity
 void QuadTree::SearchInIsoRect(const IsoRect rect, std::vector<Entity*>& vec)
 {
 	origin->Search(rect, vec);
-}
-
-Entity * QuadTree::SearchFirstCollisionInTile(iPoint tile, Entity * exeption) const
-{
-	return origin->SearchFirstCollisionInTile(tile, exeption);
-}
-
-void QuadTree::SearchCollisionsInTile(iPoint tile, std::vector<Unit*>& vec, Entity * exeption)
-{
-	origin->SearchCollisions(tile, vec, exeption);
 }
 
 Entity * QuadTree::SearchFirst(const SDL_Rect & rect) const

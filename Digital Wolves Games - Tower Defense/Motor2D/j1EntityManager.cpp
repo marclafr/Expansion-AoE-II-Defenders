@@ -222,7 +222,10 @@ Entity * j1EntityManager::LookForEnemies(int pixel_range, iPoint pos, Side side,
 		{
 			if (attacker->GetEntityType() == E_UNIT)
 			{
-				if (((Unit*)attacker)->FindClosestEmptyAttackTile(*it, ((Unit*)attacker)->GetRange()).y != -1)
+				std::vector<iPoint> positions;
+				((Unit*)*it)->GetEmptyAttackPositions(positions, ((Unit*)attacker)->GetRange());
+				
+				if (positions.size() != 0)
 				{
 					ret = *it;
 					shortest_distance = current_distance;
