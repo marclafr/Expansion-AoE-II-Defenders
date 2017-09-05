@@ -13,7 +13,7 @@ Projectile::Projectile(iPoint initialpos, Entity * target, int damage, float tim
 {
 	last_pos = target->GetPixelPosition();
 	diferential = 1 / time_in_secs;
-	pre_actual_pos = initialpos;
+
 	switch (type)
 	{
 	case P_BASIC_ARROW:
@@ -61,14 +61,14 @@ Projectile::~Projectile()
 void Projectile::Update()
 {
 	if (target != nullptr)
-		last_pos = target->GetPosition();
+		last_pos = target->GetPixelPosition();
 
 	iPoint initial_point (start_pos.x, start_pos.y - start_height);
 
 	fPoint mid_point((initial_point.x + last_pos.x) / 2.0f, ((initial_point.y + last_pos.y) / 2.0f) - curve_height);
 
 	actual_pos.x = ((1 - projectile_pos)*(1 - projectile_pos)*initial_point.x) + ((2 * projectile_pos)*(1 - projectile_pos)*mid_point.x) + ((projectile_pos*projectile_pos)*last_pos.x);
-	actual_pos.y = ((1 - projectile_pos)*(1 - projectile_pos)*initial_point.y) + ((2 * projectile_pos)*(1 - projectile_pos)*mid_point.y) + ((projectile_pos*projectile_pos)*last_pos.y);
+	actual_pos.y = ((1 - projectile_pos)*(1 - projectile_pos)*initial_point.y) + ((2 * projectile_pos)*(1 - projectile_pos)*mid_point.y) + ((projectile_pos*projectile_pos)*last_pos.y); // used to be actual_pos.y
 
 	fPoint first_point (initial_point.x * (1 - projectile_pos) + mid_point.x * projectile_pos, initial_point.y * (1 - projectile_pos) + mid_point.y * projectile_pos);
 	fPoint second_point (mid_point.x * (1 - projectile_pos) + last_pos.x * projectile_pos, mid_point.y * (1 - projectile_pos) + last_pos.y * projectile_pos);

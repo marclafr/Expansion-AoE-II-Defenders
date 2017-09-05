@@ -453,7 +453,7 @@ void j1Render::BlitSelection() const
 			Building* building = (Building*)*it;
 			building->GetBuildRectangle().Draw();
 
-			/*if (building->GetBuildingType() == B_TURRET || building->GetBuildingType() == B_CANNON || building->GetBuildingType() == B_TURRET_UPGRADED_FIRE  || building->GetBuildingType() == B_TURRET_UPGRADED_ICE || building->GetBuildingType() == B_TURRET_UPGRADED_AIR || building->GetBuildingType() == B_CANNON_UPGRADED_FIRE || building->GetBuildingType() == B_CANNON_UPGRADED_ICE || building->GetBuildingType() == B_CANNON_UPGRADED_AIR)
+			/*if (building->GetBuildingType() == B_TOWER || building->GetBuildingType() == B_CANNON || building->GetBuildingType() == B_TURRET_UPGRADED_FIRE  || building->GetBuildingType() == B_TURRET_UPGRADED_ICE || building->GetBuildingType() == B_TURRET_UPGRADED_AIR || building->GetBuildingType() == B_CANNON_UPGRADED_FIRE || building->GetBuildingType() == B_CANNON_UPGRADED_ICE || building->GetBuildingType() == B_CANNON_UPGRADED_AIR)
 			{
 				int range = ((Tower*)building)->GetRange();
 				DrawCircle(blit_pos.x + camera->GetPosition().x, blit_pos.y + camera->GetPosition().y, range, 255, 255, 255, 255);

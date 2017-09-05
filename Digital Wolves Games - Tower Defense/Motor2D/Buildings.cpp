@@ -38,7 +38,7 @@ Building::Building(BUILDING_TYPE b_type, iPoint pos, bool builded) : Entity(E_BU
 
 	switch (b_type)
 	{
-	case B_TURRET:
+	case B_TOWER:
 		SetTextureID(T_TURRET);
 		break;
 
@@ -276,6 +276,9 @@ const iPoint & Building::GetPixelPosition() const
 
 	case B_UNIVERSITY:
 		
+		break;
+
+	case B_TOWER:
 		break;
 
 	default:

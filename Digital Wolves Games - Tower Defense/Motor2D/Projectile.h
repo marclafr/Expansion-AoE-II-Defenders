@@ -33,9 +33,10 @@ class Projectile
 {
 private:
 	SDL_Rect rect;
+	int height;
 	iPoint pivot;
 	iPoint start_pos;
-	iPoint actual_pos, pre_actual_pos;
+	iPoint actual_pos;
 	iPoint last_pos;
 	Entity* target;
 	int damage;

@@ -178,7 +178,7 @@ bool j1PathFinding::CalculatePath(const iPoint& start, const iPoint & end, std::
 
 	if (origin->pos == destination->pos)
 	{
-		LOG("NOT MOVING");
+		LOG("NOT MOVING, origin = destination");
 		vec_to_fill.push_back(start);
 		return false;
 	}
