@@ -123,6 +123,7 @@ void Building::AI()
 			state_changed = true;
 			state = BS_BUILT;
 			buildtimer.Start();
+			StartTimers();
 			//need to change texture for everything but TH and uni
 		}
 		break;
@@ -133,14 +134,14 @@ void Building::AI()
 
 		if (App->entity_manager->AreUnitsInRect(GetInWorldTextureRect()))
 		{
-			if (building_type == B_TOWNHALL || building_type == B_UNIVERSITY)
-				SetTextureID(T_TOWNHALL_ALPHA_DOWN);
+			if(alpha != 100)
+				alpha = 100;
 		}
 		else
-		{
-			if (building_type == B_TOWNHALL || building_type == B_UNIVERSITY)
-				SetTextureID(T_TOWNHALL);
-		}
+			if (alpha != 255)
+				alpha = 255;
+
+		DoBattle();
 
 		break;
 
@@ -206,9 +207,15 @@ void Building::ChangeTexture()
 	}
 }
 
+void Building::DoBattle()
+{}
+
+void Building::StartTimers()
+{}
+
 void Building::Draw()
 {
-	App->render->PushInGameSprite(this);
+	App->render->PushInGameSprite(this, alpha);
 }
 
 void Building::Destroyed()

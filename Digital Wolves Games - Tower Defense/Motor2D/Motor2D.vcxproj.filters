@@ -157,7 +157,10 @@
     <ClCompile Include="UI_MultiLabel.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="p2Math.cpp" />
+    <ClCompile Include="Wall.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buildings.h">

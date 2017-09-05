@@ -3,6 +3,9 @@
 #include "j1Gui.h"
 #include "UI_Label.h"
 #include "UI_Image.h"
+#include "Wall.h"
+#include "Towers.h"
+#include "j1EntityManager.h"
 #include "ResourceManager.h"
 
 ResourceManager::ResourceManager(): gold (STARTING_GOLD)
@@ -51,17 +54,15 @@ int ResourceManager::GetGold() const
 }
 
 
-bool ResourceManager::CanBuildTower(TOWER_TYPE type)
+bool ResourceManager::CanBuildTower(TOWER_TYPE type) const
 {
-	/*
 	switch (type)
 	{
 	case T_NO_TYPE:
-		return false;
 		break;
 
 	case T_BASIC_TOWER:
-		return wood >= BASIC_TOWER_WOOD_COST && stone > BASIC_TOWER_STONE_COST;
+		return gold >= BASIC_TOWER_COST;
 		break;
 
 	case T_FIRE_TOWER:
@@ -77,7 +78,7 @@ bool ResourceManager::CanBuildTower(TOWER_TYPE type)
 		break;
 
 	case T_BOMBARD_TOWER:
-		return wood >= BASIC_TOWER_WOOD_COST && stone > BASIC_TOWER_STONE_COST;
+		return gold >= BASIC_TOWER_COST;
 		break;
 
 	case T_BOMBARD_FIRE_TOWER:
@@ -93,22 +94,19 @@ bool ResourceManager::CanBuildTower(TOWER_TYPE type)
 		break;
 
 	}
-	*/
 	return false;
 }
 
 bool ResourceManager::BuildTower(TOWER_TYPE type)
 {
-	/*
 	switch (type)
 	{
 	case T_NO_TYPE:
 		break;
 
 	case T_BASIC_TOWER:
-		wood -= BASIC_TOWER_WOOD_COST;
-		stone -= BASIC_TOWER_STONE_COST;
-		App->score_scene->build_simple_tower = false;
+		gold -= BASIC_TOWER_COST;
+		//App->score_scene->build_simple_tower = false;
 		break;
 
 	case T_FIRE_TOWER:
@@ -121,8 +119,7 @@ bool ResourceManager::BuildTower(TOWER_TYPE type)
 		break;
 
 	case T_BOMBARD_TOWER:
-		wood -= BASIC_TOWER_WOOD_COST;
-		stone -= BASIC_TOWER_STONE_COST;
+		gold -= BASIC_TOWER_COST;
 		break;
 
 	case T_BOMBARD_FIRE_TOWER:
@@ -134,52 +131,28 @@ bool ResourceManager::BuildTower(TOWER_TYPE type)
 	case T_BOMBARD_AIR_TOWER:
 		break;
 	}
-		return true/false			App->entity_manager->CreateTower(type, fPoint(pos.x, pos.y));
-	*/
+	//App->entity_manager->CreateTower(type, fPoint(pos.x, pos.y));
 	return false;
 }
 
-bool ResourceManager::CanBuildWall(BUILDING_TYPE type)
+bool ResourceManager::CanBuildWall(BUILDING_TYPE type) const
 {
-	/*
-	switch (type)
-	{
-	case B_WOOD_WALL:
-		return stone >= BASIC_WALL_STONE_COST;
-		break;
-	case B_STONE_WALL:
-		return stone >= BASIC_WALL_STONE_COST;
-		break;
-	}
-	*/
-	return false;
+	return gold <= BASIC_WALL_COST;
 }
 
-bool ResourceManager::CanBuildAmountOfWalls(int number_of_walls)
+bool ResourceManager::CanBuildAmountOfWalls(int number_of_walls) const
 {
-	//return stone >= BASIC_WALL_STONE_COST* number_of_walls;
-	return false;
+	return gold >= BASIC_WALL_COST * number_of_walls;
 }
 
 void ResourceManager::BuildWall(BUILDING_TYPE type)
 {
-	/*
-	switch (type)
-	{
-	case B_WOOD_WALL:
-		stone -= BASIC_WALL_STONE_COST;
-		break;
-
-	case B_STONE_WALL:
-		stone -= BASIC_WALL_STONE_COST;
-		break;
-	}
-	*/
+	gold -= BASIC_WALL_COST;
+	// maybe CreateWall() ??
 }
 
-bool ResourceManager::CanTrainSoldier(UNIT_TYPE type)
+bool ResourceManager::CanTrainSoldier(UNIT_TYPE type) const
 {
-	/*
 	switch (type)
 	{
 	case U_NO_UNIT:
@@ -197,8 +170,7 @@ bool ResourceManager::CanTrainSoldier(UNIT_TYPE type)
 	case U_TWOHANDEDSWORDMAN:
 		return false;
 	case U_CHAMPION:
-		return food >= CHAMPION_FOOD_COST;
-		return false;
+		return gold >= CHAMPION_COST;
 	case U_SPEARMAN:
 		return false;
 	case U_PIKEMAN:
@@ -206,30 +178,25 @@ bool ResourceManager::CanTrainSoldier(UNIT_TYPE type)
 	case U_ARCHER:
 		return false;
 	case U_ARBALEST:
-		return food >= ARBALEST_FOOD_COST;
-		return false;
+		return gold >= ARBALEST_COST;
 	case U_CAVALRYARCHER:
 		return false;
 	case U_HEAVYCAVALRYARCHER:
-		return food >= HEAVYCAVALRYARCHER_FOOD_COST;
-		return false;
+		return gold >= HEAVYCAVALRYARCHER_COST;
 	case U_KNIGHT:
 		return false;
 	case U_CAVALIER:
 		return false;
 	case U_PALADIN:
-		return food >= PALADIN_FOOD_COST;
-		return false;
+		return gold >= PALADIN_COST;
 	case U_SIEGERAM:
 		return false;
 	}
-	*/
 	return false;
 }
 
 void ResourceManager::TrainSoldier(UNIT_TYPE type)
 {
-	/*
 	switch (type)
 	{
 	case U_NO_UNIT:
@@ -247,7 +214,7 @@ void ResourceManager::TrainSoldier(UNIT_TYPE type)
 	case U_TWOHANDEDSWORDMAN:
 		break;
 	case U_CHAMPION:
-		food -= CHAMPION_FOOD_COST;
+		gold -= CHAMPION_COST;
 		break;
 	case U_SPEARMAN:
 		break;
@@ -256,111 +223,86 @@ void ResourceManager::TrainSoldier(UNIT_TYPE type)
 	case U_ARCHER:
 		break;
 	case U_ARBALEST:
-		food -= ARBALEST_FOOD_COST;
+		gold -= ARBALEST_COST;
 		break;
 	case U_CAVALRYARCHER:
 		break;
 	case U_HEAVYCAVALRYARCHER:
-		food -= HEAVYCAVALRYARCHER_FOOD_COST;
+		gold -= HEAVYCAVALRYARCHER_COST;
 		break;
 	case U_KNIGHT:
 		break;
 	case U_CAVALIER:
 		break;
 	case U_PALADIN:
-		food -= PALADIN_FOOD_COST;
+		gold -= PALADIN_COST;
 		break;
 	case U_SIEGERAM:
 		break;
 	}
 	App->entity_manager->CreateUnit(type, STARTING_POS, S_ALLY);
-	*/
 }
 
-bool ResourceManager::CanUpgradeTower(TOWER_TYPE type)
+bool ResourceManager::CanUpgradeTower(TOWER_TYPE type) const
 {
-	/*
 	switch (type)
 	{
 	case T_NO_TYPE:
 		return false;
 	case T_FIRE_TOWER:
-		return 	(gold >= TU_FIRE_GOLD_COST && wood >= TU_FIRE_WOOD_COST && stone >= TU_FIRE_STONE_COST);
+		return 	gold >= TU_UPGRADE_FIRE_COST;
 	case T_ICE_TOWER:
-		return 	(gold >= TU_ICE_GOLD_COST && wood >= TU_ICE_WOOD_COST && stone >= TU_ICE_STONE_COST);
+		return 	gold >= TU_UPGRADE_ICE_COST;
 	case T_AIR_TOWER:
-		return 	(gold >= TU_AIR_GOLD_COST && wood >= TU_AIR_WOOD_COST && stone >= TU_AIR_STONE_COST);
+		return 	gold >= TU_UPGRADE_AIR_COST;
 	default:
 		return false;
 	}
-	*/
 	return false;
 }
 
-void ResourceManager::UpgradeTower(TOWER_TYPE type)
+const int ResourceManager::GetTowerUpgradeCost(TOWER_TYPE type) const
 {
-	/*
 	switch (type)
 	{
 	case T_NO_TYPE:
 		break;
 	case T_FIRE_TOWER:
-		gold -= TU_FIRE_GOLD_COST;
-		wood -= TU_FIRE_WOOD_COST;
-		stone -= TU_FIRE_STONE_COST;
-		break;
+		return TU_UPGRADE_FIRE_COST;
 	case T_ICE_TOWER:
-		gold -= TU_ICE_GOLD_COST;
-		wood -= TU_ICE_WOOD_COST;
-		stone -= TU_ICE_STONE_COST;
-		break;
+		return TU_UPGRADE_ICE_COST;
 	case T_AIR_TOWER:
-		gold -= TU_AIR_GOLD_COST;
-		wood -= TU_AIR_WOOD_COST;
-		stone -= TU_AIR_STONE_COST;
-		break;
+		return TU_UPGRADE_AIR_COST;
 	default:
 		break;
 	}
-	*/
 }
 
-bool ResourceManager::CanUpgradeWall(BUILDING_TYPE type)
+bool ResourceManager::CanUpgradeWall(WALL_LEVEL type) const
 {
-	/*
 	switch (type)
 	{
-	case B_NO_BUILDING:
-		return false;
-	case B_WOOD_WALL:
-		return stone >= UPGRADED_WALL_STONE_COST;
-	case B_STONE_WALL:
-		return stone >= UPGRADED_WALL_BRICK_COST;
+	case WL_STONE:
+		return gold >= STONE_WALL_UPGRADE_COST;
+	case WL_BRICK:
+		return gold >= BRICK_WALL_UPGRADE_COST;
 	default:
-		return false;
+		LOG("Wrong wall level, can't know if upgradable");
 	}
-	return false;
-	*/
 	return false;
 }
 
-void ResourceManager::UpgradeWall(BUILDING_TYPE type)
+const int ResourceManager::GetWallUpgradeCost(WALL_LEVEL type) const
 {
-	/*
 	switch (type)
 	{
-	case B_NO_BUILDING:
-		break;
-	case B_WOOD_WALL:
-		stone -= UPGRADED_WALL_STONE_COST;
-		break;
-	case B_STONE_WALL:
-		stone -= UPGRADED_WALL_BRICK_COST;
-		break;
+	case WL_STONE:
+		return STONE_WALL_UPGRADE_COST;
+	case WL_BRICK:
+		return BRICK_WALL_UPGRADE_COST;
 	default:
-		break;
+		LOG("Wrong wall level, can't know cost");
 	}
-	*/
 }
 
 void ResourceManager::SaveResourcesAmount(pugi::xml_node &data)

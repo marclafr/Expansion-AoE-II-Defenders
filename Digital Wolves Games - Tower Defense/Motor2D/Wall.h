@@ -1,9 +1,11 @@
 #ifndef _WALL
 #define _WALL
 
+#include "Buildings.h"
+
 #define HP_PER_LEVEL_UP 200
 
-enum WALL_LEVELS
+enum WALL_LEVEL
 {
 	WL_NO_LEVEL = 0,
 	WL_WOOD,
@@ -24,7 +26,7 @@ enum WALL_ORIENTATION
 class Wall: public Building
 {
 private:
-	WALL_LEVELS level = WL_WOOD;
+	WALL_LEVEL level = WL_WOOD;
 	WALL_ORIENTATION orientation = WO_HORIZONTAL;
 
 public:
@@ -40,7 +42,7 @@ public:
 
 	//Setters
 	void SetOrientation(WALL_ORIENTATION orientation);
-	void SetLevel(WALL_LEVELS level);
+	void SetLevel(WALL_LEVEL level);
 
 	//Getters
 	const iPoint& GetPixelPos() const;

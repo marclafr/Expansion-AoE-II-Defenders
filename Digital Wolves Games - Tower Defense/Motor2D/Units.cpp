@@ -1110,7 +1110,7 @@ void Unit::DoDamage()
 	if (unit_class == C_SIEGE)
 		siege_attacked = true;
 
-	if (destination != App->map->WorldToMap(GetX(), GetY()))
+	if (destination != position)
 		LOG("NOT EQUAL!!!!!!!");
 }
 

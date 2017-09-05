@@ -1,5 +1,3 @@
-//TODO activate
-/*
 #ifndef _j1Investigations_
 #define _j1Investigations_
 
@@ -10,6 +8,7 @@
 #define COST_INCREASE_BY_LVL 100
 
 class Resource;
+enum TOWER_TYPE;
 
 enum LEVEL
 {
@@ -82,6 +81,8 @@ public:
 	void InstaUnlockAllInvestigations();
 	void SetInvestigationCost(INVESTIGATION_TYPE name, int cost);
 
+	bool CanUpgradeTower(TOWER_TYPE new_type);
+
 private:
 	Investigation* CreateInvestigation(INVESTIGATION_TYPE investigation, bool has_lvls, uint cost, float time_to_upgrade);
 	bool DeleteInvestigation(Investigation* ptr);
@@ -95,4 +96,3 @@ private:
 
 };
 #endif //_j1Investigations_
-*/

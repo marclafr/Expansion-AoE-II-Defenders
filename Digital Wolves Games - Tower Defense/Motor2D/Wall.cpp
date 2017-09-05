@@ -160,7 +160,7 @@ void Wall::SetOrientation(WALL_ORIENTATION orientation)
 	this->orientation = orientation;
 }
 
-void Wall::SetLevel(WALL_LEVELS level)
+void Wall::SetLevel(WALL_LEVEL level)
 {
 	this->level = level;
 }

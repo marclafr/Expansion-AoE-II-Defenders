@@ -45,17 +45,20 @@ protected:
 	j1Timer DieTimer;
 	IsoRect build_rect;
 	AnimationManager* building_fire;
+	int alpha = 255;
 
 public:
 	Building(BUILDING_TYPE b_type, iPoint pos, bool builded = false);
 	~Building();
 
 	void Update(float dt); // defines order
-	virtual void AI();
-	virtual void ChangeTexture();
+	virtual void ChangeTexture(); //towers change texts depending in inter stats other buildings use this one
+	virtual void DoBattle(); //normal buildings do nothing, every other does their thing here (spawn troops, shoot arrows...)
+	virtual void StartTimers(); //normal buildings do nothing, every other starts their timers here, they will be managed later in DoBattle
+	void AI();
 	void Draw();
 
-	void Destroyed();
+	virtual void Destroyed();
 	void DestroyBuilding();
 	
 	//Setters

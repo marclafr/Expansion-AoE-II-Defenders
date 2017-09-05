@@ -5,44 +5,30 @@
 #define GOLD_IMAGE_RECT { 406, 1165, 83, 56 }
 #define STARTING_GOLD 150
 
+#define BASIC_TOWER_COST 115
+#define BOMBARD_TOWER_COST 135
 
+#define TU_UPGRADE_FIRE_COST 450
 
+#define TU_UPGRADE_ICE_COST 320
 
+#define TU_UPGRADE_AIR_COST 400
 
-#define BASIC_TOWER_WOOD_COST 115
-#define BASIC_TOWER_STONE_COST 50
-#define BOMBARD_TOWER_WOOD_COST 135
-#define BOMBARD_TOWER_STONE_COST 80
+#define BASIC_WALL_COST 60
+#define STONE_WALL_UPGRADE_COST 85
+#define BRICK_WALL_UPGRADE_COST 100
 
-#define TU_UPGRADE_FIRE_GOLD_COST 450
-#define TU_FIRE_GOLD_COST 50
-#define TU_FIRE_WOOD_COST 55
-#define TU_FIRE_STONE_COST 40
+#define CHAMPION_COST 100
+#define ARBALEST_COST 125
+#define HEAVYCAVALRYARCHER_COST 175
+#define PALADIN_COST 200
 
-#define TU_UPGRADE_ICE_GOLD_COST 320
-#define TU_ICE_GOLD_COST 35
-#define TU_ICE_WOOD_COST 25
-#define TU_ICE_STONE_COST 30
-
-#define TU_UPGRADE_AIR_GOLD_COST 400
-#define TU_AIR_GOLD_COST 40
-#define TU_AIR_WOOD_COST 50
-#define TU_AIR_STONE_COST 35
-
-#define BASIC_WALL_STONE_COST 60
-#define UPGRADED_WALL_STONE_COST 85
-#define UPGRADED_WALL_BRICK_COST 100
-
-#define CHAMPION_FOOD_COST 100
-#define ARBALEST_FOOD_COST 125
-#define HEAVYCAVALRYARCHER_FOOD_COST 175
-#define PALADIN_FOOD_COST 200
-
-#define STARTING_POS fPoint(-70, 420)
+#define STARTING_POS iPoint(-70, 420) //has to change to tiles
 
 enum BUILDING_TYPE;
 enum TOWER_TYPE;
 enum UNIT_TYPE;
+enum WALL_LEVEL;
 class UI_Label;
 class UI_Image;
 
@@ -63,17 +49,17 @@ public:
 	int GetGold() const;
 
 	//Entity creation
-	bool CanBuildTower(TOWER_TYPE type);
+	bool CanBuildTower(TOWER_TYPE type) const;
 	bool BuildTower(TOWER_TYPE type);
-	bool CanBuildWall(BUILDING_TYPE type);
-	bool CanBuildAmountOfWalls(int number_of_walls);
+	bool CanBuildWall(BUILDING_TYPE type) const;
+	bool CanBuildAmountOfWalls(int number_of_walls) const;
 	void BuildWall(BUILDING_TYPE type);
-	bool CanTrainSoldier(UNIT_TYPE type);
+	bool CanTrainSoldier(UNIT_TYPE type) const;
 	void TrainSoldier(UNIT_TYPE type);
-	bool CanUpgradeTower(TOWER_TYPE type);
-	void UpgradeTower(TOWER_TYPE type);
-	bool CanUpgradeWall(BUILDING_TYPE type);
-	void UpgradeWall(BUILDING_TYPE type);
+	bool CanUpgradeTower(TOWER_TYPE type) const;
+	const int GetTowerUpgradeCost(TOWER_TYPE type) const;
+	bool CanUpgradeWall(WALL_LEVEL type) const;
+	const int GetWallUpgradeCost(WALL_LEVEL type) const;
 
 
 	void SaveResourcesAmount(pugi::xml_node&);

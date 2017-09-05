@@ -1,4 +1,4 @@
-/*
+#include "p2Log.h"
 #include "j1Investigations.h"
 #include "j1App.h"
 #include "Resources.h"
@@ -12,8 +12,7 @@ j1Investigations::j1Investigations()
 }
 
 j1Investigations::~j1Investigations()
-{
-}
+{}
 
 bool j1Investigations::Start()
 {
@@ -24,10 +23,8 @@ bool j1Investigations::Start()
 	//--
 
 	//RESOURCES
-	CreateInvestigation(INV_FOOD, true, 300, 5.0);
-	CreateInvestigation(INV_WOOD, true, 300, 5.0);
 	CreateInvestigation(INV_GOLD, true, 150, 5.0);
-	CreateInvestigation(INV_STONE, true, 300, 5.0);
+
 	//TROPS
 	CreateInvestigation(INV_CAVALRY_ATTACK, false, 300, 30.0);
 	CreateInvestigation(INV_CAVALRY_DEFENSE, false, 300, 25.0);
@@ -35,6 +32,7 @@ bool j1Investigations::Start()
 	CreateInvestigation(INV_ARCHERS_DEFENSE, false, 300, 25.0);
 	CreateInvestigation(INV_INFANTRY_ATTACK, false, 300, 30.0);
 	CreateInvestigation(INV_INFANTRY_DEFENSE, false, 300, 25.0);
+
 	//TOWERS
 	CreateInvestigation(INV_FIRE_TOWER, false, 450, 10.0);
 	CreateInvestigation(INV_ICE_TOWER, false, 320, 10.0);
@@ -111,7 +109,7 @@ bool j1Investigations::DeleteInvestigation(Investigation* ptr)
 
 bool j1Investigations::CanInvestigate(Investigation* investigation)
 {
-	if (App->scene->resources->GetGold() >= investigation->cost)
+	if (App->scene->gold->GetGold() >= investigation->cost)
 	{
 		investigation->inv_state = INV_S_IN_COURSE;
 		DoInvestigationUpgrade(investigation);
@@ -132,7 +130,7 @@ bool j1Investigations::CanInvestigate(Investigation* investigation)
 
 void j1Investigations::DoInvestigationUpgrade(Investigation* investigation)
 {
-	App->scene->resources->UseResource(R_GOLD, investigation->cost);
+	App->scene->gold->UseGold(investigation->cost);
 
 	if (investigation->has_levels == true)
 		investigation->cost += COST_INCREASE_BY_LVL;
@@ -199,6 +197,25 @@ void j1Investigations::SetInvestigationCost(INVESTIGATION_TYPE name, int costt)
 	GetInvestigation(name)->cost = costt;
 }
 
+bool j1Investigations::CanUpgradeTower(TOWER_TYPE new_type)
+{
+	switch (new_type)
+	{
+	case T_FIRE_TOWER:
+	case T_BOMBARD_FIRE_TOWER:
+		return App->investigations->GetLevel(App->investigations->GetInvestigation(INV_FIRE_TOWER)) == INV_LVL_UNLOCKED;
+	case T_ICE_TOWER:
+	case T_BOMBARD_ICE_TOWER:
+		return App->investigations->GetLevel(App->investigations->GetInvestigation(INV_ICE_TOWER)) == INV_LVL_UNLOCKED;
+	case T_AIR_TOWER:
+	case T_BOMBARD_AIR_TOWER:
+		return App->investigations->GetLevel(App->investigations->GetInvestigation(INV_AIR_TOWER)) == INV_LVL_UNLOCKED;
+	default:
+		LOG("tower type unidentified, can't know if upgrade is posible");
+	}
+	return false;
+}
+
 bool j1Investigations::UpgradeInvestigation(Investigation* investigation)
 {
 	if (investigation->upgrade_timer.ReadSec() >= investigation->time_to_upgrade)
@@ -209,30 +226,20 @@ bool j1Investigations::UpgradeInvestigation(Investigation* investigation)
 		if (investigation->has_levels == false)
 		{
 			investigation->investigation_level = INV_LVL_UNLOCKED;
+			/* TODO dont know about tuto
 			if (App->tutorial->tutorial_num == TUTORIAL_4 && investigation->investigation_type == INV_FIRE_TOWER)
 			{
 				App->tutorial->InvestigationDone = true;
-			}
+			}*/
 			return true;
 		}
 
 		switch (investigation->investigation_type)
 		{
-		case INV_FOOD:
-			if (!App->scene->resources->ReduceFoodCollectTime(2.0f))
-				App->scene->resources->IncreaseResourceAmount(R_FOOD, 25.0f);
-			break;
-		case INV_WOOD:
-			if(!App->scene->resources->ReduceWoodCollectTime(2.0f))
-				App->scene->resources->IncreaseResourceAmount(R_WOOD, 25.0f);
-			break;
 		case INV_GOLD:
-			if(!App->scene->resources->ReduceGoldCollectTime(2.0f))
-				App->scene->resources->IncreaseResourceAmount(R_GOLD, 25.0f);
-			break;
-		case INV_STONE:
-			if(!App->scene->resources->ReduceStoneCollectTime(2.0f))
-				App->scene->resources->IncreaseResourceAmount(R_STONE, 25.0f);
+			/* TODO probablly should increase gold per kill
+			if(!App->scene->gold->ReduceGoldCollectTime(2.0f))
+				App->scene->resources->IncreaseResourceAmount(R_GOLD, 25.0f);*/
 			break;
 		default:
 			break;
@@ -241,4 +248,3 @@ bool j1Investigations::UpgradeInvestigation(Investigation* investigation)
 	}
 	return false;
 }
-*/
