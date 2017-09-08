@@ -180,7 +180,7 @@ void Tower::Attack()
 		pos.x = GetProjectilePosition().x;
 		pos.y = GetProjectilePosition().y;
 
-		App->projectile_manager->CreateProjectile(pos, target, GetAttack(), projectile_spd, HEIGHT_BASIC_TOWER, 100, projectile_type);
+		App->projectile_manager->CreateProjectile(pos, target, GetAttack(), projectile_spd, HEIGHT_BASIC_TOWER, 50, projectile_type);
 		// for now
 		//App->projectile_manager->CreateProjectile(GetPixelPosition(), target, GetAttack(), projectile_spd, HEIGHT_BASIC_TOWER, 100, projectile_type);
 		

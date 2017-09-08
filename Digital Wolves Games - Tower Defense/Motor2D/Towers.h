@@ -4,7 +4,9 @@
 #include "Buildings.h"
 #include "j1Timer.h"
 #include "Projectile.h"
-#define HEIGHT_BASIC_TOWER 146
+
+#define HEIGHT_BASIC_TOWER 114
+
 class AnimationManager;
 
 enum TOWER_TYPE
