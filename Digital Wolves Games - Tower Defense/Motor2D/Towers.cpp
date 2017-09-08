@@ -176,11 +176,15 @@ void Tower::Attack()
 	{
 		attack_timer.Start();
 
-		//App->projectile_manager->CreateProjectile(GetProjectilePosition(), target, GetAttack(), projectile_spd, HEIGHT_BASIC_TOWER, 100, projectile_type);
+		iPoint pos;
+		pos.x = GetProjectilePosition().x;
+		pos.y = GetProjectilePosition().y;
+
+		App->projectile_manager->CreateProjectile(pos, target, GetAttack(), projectile_spd, HEIGHT_BASIC_TOWER, 100, projectile_type);
 		// for now
-		App->projectile_manager->CreateProjectile(GetPixelPosition(), target, GetAttack(), projectile_spd, HEIGHT_BASIC_TOWER, 100, projectile_type);
+		//App->projectile_manager->CreateProjectile(GetPixelPosition(), target, GetAttack(), projectile_spd, HEIGHT_BASIC_TOWER, 100, projectile_type);
 		
-		if (App->render->camera->InsideRenderTarget(App->render->camera->GetPosition().x + left_tile.x, App->render->camera->GetPosition().y + left_tile.y))
+		if (App->render->camera->InsideRenderTarget(App->render->camera->GetPosition().x + GetPixelPosition().x, App->render->camera->GetPosition().y + GetPixelPosition().y))
 		{
 			if (tower_type == T_BASIC_TOWER || tower_type == T_ICE_TOWER || tower_type == T_AIR_TOWER || tower_type == T_FIRE_TOWER)
 				App->audio->PlayFx(App->audio->fx_arrow);
@@ -286,6 +290,35 @@ void Tower::ChangeTexture()
 void Tower::StartTimers()
 {
 	attack_timer.Start();
+}
+
+const iPoint & Tower::GetProjectilePosition() const
+{
+	iPoint ret(GetPixelPosition());
+
+	fPoint vec(GetPosition().x - target->GetPosition().x, GetPosition().y - target->GetPosition().y);
+
+	if (vec.x <= 0 && vec.y <= 0)
+	{
+		ret.x += App->map->data.tile_width / 4.0f;
+		ret.y += App->map->data.tile_height / 4.0f;
+	}
+	else if (vec.x > 0 && vec.y > 0)
+	{
+		ret.x -= App->map->data.tile_width / 4.0f;
+		ret.y -= App->map->data.tile_height / 4.0f;
+	}
+	else if (vec.x > 0 && vec.y <= 0)
+	{
+		ret.x -= App->map->data.tile_width / 4.0f;
+		ret.y += App->map->data.tile_height / 4.0f;
+	}
+	else if (vec.x <= 0 && vec.y > 0)
+	{
+		ret.x += App->map->data.tile_width / 4.0f;
+		ret.y -= App->map->data.tile_height / 4.0f;
+	}
+	return ret;
 }
 
 /* Useless, only here for fire animations reference (destruction animations not attack). Fires for destruction should be done in buildings

@@ -281,6 +281,9 @@ const iPoint & Building::GetPixelPosition() const
 	case B_TOWER:
 		break;
 
+	case B_WALL:
+		break;
+
 	default:
 		LOG("Error BUILDING TYPE NULL, can't return pixel pos");
 		break;

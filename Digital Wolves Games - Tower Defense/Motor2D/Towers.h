@@ -50,7 +50,7 @@ public:
 	void Attack();
 	void ChangeTexture();
 	void StartTimers();
-	//TODO const iPoint& GetProjectilePosition() const; //depending on target pos will give one of four options based on direction 
+	const iPoint& GetProjectilePosition() const; //depending on target pos will give one of four options based on direction 
 	const TOWER_TYPE GetTowerType() const;
 	const int GetRange() const;
 	void Destroyed();

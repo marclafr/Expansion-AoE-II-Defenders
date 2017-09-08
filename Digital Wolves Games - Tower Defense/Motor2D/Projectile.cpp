@@ -138,8 +138,7 @@ void Projectile::Draw()
 	if (projectile_anim != nullptr)
 		projectile_anim->Update(rect, pivot);
 	if (dest_reached == false)
-		if (App->render->camera->InsideRenderTarget(App->render->camera->GetPosition().x + actual_pos.x, App->render->camera->GetPosition().y + actual_pos.y))
-			App->render->PushInGameSprite(App->tex->GetTexture(T_ARROW_BOMB), actual_pos.x, actual_pos.y, &rect, SDL_FLIP_HORIZONTAL, pivot.x, pivot.y, 1, angle, false);
+		App->render->PushInGameSprite(App->tex->GetTexture(T_ARROW_BOMB), actual_pos.x, actual_pos.y, &rect, SDL_FLIP_HORIZONTAL, pivot.x, pivot.y, 1, angle, false);
 }
 
 int Projectile::GetProjectilePos() const
